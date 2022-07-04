@@ -1,0 +1,107 @@
+body {
+    background-image: url("../images/fondo_generador.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-position-y: 3vh;
+}
+
+.form-div {
+    display: grid;
+    grid-template-areas:
+        'titulo'
+        'form';
+    grid-template-rows: 10vh 25vh;
+    grid-template-columns: 50vw;
+    margin: 6vh auto auto auto;
+    height: 50vh;
+    width: 50vw;
+    align-content: center;
+    align-items: center;
+    justify-items: center;
+}
+
+h1 {
+    font-family: 'bold', Arial, Helvetica, sans-serif;
+    font-size: 60px;
+    line-height: 60px;
+}
+
+.titulo {
+    display: grid;
+    grid-area: titulo;
+    text-align: center;
+}
+
+#csv-form {
+    display: grid;
+    grid-area: form;
+    justify-items: center;
+}
+
+label {
+    font-size: 20px;
+    font-family: 'bold', Arial, Helvetica, sans-serif;
+}
+
+input[type="file"] {
+    font-family: 'bold', Arial, Helvetica, sans-serif;
+    width: 22vw;
+    border-radius: 5px;
+    margin: auto;
+    background-color: #eee;
+    padding: 1em;
+}
+
+.submit {
+    margin: 20px;
+    width: 130px;
+    height: 40px;
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px 25px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+    box-shadow: inset 2px 2px 2px 0 rgba(255, 255, 255, .5),
+    7px 7px 20px 0 rgba(0, 0, 0, .1),
+    4px 4px 5px 0 rgba(0, 0, 0, .1);
+    outline: none;
+    background-color: #89d8d3;
+    background-image: linear-gradient(315deg, #89d8d3 0%, #03c8a8 74%);
+    border: none;
+    z-index: 1;
+}
+
+.submit:after {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    border-radius: 5px;
+    background-color: #4dccc6;
+    background-image: linear-gradient(315deg, #4dccc6 0%, #96e4df 74%);
+    box-shadow: -7px -7px 20px 0px #fff9,
+    -4px -4px 5px 0px #fff9,
+    7px 7px 20px 0px #0002,
+    4px 4px 5px 0px #0001;
+    transition: all 0.3s ease;
+}
+
+.submit:hover {
+    color: #fff;
+}
+
+.submit:hover:after {
+    top: 0;
+    height: 100%;
+}
+
+.submit:active {
+    top: 2px;
+}

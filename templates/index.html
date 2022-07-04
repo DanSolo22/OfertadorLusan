@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="description" content="{% block description %}Generador de ofertas{% endblock description %}">
+    <title>Ofertador Lusan</title>
+    <link rel="shortcut icon" type="image/png" sizes="32x32" href="{{ static('favicon/favicon-32x32.png') }}">
+    <link rel="shortcut icon" type="image/png" sizes="16x16" href="{{ static('favicon/favicon-16x16.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ static('favicon/apple-touch-icon.png') }}">
+    <link rel="manifest" href="{{ static('favicon/manifest.json') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+          rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ static('css/index.css') }}" type="text/css">
+    {% block stylesheets %}{% endblock stylesheets %}
+
+    <script src="{{ static('js/jquery-3.1.1.min.js') }}"></script>
+    {% block scripts %}{% endblock scripts %}
+
+</head>
+<body>
+{% block content %}
+    <div class="form-div">
+        <h1 class="titulo">Generador de ofertas</h1>
+        <form id="csv-form" method="POST" enctype="multipart/form-data">
+            {{ csrf_input }}
+            {{ form.as_p() }}
+            <input class="submit" type="submit" value="Generar oferta">
+        </form>
+    </div>
+{% endblock content %}
+</body>
+</html>
