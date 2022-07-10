@@ -41,7 +41,7 @@ class Index(View):
                 moneda = ''
                 des_moneda = ''
 
-                doc = DocxTemplate("C:/ofertas/plantilla.docx")
+                doc = DocxTemplate("csvofertas/plantilla.docx")
 
                 with open('csvofertas/oferta.csv') as csv_file:
                     csv_reader = csv.reader(csv_file, delimiter=';')
