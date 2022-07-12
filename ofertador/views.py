@@ -1,6 +1,6 @@
 import docx
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.base import View
 from docx.enum.table import WD_ROW_HEIGHT_RULE
 from docx.shared import Inches, Pt, Cm
@@ -13,6 +13,17 @@ from docxtpl import DocxTemplate
 
 from docx.oxml.shared import OxmlElement
 from docx.oxml.ns import qn
+
+
+def set_repeat_table_header(row):
+    """ set repeat table row on every new page
+    """
+    tr = row._tr
+    trPr = tr.get_or_add_trPr()
+    tblHeader = OxmlElement('w:tblHeader')
+    tblHeader.set(qn('w:val'), "true")
+    trPr.append(tblHeader)
+    return row
 
 
 def insertHR(paragraph):
@@ -37,19 +48,62 @@ def insertHR(paragraph):
     pBdr.append(bottom)
 
 
+def comprovar_plazo(fecha):
+    array_fecha = fecha.split("/")
+
+    if array_fecha[1] != '00' and array_fecha[2] != '0000':
+        return fecha
+    elif array_fecha[1] == '00' and array_fecha[2] == '0000':
+        return str(array_fecha[0]) + ' dias'
+    elif array_fecha[0] == '00' and array_fecha[2] == '0000':
+        if array_fecha[1] == '01' or array_fecha[1] == '1':
+            return str(array_fecha[1]) + ' mes'
+        else:
+            return str(array_fecha[1]) + ' meses'
+    elif array_fecha[0] != '00' and array_fecha[1] != '00' and array_fecha[2] == '0000':
+        if array_fecha[1] == '01' or array_fecha[1] == '1':
+            return str(array_fecha[0]) + ' dias y ' + str(array_fecha[1]) + ' mes'
+        else:
+            return str(array_fecha[0]) + ' dias y ' + str(array_fecha[1]) + ' meses'
+
+
+def comprovar_stock(fecha_pedido, fecha_plazo):
+    if str(fecha_pedido) == str(fecha_plazo):
+        return True
+    else:
+        array_fecha_pedido = str(fecha_pedido).split('/')
+        array_fecha_plazo = str(fecha_plazo).split('/')
+
+        if (array_fecha_pedido[0][0] == '0' or array_fecha_pedido[0][0] == ' ') and (array_fecha_plazo[0][0] == '0' or array_fecha_pedido[0][0] == ' '):
+            if (array_fecha_pedido[1][0] == '0' or array_fecha_pedido[1][0] == ' ') and (array_fecha_plazo[1][0] == '0' or array_fecha_pedido[1][0] == ' '):
+                if array_fecha_pedido[0][1] == array_fecha_plazo[0][1] and array_fecha_pedido[1][1] == array_fecha_plazo[1][1] and array_fecha_pedido[2] == array_fecha_plazo[2]:
+                    return True
+                else:
+                    return False
+        else:
+            if (array_fecha_pedido[1][0] == '0' or array_fecha_pedido[1][0] == ' ') and (array_fecha_plazo[1][0] == '0' or array_fecha_pedido[1][0] == ' '):
+                if array_fecha_pedido[0] == array_fecha_plazo[0] and array_fecha_pedido[1][1] == array_fecha_plazo[1][1] and array_fecha_pedido[2] == array_fecha_plazo[2]:
+                    return True
+                else:
+                    return False
+
+
 class Index(View):
     def get(self, request):
         form = CargarOferta()
-        return render(request, 'index.html', {'form': form})
+        msg = ''
+        return render(request, 'index.html', {'form': form, 'mensaje': msg})
 
     def post(self, request):
         if request.POST:
             form = CargarOferta(request.POST, request.FILES)
             if form.is_valid():
-                oferta = form.cleaned_data.get('oferta')
+                archivo_oferta = form.cleaned_data.get('oferta')
+
+                print(str(archivo_oferta))
 
                 with open('csvofertas/oferta.csv', 'wb+') as destination:
-                    for chunk in oferta.chunks():
+                    for chunk in archivo_oferta.chunks():
                         destination.write(chunk)
 
                 oferta = ''
@@ -68,10 +122,10 @@ class Index(View):
                 moneda = ''
                 des_moneda = ''
                 peso = ''
-                transporte = ''
                 contacto = ''
                 importe_bruto = ''
                 portes = ''
+                imp_portes = ''
                 dtopp = ''
                 imp_dtopp = ''
                 base_imp = ''
@@ -81,6 +135,7 @@ class Index(View):
                 imp_rec_quiv = ''
                 total = ''
                 forma_pago = ''
+                transportista = ''
                 iban = 'ES25 2100-1083-1102-0005-4013'
                 tel_fijo = '+34 937 14 45 61'
 
@@ -110,7 +165,8 @@ class Index(View):
                             peso = row[17] + ' kg.'
                             contacto = row[32]
                             importe_bruto = row[20]
-                            portes = row[19]
+                            portes = row[18]
+                            imp_portes = row[19]
                             dtopp = row[22]
                             imp_dtopp = row[23]
                             base_imp = row[26]
@@ -120,6 +176,7 @@ class Index(View):
                             imp_rec_quiv = row[30]
                             total = row[31]
                             forma_pago = row[49]
+                            transportista = row[50]
                         line_count += 1
 
                 context = \
@@ -142,29 +199,33 @@ class Index(View):
                     }
 
                 doc.render(context)
-                doc.save("C:/ofertas/oferta.docx")
+                print(oferta)
+                nombre_oferta = 'OFE_' + str(oferta)
+                print(nombre_oferta[0])
+                ruta_guardado = 'C:/ofertas/' + nombre_oferta + '.docx'
+                doc.save(ruta_guardado)
 
-                doc = docx.Document("C:/ofertas/oferta.docx")
+                doc = docx.Document(ruta_guardado)
 
                 table = doc.add_table(rows=1, cols=6)
 
                 for i in range(6):
                     for cell in table.columns[i].cells:
                         if i == 0:
-                            cell.width = Inches(1)
+                            cell.width = Inches(0.5)
                         elif i == 1:
-                            cell.width = Inches(4)
+                            cell.width = Inches(8)
                         elif i == 2:
-                            cell.width = Inches(0.8)
+                            cell.width = Inches(0.2)
                             cell.paragraphs[0].paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                         elif i == 3:
-                            cell.width = Inches(0.8)
+                            cell.width = Inches(0.2)
                             cell.paragraphs[0].paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                         elif i == 4:
-                            cell.width = Inches(0.8)
+                            cell.width = Inches(0.03)
                             cell.paragraphs[0].paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                         elif i == 5:
-                            cell.width = Inches(0.8)
+                            cell.width = Inches(0.2)
                             cell.paragraphs[0].paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                 hdr = table.rows[0]
@@ -200,6 +261,7 @@ class Index(View):
                 hdr_cells[4].paragraphs[0].add_run('%').font.size = Pt(9)
                 hdr_cells[4].paragraphs[0].runs[0].font.bold = True
                 hdr_cells[4].paragraphs[0].runs[1].font.italic = True
+                hdr_cells[4].paragraphs[0].runs[2].font.bold = True
                 hdr_cells[4].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                 hdr_cells[5].paragraphs[0].add_run('IMPORTE\n').font.size = Pt(9)
@@ -227,6 +289,9 @@ class Index(View):
 
                 insertHR(barra_cabeza_tabla[0].paragraphs[0])
 
+                set_repeat_table_header(table.rows[0])
+                set_repeat_table_header(table.rows[1])
+
                 with open('csvofertas/oferta.csv') as csv_file:
                     csv_reader = csv.reader(csv_file, delimiter=';')
                     count = 0
@@ -239,27 +304,32 @@ class Index(View):
                             row_prod.height = Cm(1)
                             row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                            row_cells[0].paragraphs[0].add_run(row[22]).font.size = Pt(9)
-                            row_cells[0].paragraphs[0].add_run('\n' + row[4]).font.size = Pt(9)
+                            row_cells[0].paragraphs[0].add_run(row[22]).font.size = Pt(10)
+                            row_cells[0].paragraphs[0].add_run('\n' + row[4]).font.size = Pt(10)
                             row_cells[0].paragraphs[0].runs[1].font.italic = True
 
-                            if fecha.strip() == str(row[16]).strip():
-                                row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(9)
-                                row_cells[1].paragraphs[0].add_run('\nPLAZO/Delivery:   [STOCK]').font.size = Pt(9)
-                                row_cells[1].paragraphs[0].runs[1].font.bold = True
-                                row_cells[1].paragraphs[0].runs[1].font.italic = True
+                            if comprovar_stock(str(fecha), str(row[16]).strip()):
+                                row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
+                                row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(9)
+                                row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(9)
+                                row_cells[1].paragraphs[0].add_run('  [STOCK]').font.size = Pt(9)
+                                row_cells[1].paragraphs[0].runs[2].font.italic = True
+                                row_cells[1].paragraphs[0].runs[3].font.bold = True
                             else:
-                                row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(9)
-                                row_cells[1].paragraphs[0].add_run(
-                                    '\nPLAZO/Delivery:   ' + row[16].strip()).font.size = Pt(9)
-                                row_cells[1].paragraphs[0].runs[1].font.bold = True
+                                row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
+                                row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(9)
+                                row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(9)
+                                row_cells[1].paragraphs[0].add_run('  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(9)
+                                row_cells[1].paragraphs[0].runs[2].font.italic = True
+                                row_cells[1].paragraphs[0].runs[3].font.bold = True
 
                             row_cells[2].text = row[9]
-                            row_cells[2].paragraphs[0].runs[0].font.size = Pt(9)
+                            row_cells[2].paragraphs[0].runs[0].font.size = Pt(10)
                             row_cells[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                             row_cells[3].text = row[18]
-                            row_cells[3].paragraphs[0].runs[0].font.size = Pt(9)
+                            row_cells[3].paragraphs[0].runs[0].font.size = Pt(10)
+                            row_cells[3].paragraphs[0].runs[0].font.bold = True
                             row_cells[3].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                             if str(row[19]).strip() == '':
@@ -267,11 +337,11 @@ class Index(View):
                             else:
                                 row_cells[4].text = row[19]
 
-                            row_cells[4].paragraphs[0].runs[0].font.size = Pt(9)
+                            row_cells[4].paragraphs[0].runs[0].font.size = Pt(10)
                             row_cells[4].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                             row_cells[5].text = row[20]
-                            row_cells[5].paragraphs[0].runs[0].font.size = Pt(9)
+                            row_cells[5].paragraphs[0].runs[0].font.size = Pt(10)
                             row_cells[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                         count += 1
@@ -298,17 +368,15 @@ class Index(View):
                 pie_tabla[0].merge(pie_tabla[1])
 
                 pie_tabla[0].text = 'PRECIOS VÁLIDOS PARA LAS CANTIDADES OFERTADAS'
-                pie_tabla[0].paragraphs[0].runs[0].font.size = Pt(8)
+                pie_tabla[0].paragraphs[0].runs[0].font.size = Pt(10)
                 pie_tabla[0].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
                 pie_tabla[0].paragraphs[0].runs[0].font.bold = True
 
-                pie_tabla[2].text = 'OFERTA VIGENTE HASTA LA FECHA: ' + validez
-                pie_tabla[2].paragraphs[0].runs[0].font.size = Pt(8)
+                pie_tabla[2].text = 'OFERTA VIGENTE HASTA LA FECHA:\n' + validez
+                pie_tabla[2].paragraphs[0].runs[0].font.size = Pt(10)
                 pie_tabla[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                 pie_tabla[2].paragraphs[0].runs[0].font.bold = True
 
-                doc.add_paragraph()
-                doc.add_paragraph()
                 doc.add_paragraph()
                 doc.add_paragraph()
 
@@ -341,38 +409,67 @@ class Index(View):
 
                     i += 1
 
-                table_resumen.cell(0, 0).paragraphs[0].add_run('PESO').font.size = Pt(8)
+                '''Información del pedido'''
+
+                table_resumen.cell(0, 0).paragraphs[0].add_run('PORTES').font.size = Pt(8)
                 table_resumen.cell(0, 0).paragraphs[0].runs[0].font.bold = True
                 table_resumen.cell(0, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
-                table_resumen.cell(1, 0).paragraphs[0].add_run('WEIGHT').font.size = Pt(8)
+                table_resumen.cell(1, 0).paragraphs[0].add_run('TRANSPORT').font.size = Pt(8)
                 table_resumen.cell(1, 0).paragraphs[0].runs[0].font.italic = True
                 table_resumen.cell(1, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
-                table_resumen.cell(3, 0).paragraphs[0].add_run('TRANSPORTE').font.size = Pt(8)
+                table_resumen.cell(3, 0).paragraphs[0].add_run('PESO').font.size = Pt(8)
                 table_resumen.cell(3, 0).paragraphs[0].runs[0].font.bold = True
                 table_resumen.cell(3, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
-                table_resumen.cell(4, 0).paragraphs[0].add_run('TRANSPORT').font.size = Pt(8)
+                table_resumen.cell(4, 0).paragraphs[0].add_run('WEIGHT').font.size = Pt(8)
                 table_resumen.cell(4, 0).paragraphs[0].runs[0].font.italic = True
                 table_resumen.cell(4, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
-                table_resumen.cell(6, 0).paragraphs[0].add_run('CONTACTO\n').font.size = Pt(8)
-                table_resumen.cell(6, 0).paragraphs[0].add_run('CONTACT PERSON').font.size = Pt(8)
+                table_resumen.cell(6, 0).paragraphs[0].add_run('TRANSPORTE\n').font.size = Pt(8)
+                table_resumen.cell(6, 0).paragraphs[0].add_run('TRANSPORT').font.size = Pt(8)
                 table_resumen.cell(6, 0).paragraphs[0].runs[0].font.bold = True
                 table_resumen.cell(6, 0).paragraphs[0].runs[1].font.italic = True
                 table_resumen.cell(6, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
-                table_resumen.cell(0, 1).paragraphs[0].text = peso
-                table_resumen.cell(0, 1).paragraphs[0].runs[0].font.size = Pt(8)
+                table_resumen.cell(8, 0).paragraphs[0].add_run('CONTACTO\n').font.size = Pt(8)
+                table_resumen.cell(8, 0).paragraphs[0].runs[0].font.bold = True
+                table_resumen.cell(8, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
-                table_resumen.cell(3, 1).paragraphs[0].text = transporte
+                table_resumen.cell(9, 0).paragraphs[0].add_run('CONTACT PERSON').font.size = Pt(8)
+                table_resumen.cell(9, 0).paragraphs[0].runs[0].font.italic = True
+                table_resumen.cell(9, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+
+                if str(portes).strip() == 'D':
+                    table_resumen.cell(0, 1).paragraphs[0].text = 'Portes debidos'
+                    table_resumen.cell(1, 1).paragraphs[0].text = 'Transport not included'
+                elif str(portes).strip() == 'P':
+                    table_resumen.cell(0, 1).paragraphs[0].text = 'Portes pagados'
+                    table_resumen.cell(1, 1).paragraphs[0].text = 'Transport included'
+                elif str(portes).strip() == 'F':
+                    table_resumen.cell(0, 1).paragraphs[0].text = 'Portes en factura'
+                    table_resumen.cell(1, 1).paragraphs[0].text = 'Transport in invoice'
+
+                table_resumen.cell(0, 1).paragraphs[0].runs[0].font.size = Pt(8)
+                table_resumen.cell(1, 1).paragraphs[0].runs[0].font.size = Pt(8)
+                table_resumen.cell(0, 1).paragraphs[0].runs[0].font.bold = True
+                table_resumen.cell(1, 1).paragraphs[0].runs[0].font.italic = True
+
+                table_resumen.cell(3, 1).paragraphs[0].text = peso
                 table_resumen.cell(3, 1).paragraphs[0].runs[0].font.size = Pt(8)
 
-                table_resumen.cell(6, 1).paragraphs[0].add_run(contacto + '\n')
-                table_resumen.cell(6, 1).paragraphs[0].add_run(tel_fijo)
+                table_resumen.cell(6, 1).paragraphs[0].text = transportista
                 table_resumen.cell(6, 1).paragraphs[0].runs[0].font.size = Pt(8)
-                table_resumen.cell(6, 1).paragraphs[0].runs[1].font.size = Pt(8)
+
+                table_resumen.cell(8, 1).paragraphs[0].add_run(contacto + '\n')
+                table_resumen.cell(8, 1).paragraphs[0].runs[0].font.size = Pt(10)
+                table_resumen.cell(8, 1).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+
+                table_resumen.cell(9, 1).paragraphs[0].add_run(tel_fijo)
+                table_resumen.cell(9, 1).paragraphs[0].runs[0].font.size = Pt(10)
+
+                '''Resumen del pedido'''
 
                 table_resumen.cell(0, 3).paragraphs[0].add_run('IMPORTE BRUTO / ').font.size = Pt(8)
                 table_resumen.cell(0, 3).paragraphs[0].add_run('GROSS AMOUNT').font.size = Pt(8)
@@ -389,7 +486,7 @@ class Index(View):
                 table_resumen.cell(1, 3).paragraphs[0].runs[1].font.italic = True
                 table_resumen.cell(1, 3).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
-                table_resumen.cell(1, 5).paragraphs[0].add_run(portes + ' €').font.size = Pt(8)
+                table_resumen.cell(1, 5).paragraphs[0].add_run(imp_portes + ' €').font.size = Pt(8)
                 table_resumen.cell(1, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                 table_resumen.cell(2, 3).paragraphs[0].add_run('DTOP. PP.').font.size = Pt(8)
@@ -444,6 +541,7 @@ class Index(View):
                 table_resumen.cell(7, 3).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
                 table_resumen.cell(7, 5).paragraphs[0].add_run(total + ' €').font.size = Pt(9)
+                table_resumen.cell(7, 5).paragraphs[0].runs[0].font.bold = True
                 table_resumen.cell(7, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                 table_resumen.cell(10, 3).paragraphs[0].add_run('FORMA DE PAGO / ').font.size = Pt(8)
@@ -454,6 +552,8 @@ class Index(View):
 
                 table_resumen.cell(10, 5).paragraphs[0].add_run(forma_pago).font.size = Pt(8)
                 table_resumen.cell(10, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+
+                table_resumen.cell(11, 5).merge(table_resumen.cell(11, 4))
 
                 if str(forma_pago).strip() == 'TRANSFERENCIA' or str(forma_pago).strip() == 'CONTADO':
                     table_resumen.cell(11, 3).paragraphs[0].add_run('SWIFT/IBAN').font.size = Pt(9)
@@ -468,33 +568,40 @@ class Index(View):
                 insertHR(barra_cond)
 
                 condiciones = doc.add_paragraph()
-                condiciones.add_run('CONDICIONES:\n').font.size = Pt(10)
-                condiciones.add_run('Disponibilidad y precios indicados salvo venta.\nEstos ').font.size = Pt(9)
+                condiciones.add_run('CONDICIONES:\n').font.size = Pt(11)
+                condiciones.add_run('\n').font.size = Pt(3)
+                condiciones.add_run('- Disponibilidad y precios indicados salvo venta.\n- Estos ').font.size = Pt(9)
                 condiciones.add_run('precios ').font.size = Pt(9)
                 condiciones.add_run('son para la ').font.size = Pt(9)
                 condiciones.add_run('totalidad de la oferta').font.size = Pt(9)
-                condiciones.add_run(', en caso de pedido parcial los precios estarían sujetos a revisión.\nLos ').font.size = Pt(9)
+                condiciones.add_run(
+                    ', en caso de pedido parcial los precios estarían sujetos a revisión.\n- Los ').font.size = Pt(9)
                 condiciones.add_run('plazos de entrega ').font.size = Pt(9)
-                condiciones.add_run('indicados son orientativos y siempre se consideran ').font.size = Pt(9)
-                condiciones.add_run('a partir de la fecha confirmación del pedido y siempre días laborales y en nuestro almacén\n').font.size = Pt(9)
-                condiciones.add_run('No se aceptan devolución de piezas especiales ').font.size = Pt(9)
-                condiciones.add_run('ni medidas fuera de catálogo.\nLas piezas especiales se podrán suministrar con un +/- 10% de la cantidad ofertada.').font.size = Pt(9)
-                condiciones.add_run('\n\nEl suministro quedará supeditado a la concesión de riesgo por parte de Crédito y Caución.').font.size = Pt(9)
+                condiciones.add_run('indicados son orientativos y se consideran, ').font.size = Pt(9)
+                condiciones.add_run('días laborales y en nuestro almacén, ').font.size = Pt(9)
+                condiciones.add_run('\n  a partir de la ').font.size = Pt(9)
+                condiciones.add_run('fecha confirmación del pedido.\n').font.size = Pt(9)
+                condiciones.add_run('- No se aceptan devolución de piezas especiales ').font.size = Pt(9)
+                condiciones.add_run('ni medidas fuera de catálogo.\n').font.size = Pt(9)
+                condiciones.add_run('- ').font.size = Pt(9)
+                condiciones.add_run('Las piezas especiales se podrán suministrar con un +/- 10% de la cantidad ofertada.').font.size = Pt(9)
+                condiciones.add_run('\n\n- El suministro quedará supeditado a la concesión de riesgo por parte de ').font.size = Pt(9)
+                condiciones.add_run('Crédito y Caución.').font.size = Pt(9)
 
                 condiciones.runs[0].font.bold = True
-                condiciones.runs[2].font.bold = True
-                condiciones.runs[4].font.bold = True
-                condiciones.runs[6].font.bold = True
-                condiciones.runs[8].font.bold = True
-                condiciones.runs[10].font.bold = True
+                condiciones.runs[3].font.bold = True
+                condiciones.runs[5].font.bold = True
+                condiciones.runs[7].font.bold = True
+                condiciones.runs[9].font.bold = True
+                condiciones.runs[11].font.bold = True
+                condiciones.runs[13].font.bold = True
+                condiciones.runs[15].font.bold = True
+                condiciones.runs[17].font.bold = True
 
-                doc.save("C:/ofertas/oferta.docx")
+                doc.save(ruta_guardado)
 
-                '''inputFile = "C:/ofertas/oferta.docx"
-                outputFile = "C:/ofertas/oferta.pdf"
-
-                convert(inputFile, outputFile)'''
-
-                return HttpResponse('Recibido correctamente')
+                return redirect('inicio')
             else:
-                return HttpResponse('Error')
+                form = CargarOferta()
+                msg = 'Fichero no válido. Porfavor, compruebe que es unb archivo .csv.'
+                return render(request, 'index.html', {'form': form, 'mensaje': msg})
