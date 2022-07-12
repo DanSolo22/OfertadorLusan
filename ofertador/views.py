@@ -11,6 +11,31 @@ from ofertador.forms import CargarOferta
 import csv
 from docxtpl import DocxTemplate
 
+from docx.oxml.shared import OxmlElement
+from docx.oxml.ns import qn
+
+
+def insertHR(paragraph):
+    p = paragraph._p
+    pPr = p.get_or_add_pPr()
+    pBdr = OxmlElement('w:pBdr')
+    pPr.insert_element_before(
+        pBdr,
+        'w:shd', 'w:tabs', 'w:suppressAutoHyphens', 'w:kinsoku', 'w:wordWrap',
+        'w:overflowPunct', 'w:topLinePunct', 'w:autoSpaceDE', 'w:autoSpaceDN',
+        'w:bidi', 'w:adjustRightInd', 'w:snapToGrid', 'w:spacing', 'w:ind',
+        'w:contextualSpacing', 'w:mirrorIndents', 'w:suppressOverlap', 'w:jc',
+        'w:textDirection', 'w:textAlignment', 'w:textboxTightWrap',
+        'w:outlineLvl', 'w:divId', 'w:cnfStyle', 'w:rPr', 'w:sectPr',
+        'w:pPrChange'
+    )
+    bottom = OxmlElement('w:bottom')
+    bottom.set(qn('w:val'), 'single')
+    bottom.set(qn('w:sz'), '6')
+    bottom.set(qn('w:space'), '1')
+    bottom.set(qn('w:color'), 'auto')
+    pBdr.append(bottom)
+
 
 class Index(View):
     def get(self, request):
@@ -45,7 +70,6 @@ class Index(View):
                 peso = ''
                 transporte = ''
                 contacto = ''
-                num_contacto = ''
                 importe_bruto = ''
                 portes = ''
                 dtopp = ''
@@ -58,6 +82,7 @@ class Index(View):
                 total = ''
                 forma_pago = ''
                 iban = 'ES25 2100-1083-1102-0005-4013'
+                tel_fijo = '+34 937 14 45 61'
 
                 doc = DocxTemplate("csvofertas/plantilla.docx")
 
@@ -83,8 +108,7 @@ class Index(View):
                             moneda = row[15]
                             des_moneda = row[16]
                             peso = row[17] + ' kg.'
-                            contacto = row[33]
-                            num_contacto = row[34]
+                            contacto = row[32]
                             importe_bruto = row[20]
                             portes = row[19]
                             dtopp = row[22]
@@ -198,10 +222,10 @@ class Index(View):
                 barra_cabeza_tabla[2].merge(barra_cabeza_tabla[1])
                 barra_cabeza_tabla[1].merge(barra_cabeza_tabla[0])
 
-                barra_cabeza.height = Cm(0.5)
+                barra_cabeza.height = Cm(0.65)
                 barra_cabeza.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                barra_cabeza_tabla[0].text = '--------------------------------------------------------------------------------------------------------------------------------------------------------'
+                insertHR(barra_cabeza_tabla[0].paragraphs[0])
 
                 with open('csvofertas/oferta.csv') as csv_file:
                     csv_reader = csv.reader(csv_file, delimiter=';')
@@ -209,7 +233,12 @@ class Index(View):
 
                     for row in csv_reader:
                         if count > 2:
-                            row_cells = table.add_row().cells
+                            row_prod = table.add_row()
+                            row_cells = row_prod.cells
+
+                            row_prod.height = Cm(1)
+                            row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
+
                             row_cells[0].paragraphs[0].add_run(row[22]).font.size = Pt(9)
                             row_cells[0].paragraphs[0].add_run('\n' + row[4]).font.size = Pt(9)
                             row_cells[0].paragraphs[0].runs[1].font.italic = True
@@ -256,10 +285,10 @@ class Index(View):
                 barra_pie_tabla[2].merge(barra_pie_tabla[1])
                 barra_pie_tabla[1].merge(barra_pie_tabla[0])
 
-                barra_pie.height = Cm(0.5)
+                barra_pie.height = Cm(0.65)
                 barra_pie.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                barra_pie_tabla[0].text = '--------------------------------------------------------------------------------------------------------------------------------------------------------'
+                insertHR(barra_pie_tabla[0].paragraphs[0])
 
                 pie_tabla = table.add_row().cells
 
@@ -279,6 +308,9 @@ class Index(View):
                 pie_tabla[2].paragraphs[0].runs[0].font.bold = True
 
                 doc.add_paragraph()
+                doc.add_paragraph()
+                doc.add_paragraph()
+                doc.add_paragraph()
 
                 table_resumen = doc.add_table(rows=12, cols=6)
 
@@ -297,9 +329,17 @@ class Index(View):
                         if i == 4:
                             cell.width = Inches(1.25)
 
+                i = 0
+
                 for row in table_resumen.rows:
-                    row.height = Cm(0.35)
-                    row.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
+                    if i == 6:
+                        row.height = Cm(0.74)
+                        row.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
+                    else:
+                        row.height = Cm(0.35)
+                        row.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
+
+                    i += 1
 
                 table_resumen.cell(0, 0).paragraphs[0].add_run('PESO').font.size = Pt(8)
                 table_resumen.cell(0, 0).paragraphs[0].runs[0].font.bold = True
@@ -317,13 +357,11 @@ class Index(View):
                 table_resumen.cell(4, 0).paragraphs[0].runs[0].font.italic = True
                 table_resumen.cell(4, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
-                table_resumen.cell(6, 0).paragraphs[0].add_run('CONTACTO').font.size = Pt(8)
+                table_resumen.cell(6, 0).paragraphs[0].add_run('CONTACTO\n').font.size = Pt(8)
+                table_resumen.cell(6, 0).paragraphs[0].add_run('CONTACT PERSON').font.size = Pt(8)
                 table_resumen.cell(6, 0).paragraphs[0].runs[0].font.bold = True
+                table_resumen.cell(6, 0).paragraphs[0].runs[1].font.italic = True
                 table_resumen.cell(6, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
-
-                table_resumen.cell(7, 0).paragraphs[0].add_run('CONTACT').font.size = Pt(8)
-                table_resumen.cell(7, 0).paragraphs[0].runs[0].font.italic = True
-                table_resumen.cell(7, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
                 table_resumen.cell(0, 1).paragraphs[0].text = peso
                 table_resumen.cell(0, 1).paragraphs[0].runs[0].font.size = Pt(8)
@@ -331,11 +369,10 @@ class Index(View):
                 table_resumen.cell(3, 1).paragraphs[0].text = transporte
                 table_resumen.cell(3, 1).paragraphs[0].runs[0].font.size = Pt(8)
 
-                table_resumen.cell(6, 1).paragraphs[0].text = contacto
+                table_resumen.cell(6, 1).paragraphs[0].add_run(contacto + '\n')
+                table_resumen.cell(6, 1).paragraphs[0].add_run(tel_fijo)
                 table_resumen.cell(6, 1).paragraphs[0].runs[0].font.size = Pt(8)
-
-                table_resumen.cell(7, 1).paragraphs[0].text = num_contacto
-                table_resumen.cell(7, 1).paragraphs[0].runs[0].font.size = Pt(8)
+                table_resumen.cell(6, 1).paragraphs[0].runs[1].font.size = Pt(8)
 
                 table_resumen.cell(0, 3).paragraphs[0].add_run('IMPORTE BRUTO / ').font.size = Pt(8)
                 table_resumen.cell(0, 3).paragraphs[0].add_run('GROSS AMOUNT').font.size = Pt(8)
@@ -398,9 +435,7 @@ class Index(View):
 
                 table_resumen.cell(6, 3).merge(table_resumen.cell(6, 4))
                 table_resumen.cell(6, 4).merge(table_resumen.cell(6, 5))
-                table_resumen.cell(6, 3).paragraphs[0].add_run('-----------------------------------------------------------------------------------------------------').font.size = Pt(8)
-                table_resumen.cell(6, 3).paragraphs[0].runs[0].font.bold = True
-                table_resumen.cell(6, 3).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+                insertHR(table_resumen.cell(6, 3).paragraphs[0])
 
                 table_resumen.cell(7, 3).paragraphs[0].add_run('IMPORTE TOTAL / ').font.size = Pt(9)
                 table_resumen.cell(7, 3).paragraphs[0].add_run('TOTAL AMOUNT').font.size = Pt(9)
@@ -426,7 +461,32 @@ class Index(View):
                     table_resumen.cell(11, 3).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
                     table_resumen.cell(11, 5).paragraphs[0].add_run(iban).font.size = Pt(9)
+                    table_resumen.cell(11, 5).paragraphs[0].runs[0].font.bold = True
                     table_resumen.cell(11, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+
+                barra_cond = doc.add_paragraph()
+                insertHR(barra_cond)
+
+                condiciones = doc.add_paragraph()
+                condiciones.add_run('CONDICIONES:\n').font.size = Pt(10)
+                condiciones.add_run('Disponibilidad y precios indicados salvo venta.\nEstos ').font.size = Pt(9)
+                condiciones.add_run('precios ').font.size = Pt(9)
+                condiciones.add_run('son para la ').font.size = Pt(9)
+                condiciones.add_run('totalidad de la oferta').font.size = Pt(9)
+                condiciones.add_run(', en caso de pedido parcial los precios estarían sujetos a revisión.\nLos ').font.size = Pt(9)
+                condiciones.add_run('plazos de entrega ').font.size = Pt(9)
+                condiciones.add_run('indicados son orientativos y siempre se consideran ').font.size = Pt(9)
+                condiciones.add_run('a partir de la fecha confirmación del pedido y siempre días laborales y en nuestro almacén\n').font.size = Pt(9)
+                condiciones.add_run('No se aceptan devolución de piezas especiales ').font.size = Pt(9)
+                condiciones.add_run('ni medidas fuera de catálogo.\nLas piezas especiales se podrán suministrar con un +/- 10% de la cantidad ofertada.').font.size = Pt(9)
+                condiciones.add_run('\n\nEl suministro quedará supeditado a la concesión de riesgo por parte de Crédito y Caución.').font.size = Pt(9)
+
+                condiciones.runs[0].font.bold = True
+                condiciones.runs[2].font.bold = True
+                condiciones.runs[4].font.bold = True
+                condiciones.runs[6].font.bold = True
+                condiciones.runs[8].font.bold = True
+                condiciones.runs[10].font.bold = True
 
                 doc.save("C:/ofertas/oferta.docx")
 
