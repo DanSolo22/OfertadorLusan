@@ -614,5 +614,5 @@ class Index(View):
                 return response
             else:
                 form = CargarOferta()
-                msg = 'Fichero no válido. Porfavor, compruebe que es unb archivo .csv.'
+                msg = 'Fichero no válido. Porfavor, compruebe el archivo.'
                 return render(request, 'index.html', {'form': form, 'mensaje': msg})

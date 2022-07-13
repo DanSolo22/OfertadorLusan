@@ -10,17 +10,20 @@
     <link rel="shortcut icon" type="image/png" sizes="16x16" href="{{ static('favicon/favicon-16x16.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ static('favicon/apple-touch-icon.png') }}">
     <link rel="manifest" href="{{ static('favicon/manifest.json') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <!--<link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
           rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-          rel="stylesheet">
+          rel="stylesheet">-->
 
     <link rel="stylesheet" href="{{ static('css/index.css') }}" type="text/css">
     {% block stylesheets %}{% endblock stylesheets %}
 
     <script src="{{ static('js/jquery-3.1.1.min.js') }}"></script>
+    <script src="{{ static('js/index.js') }}" defer></script>
     {% block scripts %}{% endblock scripts %}
 
 </head>
@@ -29,8 +32,23 @@
     <div class="form-div">
         <h1 class="titulo">Generador de ofertas</h1>
         {% if mensaje != '' %}
-            <div class="msg">{{ mensaje }}</div>
+            <div id="msg" class="alert alert-error">
+                <div class="icon__wrapper">
+                    <span class="mdi mdi-alert-outline material-symbols-outlined">warning</span>
+                </div>
+                <p>{{ mensaje }}</p>
+                <span id="close" class="material-symbols-outlined close">close</span>
+            </div>
+        {% else %}
+            <div id="msg">
+                <div class="icon__wrapper">
+                    <span class="mdi mdi-alert-outline material-symbols-outlined"></span>
+                </div>
+                <p>{{ mensaje }}</p>
+                <span id="close"></span>
+            </div>
         {% endif %}
+
         <form id="csv-form" method="POST" enctype="multipart/form-data">
             {{ csrf_input }}
             {{ form.as_p() }}
