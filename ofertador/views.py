@@ -1,3 +1,6 @@
+import mimetypes
+import os
+
 import docx
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -100,8 +103,6 @@ class Index(View):
             if form.is_valid():
                 archivo_oferta = form.cleaned_data.get('oferta')
 
-                print(str(archivo_oferta))
-
                 with open('csvofertas/oferta.csv', 'wb+') as destination:
                     for chunk in archivo_oferta.chunks():
                         destination.write(chunk)
@@ -199,9 +200,8 @@ class Index(View):
                     }
 
                 doc.render(context)
-                print(oferta)
-                nombre_oferta = 'OFE_' + str(oferta)
-                print(nombre_oferta[0])
+
+                nombre_oferta = 'OFE_' + str(oferta).strip()
                 ruta_guardado = 'C:/ofertas/' + nombre_oferta + '.docx'
                 doc.save(ruta_guardado)
 
@@ -600,7 +600,18 @@ class Index(View):
 
                 doc.save(ruta_guardado)
 
-                return redirect('inicio')
+                filename = nombre_oferta + '.docx'
+                filepath = 'C:/ofertas/' + filename
+                # Open the file for reading content
+                path = open(filepath, 'rb')
+                # Set the mime type
+                mime_type, _ = mimetypes.guess_type(filepath)
+                # Set the return value of the HttpResponse
+                response = HttpResponse(path, content_type=mime_type)
+                # Set the HTTP header for sending to browser
+                response['Content-Disposition'] = "attachment; filename=%s" % filename
+                # Return the response value
+                return response
             else:
                 form = CargarOferta()
                 msg = 'Fichero no válido. Porfavor, compruebe que es unb archivo .csv.'
