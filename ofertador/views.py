@@ -202,7 +202,7 @@ class Index(View):
                 doc.render(context)
 
                 nombre_oferta = 'OFE_' + str(oferta).strip()
-                ruta_guardado = 'C:/ofertas/' + nombre_oferta + '.docx'
+                ruta_guardado = 'C:/generador/ofertas/' + nombre_oferta + '.docx'
                 doc.save(ruta_guardado)
 
                 doc = docx.Document(ruta_guardado)
@@ -601,7 +601,7 @@ class Index(View):
                 doc.save(ruta_guardado)
 
                 filename = nombre_oferta + '.docx'
-                filepath = 'C:/ofertas/' + filename
+                filepath = 'C:/generador/ofertas/' + filename
                 # Open the file for reading content
                 path = open(filepath, 'rb')
                 # Set the mime type
