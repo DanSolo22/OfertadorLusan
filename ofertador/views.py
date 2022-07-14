@@ -309,19 +309,25 @@ class Index(View):
                             row_cells[0].paragraphs[0].runs[1].font.italic = True
 
                             if comprovar_stock(str(fecha), str(row[16]).strip()):
-                                row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
-                                row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(9)
-                                row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(9)
-                                row_cells[1].paragraphs[0].add_run('  [STOCK]').font.size = Pt(9)
-                                row_cells[1].paragraphs[0].runs[2].font.italic = True
-                                row_cells[1].paragraphs[0].runs[3].font.bold = True
+                                if str(row[23]).strip() == 'Especial':
+                                    row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
+                                else:
+                                    row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
+                                    row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(9)
+                                    row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(9)
+                                    row_cells[1].paragraphs[0].add_run('  [STOCK]').font.size = Pt(9)
+                                    row_cells[1].paragraphs[0].runs[2].font.italic = True
+                                    row_cells[1].paragraphs[0].runs[3].font.bold = True
                             else:
-                                row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
-                                row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(9)
-                                row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(9)
-                                row_cells[1].paragraphs[0].add_run('  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(9)
-                                row_cells[1].paragraphs[0].runs[2].font.italic = True
-                                row_cells[1].paragraphs[0].runs[3].font.bold = True
+                                if str(row[23]).strip() == 'Especial':
+                                    row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
+                                else:
+                                    row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
+                                    row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(9)
+                                    row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(9)
+                                    row_cells[1].paragraphs[0].add_run('  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(9)
+                                    row_cells[1].paragraphs[0].runs[2].font.italic = True
+                                    row_cells[1].paragraphs[0].runs[3].font.bold = True
 
                             row_cells[2].text = row[9]
                             row_cells[2].paragraphs[0].runs[0].font.size = Pt(10)
