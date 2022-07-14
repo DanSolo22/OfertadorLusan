@@ -10,7 +10,8 @@
     <link rel="shortcut icon" type="image/png" sizes="16x16" href="{{ static('favicon/favicon-16x16.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ static('favicon/apple-touch-icon.png') }}">
     <link rel="manifest" href="{{ static('favicon/manifest.json') }}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
     <!--<link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -22,15 +23,41 @@
     <link rel="stylesheet" href="{{ static('css/index.css') }}" type="text/css">
     {% block stylesheets %}{% endblock stylesheets %}
 
-    <script src="{{ static('js/jquery-3.1.1.min.js') }}"></script>
+    <script src="{{ static('js/jquery-3.1.1.min.js') }}" defer></script>
     <script src="{{ static('js/index.js') }}" defer></script>
     {% block scripts %}{% endblock scripts %}
 
 </head>
 <body>
 {% block content %}
+    <nav class='navbar-inner header'>
+        <ul class='nav pull-right'>
+            <li class="prin-li" id="1">
+                <a class='nav-link' href="{{ url('inicio') }}">OFERTAS</a>
+            </li>
+            <li class="prin-li" id="2">
+                <a class='nav-link' href="{{ url('pedidos') }}">PEDIDOS</a>
+            </li>
+            <li class="prin-li" id="3">
+                <a class='nav-link' href="{{ url('pre-albaranes') }}">PRE-ALBARANES</a>
+            </li>
+            <li class="dropdown prin-li" id="4">
+                <a class='nav-link'>
+                    <p class="prov-text">PROVEEDORES<br>v</p>
+                    <ul class='dropdown-menu' id="drop">
+                        <li>
+                            <a class='nav-link' href="{{ url('consultas') }}">CONSULTAS</a>
+                        </li>
+                        <li>
+                            <a class='nav-link' href="{{ url('pedidos-prov') }}">PEDIDOS</a>
+                        </li>
+                    </ul>
+                </a>
+            </li>
+        </ul>
+    </nav>
     <div class="form-div">
-        <h1 class="titulo">Generador de ofertas</h1>
+        <h1 class="titulo">{{ titulo }}</h1>
         {% if mensaje != '' %}
             <div id="msg" class="alert alert-error">
                 <div class="icon__wrapper">

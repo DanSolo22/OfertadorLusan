@@ -26,4 +26,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', views.Index.as_view(), name='inicio'),
+    path('pedidos/', views.Pedidos.as_view(), name='pedidos'),
+    path('prealb/', views.PreAlbaranes.as_view(), name='pre-albaranes'),
+    path('consultas/', views.Consultas.as_view(), name='consultas'),
+    path('pedidosprov/', views.PedidosProv.as_view(), name='pedidos-prov'),
 ]

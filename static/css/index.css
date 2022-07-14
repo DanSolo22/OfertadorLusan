@@ -1,8 +1,103 @@
+* {
+    font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+}
+
 body {
     background-image: url("../images/fondo_generador.jpg");
+    margin: 0;
     background-repeat: no-repeat;
     background-position: center;
-    background-position-y: 3vh;
+    background-position-y: 14vh;
+}
+
+.header {
+    background: linear-gradient(315deg, #1f1f1c 60%, #ff7d1e 40%);
+    line-height: 40px;
+    box-shadow: 0 12px 6px -6px rgba(0, 0, 0, 0.2);
+    height: 5vh;
+    vertical-align: middle;
+    padding-top: 1vh;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+}
+
+.nav {
+    display: grid;
+    grid-template-areas:
+        '1 2 3 4';
+    grid-template-rows: 4vh;
+    grid-template-columns: 6.5vw;
+    width: 30vw;
+    align-content: center;
+    align-items: center;
+    justify-items: center;
+}
+
+#1 {
+    grid-area: 1;
+}
+
+#2 {
+    grid-area: 2;
+}
+
+#3 {
+    grid-area: 3;
+}
+
+#4 {
+    grid-area: 4;
+}
+
+li {
+    color: #595959;
+    font-family: 'bold', Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+.prin-li {
+    display: inline;
+}
+
+a:link, a:visited, a:hover, a:active {
+    color: #595959;
+    text-decoration: none;
+}
+
+.nav-link {
+    transition: 0.8s;
+
+}
+
+.prov-text {
+    line-height: 0.9;
+    text-align: center;
+}
+
+.nav-link:hover {
+    color: #e8e8e8;
+    cursor: pointer;
+}
+
+.dropdown {
+    display: inline-block;
+    width: fit-content;
+    justify-content: center;
+    margin-top: 1.4vh;
+}
+
+.dropdown-menu {
+    display: none;
+    margin: -2vh 0 0 -0.7vw;
+    text-align: center;
+    width: 6.5vw;
+    z-index: -3;
+    padding: 0;
+    background: #ff7d1e;
 }
 
 .form-div {
@@ -34,52 +129,59 @@ h1 {
 }
 
 .alert {
-  height: 3vh;
-  width: fit-content;
-  border-radius: 12px;
-  padding: 16px 22px 17px 20px;
-  display: flex;
-  align-items: center;
+    height: 3vh;
+    width: fit-content;
+    border-radius: 12px;
+    padding: 16px 22px 17px 20px;
+    display: flex;
+    align-items: center;
 }
 
 .alert-error {
-  background: #e41749;
+    background: #e41749;
 }
+
 .alert .icon__wrapper {
-  height: 34px;
-  width: 34px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.253);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    height: 34px;
+    width: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.253);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
 .alert .icon__wrapper span {
-  font-size: 21px;
-  color: #fff;
+    font-size: 21px;
+    color: #fff;
 }
+
 .alert p {
-  color: #fff;
-  font-family: Arial, serif;
-  margin-left: 10px;
+    color: #fff;
+    font-family: Arial, serif;
+    margin-left: 10px;
 }
+
 .alert p a,
 .alert p a:visited,
 .alert p a:active {
-  color: #fff;
+    color: #fff;
 }
+
 .alert .open {
-  margin-left: auto;
-  margin-right: 5px;
+    margin-left: auto;
+    margin-right: 5px;
 }
+
 .alert .close, .alert .open {
-  color: #fff;
-  transition: transform 0.5s;
-  font-size: 18px;
-  cursor: pointer;
+    color: #fff;
+    transition: transform 0.5s;
+    font-size: 18px;
+    cursor: pointer;
 }
+
 .alert .close:hover, .alert .open:hover {
-  transform: scale(1.3);
+    transform: scale(1.3);
 }
 
 #csv-form {
