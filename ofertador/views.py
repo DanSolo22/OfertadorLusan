@@ -313,7 +313,7 @@ class Index(View):
                             row_cells[0].paragraphs[0].runs[1].font.italic = True
 
                             if comprovar_stock(str(fecha), str(row[16]).strip()):
-                                if str(row[23]).strip() == 'Especial':
+                                if str(row[23]).strip() == 'Especial' or str(row[23]).strip() == 'Texto':
                                     row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
                                 else:
                                     row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
@@ -323,7 +323,7 @@ class Index(View):
                                     row_cells[1].paragraphs[0].runs[2].font.italic = True
                                     row_cells[1].paragraphs[0].runs[3].font.bold = True
                             else:
-                                if str(row[23]).strip() == 'Especial':
+                                if str(row[23]).strip() == 'Especial' or str(row[23]).strip() == 'Texto':
                                     row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
                                 else:
                                     row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
@@ -843,7 +843,7 @@ class Pedidos(View):
                             row_cells[0].paragraphs[0].runs[1].font.italic = True
 
                             if comprovar_stock(str(fecha), str(row[16]).strip()):
-                                if str(row[23]).strip() == 'Especial':
+                                if str(row[23]).strip() == 'Especial' or str(row[23]).strip() == 'Texto':
                                     row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
                                 else:
                                     row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
@@ -853,7 +853,7 @@ class Pedidos(View):
                                     row_cells[1].paragraphs[0].runs[2].font.italic = True
                                     row_cells[1].paragraphs[0].runs[3].font.bold = True
                             else:
-                                if str(row[23]).strip() == 'Especial':
+                                if str(row[23]).strip() == 'Especial' or str(row[23]).strip() == 'Texto':
                                     row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
                                 else:
                                     row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
@@ -1373,7 +1373,7 @@ class PreAlbaranes(View):
                             row_cells[0].paragraphs[0].runs[1].font.italic = True
 
                             if comprovar_stock(str(fecha), str(row[16]).strip()):
-                                if str(row[23]).strip() == 'Especial':
+                                if str(row[23]).strip() == 'Especial' or str(row[23]).strip() == 'Texto':
                                     row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
                                 else:
                                     row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
@@ -1383,7 +1383,7 @@ class PreAlbaranes(View):
                                     row_cells[1].paragraphs[0].runs[2].font.italic = True
                                     row_cells[1].paragraphs[0].runs[3].font.bold = True
                             else:
-                                if str(row[23]).strip() == 'Especial':
+                                if str(row[23]).strip() == 'Especial' or str(row[23]).strip() == 'Texto':
                                     row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
                                 else:
                                     row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
@@ -1903,7 +1903,7 @@ class Consultas(View):
                             row_cells[0].paragraphs[0].runs[1].font.italic = True
 
                             if comprovar_stock(str(fecha), str(row[16]).strip()):
-                                if str(row[23]).strip() == 'Especial':
+                                if str(row[23]).strip() == 'Especial' or str(row[23]).strip() == 'Texto':
                                     row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
                                 else:
                                     row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
@@ -1913,7 +1913,7 @@ class Consultas(View):
                                     row_cells[1].paragraphs[0].runs[2].font.italic = True
                                     row_cells[1].paragraphs[0].runs[3].font.bold = True
                             else:
-                                if str(row[23]).strip() == 'Especial':
+                                if str(row[23]).strip() == 'Especial' or str(row[23]).strip() == 'Texto':
                                     row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
                                 else:
                                     row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
@@ -2433,7 +2433,7 @@ class PedidosProv(View):
                             row_cells[0].paragraphs[0].runs[1].font.italic = True
 
                             if comprovar_stock(str(fecha), str(row[16]).strip()):
-                                if str(row[23]).strip() == 'Especial':
+                                if str(row[23]).strip() == 'Especial' or str(row[23]).strip() == 'Texto':
                                     row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
                                 else:
                                     row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
@@ -2443,7 +2443,7 @@ class PedidosProv(View):
                                     row_cells[1].paragraphs[0].runs[2].font.italic = True
                                     row_cells[1].paragraphs[0].runs[3].font.bold = True
                             else:
-                                if str(row[23]).strip() == 'Especial':
+                                if str(row[23]).strip() == 'Especial' or str(row[23]).strip() == 'Texto':
                                     row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
                                 else:
                                     row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
