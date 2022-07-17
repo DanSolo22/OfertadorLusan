@@ -8,7 +8,7 @@ document.getElementById('close').onmousedown = function (e) {
     return false;
 };
 
-document.getElementById('4').onmousedown = function (e) {
+document.getElementById('4').onclick = function (e) {
     e.preventDefault();
     if (submenu) {
         document.getElementById('4').style.marginTop = '1.4vh';
@@ -22,3 +22,8 @@ document.getElementById('4').onmousedown = function (e) {
     }
     return false;
 }
+
+function redirect(url) {
+    window.location = url;
+}
+

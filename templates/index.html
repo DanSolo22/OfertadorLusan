@@ -46,10 +46,10 @@
                     <p class="prov-text">PROVEEDORES<br>v</p>
                     <ul class='dropdown-menu' id="drop">
                         <li>
-                            <a class='nav-link' href="{{ url('consultas') }}">CONSULTAS</a>
+                            <a class='nav-link' onclick="redirect({{ url('consultas') }})">CONSULTAS</a>
                         </li>
                         <li>
-                            <a class='nav-link' href="{{ url('pedidos-prov') }}">PEDIDOS</a>
+                            <a class='nav-link' onclick="redirect({{ url('pedidos-prov') }})">PEDIDOS</a>
                         </li>
                     </ul>
                 </a>
