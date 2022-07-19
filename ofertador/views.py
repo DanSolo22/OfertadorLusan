@@ -208,8 +208,7 @@ class Index(View):
                     }
 
                 doc.render(context)
-
-                nombre_oferta = 'OFE_' + str(oferta).strip()
+                nombre_oferta = str(archivo_oferta).split('.')[0]
                 ruta_guardado = 'C:/generador/ofertas/' + nombre_oferta + '.docx'
                 doc.save(ruta_guardado)
 
@@ -620,10 +619,8 @@ class Index(View):
                 condiciones.runs[17].font.bold = True
 
                 doc.save(ruta_guardado)
-
-                #os.startfile(ruta_guardado)
                 webbrowser.open(ruta_guardado)
-                #subprocess.Popen(["open", ruta_guardado])
+
                 return redirect('inicio')
             else:
                 form = CargarOferta()
