@@ -1,4 +1,6 @@
 import os
+import subprocess
+import webbrowser
 
 import docx
 from django.shortcuts import render, redirect
@@ -66,6 +68,8 @@ def comprovar_plazo(fecha):
             return str(array_fecha[0]) + ' dias y ' + str(array_fecha[1]) + ' mes'
         else:
             return str(array_fecha[0]) + ' dias y ' + str(array_fecha[1]) + ' meses'
+    elif array_fecha[0] == '00' and array_fecha[1] == '00' and array_fecha[2] != '0000':
+        return str(array_fecha[2])
 
 
 def comprovar_stock(fecha_pedido, fecha_plazo):
@@ -308,52 +312,55 @@ class Index(View):
                             row_prod.height = Cm(1)
                             row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                            row_cells[0].paragraphs[0].add_run(row[22]).font.size = Pt(10)
-                            row_cells[0].paragraphs[0].add_run('\n' + row[4]).font.size = Pt(10)
-                            row_cells[0].paragraphs[0].runs[1].font.italic = True
-
-                            if comprovar_stock(str(fecha), str(row[16]).strip()):
-                                if str(row[23]).strip() == 'Especial' or str(row[23]).strip() == 'Texto':
-                                    row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
-                                else:
-                                    row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
-                                    row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(9)
-                                    row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(9)
-                                    row_cells[1].paragraphs[0].add_run('  [STOCK]').font.size = Pt(9)
-                                    row_cells[1].paragraphs[0].runs[2].font.italic = True
-                                    row_cells[1].paragraphs[0].runs[3].font.bold = True
+                            if str(row[23]).strip() == 'Texto':
+                                row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
                             else:
-                                if str(row[23]).strip() == 'Especial' or str(row[23]).strip() == 'Texto':
-                                    row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
+                                row_cells[0].paragraphs[0].add_run(row[22]).font.size = Pt(10)
+                                row_cells[0].paragraphs[0].add_run('\n' + row[4]).font.size = Pt(10)
+                                row_cells[0].paragraphs[0].runs[1].font.italic = True
+
+                                if comprovar_stock(str(fecha), str(row[16]).strip()):
+                                    if str(row[23]).strip() == 'Especial':
+                                        row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
+                                    else:
+                                        row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
+                                        row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(9)
+                                        row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(9)
+                                        row_cells[1].paragraphs[0].add_run('  [STOCK]').font.size = Pt(9)
+                                        row_cells[1].paragraphs[0].runs[2].font.italic = True
+                                        row_cells[1].paragraphs[0].runs[3].font.bold = True
                                 else:
-                                    row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
-                                    row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(9)
-                                    row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(9)
-                                    row_cells[1].paragraphs[0].add_run(
-                                        '  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(9)
-                                    row_cells[1].paragraphs[0].runs[2].font.italic = True
-                                    row_cells[1].paragraphs[0].runs[3].font.bold = True
+                                    if str(row[23]).strip() == 'Especial':
+                                        row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
+                                    else:
+                                        row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
+                                        row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(9)
+                                        row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(9)
+                                        row_cells[1].paragraphs[0].add_run(
+                                            '  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(9)
+                                        row_cells[1].paragraphs[0].runs[2].font.italic = True
+                                        row_cells[1].paragraphs[0].runs[3].font.bold = True
 
-                            row_cells[2].text = row[9]
-                            row_cells[2].paragraphs[0].runs[0].font.size = Pt(10)
-                            row_cells[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                                row_cells[2].text = row[9]
+                                row_cells[2].paragraphs[0].runs[0].font.size = Pt(10)
+                                row_cells[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                            row_cells[3].text = row[18]
-                            row_cells[3].paragraphs[0].runs[0].font.size = Pt(10)
-                            row_cells[3].paragraphs[0].runs[0].font.bold = True
-                            row_cells[3].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                                row_cells[3].text = row[18]
+                                row_cells[3].paragraphs[0].runs[0].font.size = Pt(10)
+                                row_cells[3].paragraphs[0].runs[0].font.bold = True
+                                row_cells[3].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                            if str(row[19]).strip() == '':
-                                row_cells[4].text = 'NETO'
-                            else:
-                                row_cells[4].text = row[19]
+                                if str(row[19]).strip() == '':
+                                    row_cells[4].text = 'NETO'
+                                else:
+                                    row_cells[4].text = row[19]
 
-                            row_cells[4].paragraphs[0].runs[0].font.size = Pt(10)
-                            row_cells[4].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                                row_cells[4].paragraphs[0].runs[0].font.size = Pt(10)
+                                row_cells[4].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                            row_cells[5].text = row[20]
-                            row_cells[5].paragraphs[0].runs[0].font.size = Pt(10)
-                            row_cells[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                                row_cells[5].text = row[20]
+                                row_cells[5].paragraphs[0].runs[0].font.size = Pt(10)
+                                row_cells[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                         count += 1
 
@@ -614,8 +621,9 @@ class Index(View):
 
                 doc.save(ruta_guardado)
 
-                os.startfile(ruta_guardado)
-
+                #os.startfile(ruta_guardado)
+                webbrowser.open(ruta_guardado)
+                #subprocess.Popen(["open", ruta_guardado])
                 return redirect('inicio')
             else:
                 form = CargarOferta()
