@@ -323,22 +323,23 @@ class Index(View):
                                         row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
                                     else:
                                         row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
-                                        row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(9)
-                                        row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(9)
-                                        row_cells[1].paragraphs[0].add_run('  [STOCK]').font.size = Pt(9)
-                                        row_cells[1].paragraphs[0].runs[2].font.italic = True
-                                        row_cells[1].paragraphs[0].runs[3].font.bold = True
+
+                                    row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(9)
+                                    row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(9)
+                                    row_cells[1].paragraphs[0].add_run('  [STOCK]').font.size = Pt(9)
+                                    row_cells[1].paragraphs[0].runs[2].font.italic = True
+                                    row_cells[1].paragraphs[0].runs[3].font.bold = True
                                 else:
                                     if str(row[23]).strip() == 'Especial':
                                         row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
                                     else:
                                         row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
-                                        row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(9)
-                                        row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(9)
-                                        row_cells[1].paragraphs[0].add_run(
-                                            '  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(9)
-                                        row_cells[1].paragraphs[0].runs[2].font.italic = True
-                                        row_cells[1].paragraphs[0].runs[3].font.bold = True
+
+                                    row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(9)
+                                    row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(9)
+                                    row_cells[1].paragraphs[0].add_run('  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(9)
+                                    row_cells[1].paragraphs[0].runs[2].font.italic = True
+                                    row_cells[1].paragraphs[0].runs[3].font.bold = True
 
                                 row_cells[2].text = row[9]
                                 row_cells[2].paragraphs[0].runs[0].font.size = Pt(10)
@@ -649,13 +650,13 @@ class Pedidos(View):
         if request.POST:
             form = CargarOferta(request.POST, request.FILES)
             if form.is_valid():
-                archivo_oferta = form.cleaned_data.get('oferta')
+                archivo_pedido = form.cleaned_data.get('oferta')
 
                 with open('csvofertas/oferta.csv', 'wb+') as destination:
-                    for chunk in archivo_oferta.chunks():
+                    for chunk in archivo_pedido.chunks():
                         destination.write(chunk)
 
-                oferta = ''
+                pedido = ''
                 fecha = ''
                 validez = ''
                 cliente = ''
@@ -688,7 +689,7 @@ class Pedidos(View):
                 iban = 'ES25 2100-1083-1102-0005-4013'
                 tel_fijo = '+34 937 14 45 61'
 
-                doc = DocxTemplate("csvofertas/plantilla_pedidos.docx")
+                doc = DocxTemplate("csvofertas/plantilla_pedido.docx")
 
                 with open('csvofertas/oferta.csv') as csv_file:
                     csv_reader = csv.reader(csv_file, delimiter=';')
@@ -696,7 +697,7 @@ class Pedidos(View):
 
                     for row in csv_reader:
                         if line_count == 1:
-                            oferta = row[0]
+                            pedido = row[0]
                             fecha = row[1]
                             validez = row[2]
                             cliente = row[3]
@@ -724,13 +725,13 @@ class Pedidos(View):
                             rec_quiv = row[29]
                             imp_rec_quiv = row[30]
                             total = row[31]
-                            forma_pago = row[49]
-                            transportista = row[50]
+                            '''forma_pago = row[49]
+                            transportista = row[50]'''
                         line_count += 1
 
                 context = \
                     {
-                        'OFERTA': oferta,
+                        'PEDIDO': pedido,
                         'FECHA': fecha,
                         'VALIDEZ': validez,
                         'CLIENTE': cliente,
@@ -748,9 +749,8 @@ class Pedidos(View):
                     }
 
                 doc.render(context)
-
-                nombre_oferta = 'OFE_' + str(oferta).strip()
-                ruta_guardado = 'C:/generador/ofertas/' + nombre_oferta + '.docx'
+                nombre_pedido = str(archivo_pedido).split('.')[0]
+                ruta_guardado = 'C:/generador/pedidos/' + nombre_pedido + '.docx'
                 doc.save(ruta_guardado)
 
                 doc = docx.Document(ruta_guardado)
@@ -1128,46 +1128,9 @@ class Pedidos(View):
                     table_resumen.cell(11, 5).paragraphs[0].runs[0].font.bold = True
                     table_resumen.cell(11, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                barra_cond = doc.add_paragraph()
-                insertHR(barra_cond)
-
-                condiciones = doc.add_paragraph()
-                condiciones.add_run('CONDICIONES:\n').font.size = Pt(11)
-                condiciones.add_run('\n').font.size = Pt(3)
-                condiciones.add_run('- Disponibilidad y precios indicados salvo venta.\n- Estos ').font.size = Pt(9)
-                condiciones.add_run('precios ').font.size = Pt(9)
-                condiciones.add_run('son para la ').font.size = Pt(9)
-                condiciones.add_run('totalidad de la oferta').font.size = Pt(9)
-                condiciones.add_run(
-                    ', en caso de pedido parcial los precios estarían sujetos a revisión.\n- Los ').font.size = Pt(9)
-                condiciones.add_run('plazos de entrega ').font.size = Pt(9)
-                condiciones.add_run('indicados son orientativos y se consideran, ').font.size = Pt(9)
-                condiciones.add_run('días laborales y en nuestro almacén, ').font.size = Pt(9)
-                condiciones.add_run('\n  a partir de la ').font.size = Pt(9)
-                condiciones.add_run('fecha confirmación del pedido.\n').font.size = Pt(9)
-                condiciones.add_run('- No se aceptan devolución de piezas especiales ').font.size = Pt(9)
-                condiciones.add_run('ni medidas fuera de catálogo.\n').font.size = Pt(9)
-                condiciones.add_run('- ').font.size = Pt(9)
-                condiciones.add_run(
-                    'Las piezas especiales se podrán suministrar con un +/- 10% de la cantidad ofertada.').font.size = Pt(
-                    9)
-                condiciones.add_run(
-                    '\n\n- El suministro quedará supeditado a la concesión de riesgo por parte de ').font.size = Pt(9)
-                condiciones.add_run('Crédito y Caución.').font.size = Pt(9)
-
-                condiciones.runs[0].font.bold = True
-                condiciones.runs[3].font.bold = True
-                condiciones.runs[5].font.bold = True
-                condiciones.runs[7].font.bold = True
-                condiciones.runs[9].font.bold = True
-                condiciones.runs[11].font.bold = True
-                condiciones.runs[13].font.bold = True
-                condiciones.runs[15].font.bold = True
-                condiciones.runs[17].font.bold = True
-
                 doc.save(ruta_guardado)
 
-                os.startfile(ruta_guardado)
+                #os.startfile(ruta_guardado)
 
                 return redirect('inicio')
             else:
@@ -1263,8 +1226,8 @@ class PreAlbaranes(View):
                             rec_quiv = row[29]
                             imp_rec_quiv = row[30]
                             total = row[31]
-                            forma_pago = row[49]
-                            transportista = row[50]
+                            '''forma_pago = row[49]
+                            transportista = row[50]'''
                         line_count += 1
 
                 context = \
