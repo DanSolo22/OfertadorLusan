@@ -469,7 +469,7 @@ class Index(View):
                     table_resumen.cell(1, 1).paragraphs[0].add_run('Transport in invoice')
                 else:
                     table_resumen.cell(0, 1).paragraphs[0].add_run('Portes a concretar')
-                    table_resumen.cell(1, 1).paragraphs[0].add_run('Transport to be determined')
+                    table_resumen.cell(1, 1).paragraphs[0].add_run('To be determined')
 
                 table_resumen.cell(0, 1).paragraphs[0].runs[0].font.size = Pt(8)
                 table_resumen.cell(0, 1).paragraphs[0].runs[0].font.bold = True
@@ -479,8 +479,14 @@ class Index(View):
                 table_resumen.cell(3, 1).paragraphs[0].text = peso
                 table_resumen.cell(3, 1).paragraphs[0].runs[0].font.size = Pt(8)
 
-                table_resumen.cell(6, 1).paragraphs[0].text = transportista
-                table_resumen.cell(6, 1).paragraphs[0].runs[0].font.size = Pt(8)
+                if transportista.strip() == '':
+                    table_resumen.cell(6, 1).paragraphs[0].add_run('A determinar\n').font.size = Pt(8)
+                    table_resumen.cell(6, 1).paragraphs[0].add_run('To be determined').font.size = Pt(8)
+                    table_resumen.cell(6, 1).paragraphs[0].runs[0].font.bold = True
+                    table_resumen.cell(6, 1).paragraphs[0].runs[1].font.italic = True
+                else:
+                    table_resumen.cell(6, 1).paragraphs[0].text = transportista
+                    table_resumen.cell(6, 1).paragraphs[0].runs[0].font.size = Pt(8)
 
                 table_resumen.cell(8, 1).paragraphs[0].add_run(contacto + '\n')
                 table_resumen.cell(8, 1).paragraphs[0].runs[0].font.size = Pt(10)
