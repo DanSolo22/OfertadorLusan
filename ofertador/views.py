@@ -459,18 +459,21 @@ class Index(View):
                 table_resumen.cell(9, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
                 if str(portes).strip() == 'D':
-                    table_resumen.cell(0, 1).paragraphs[0].text = 'Portes debidos'
-                    table_resumen.cell(1, 1).paragraphs[0].text = 'Transport not included'
+                    table_resumen.cell(0, 1).paragraphs[0].add_run('Portes debidos')
+                    table_resumen.cell(1, 1).paragraphs[0].add_run('Transport not included')
                 elif str(portes).strip() == 'P':
-                    table_resumen.cell(0, 1).paragraphs[0].text = 'Portes pagados'
-                    table_resumen.cell(1, 1).paragraphs[0].text = 'Transport included'
+                    table_resumen.cell(0, 1).paragraphs[0].add_run('Portes pagados')
+                    table_resumen.cell(1, 1).paragraphs[0].add_run('Transport included')
                 elif str(portes).strip() == 'F':
-                    table_resumen.cell(0, 1).paragraphs[0].text = 'Portes en factura'
-                    table_resumen.cell(1, 1).paragraphs[0].text = 'Transport in invoice'
+                    table_resumen.cell(0, 1).paragraphs[0].add_run('Portes en factura')
+                    table_resumen.cell(1, 1).paragraphs[0].add_run('Transport in invoice')
+                else:
+                    table_resumen.cell(0, 1).paragraphs[0].add_run('Portes a concretar')
+                    table_resumen.cell(1, 1).paragraphs[0].add_run('Transport to be determined')
 
                 table_resumen.cell(0, 1).paragraphs[0].runs[0].font.size = Pt(8)
-                table_resumen.cell(1, 1).paragraphs[0].runs[0].font.size = Pt(8)
                 table_resumen.cell(0, 1).paragraphs[0].runs[0].font.bold = True
+                table_resumen.cell(1, 1).paragraphs[0].runs[0].font.size = Pt(8)
                 table_resumen.cell(1, 1).paragraphs[0].runs[0].font.italic = True
 
                 table_resumen.cell(3, 1).paragraphs[0].text = peso
