@@ -468,7 +468,7 @@ class Index(View):
                     table_resumen.cell(0, 1).paragraphs[0].add_run('Portes en factura')
                     table_resumen.cell(1, 1).paragraphs[0].add_run('Transport in invoice')
                 else:
-                    table_resumen.cell(0, 1).paragraphs[0].add_run('Portes a concretar')
+                    table_resumen.cell(0, 1).paragraphs[0].add_run('A concretar')
                     table_resumen.cell(1, 1).paragraphs[0].add_run('To be determined')
 
                 table_resumen.cell(0, 1).paragraphs[0].runs[0].font.size = Pt(8)
