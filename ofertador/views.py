@@ -628,7 +628,7 @@ class Index(View):
                 condiciones.runs[17].font.bold = True
 
                 doc.save(ruta_guardado)
-                os.startfile(ruta_guardado, 'open')
+                #os.startfile(ruta_guardado, 'open')
 
                 return redirect('inicio')
             else:
