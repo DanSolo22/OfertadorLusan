@@ -1,12 +1,10 @@
 import os
-import subprocess
-import webbrowser
 
 import docx
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
 from docx.enum.table import WD_ROW_HEIGHT_RULE
-from docx.shared import Inches, Pt, Cm
+from docx.shared import Inches, Pt, Cm, RGBColor
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 
 from ofertador.forms import CargarOferta
@@ -437,16 +435,16 @@ class Index(View):
                 table_resumen.cell(1, 0).paragraphs[0].runs[0].font.italic = True
                 table_resumen.cell(1, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
-                table_resumen.cell(3, 0).paragraphs[0].add_run('PESO').font.size = Pt(8)
+                table_resumen.cell(3, 0).paragraphs[0].add_run('TRANSPORTE').font.size = Pt(8)
                 table_resumen.cell(3, 0).paragraphs[0].runs[0].font.bold = True
                 table_resumen.cell(3, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
-                table_resumen.cell(4, 0).paragraphs[0].add_run('WEIGHT').font.size = Pt(8)
+                table_resumen.cell(4, 0).paragraphs[0].add_run('TRANSPORT').font.size = Pt(8)
                 table_resumen.cell(4, 0).paragraphs[0].runs[0].font.italic = True
                 table_resumen.cell(4, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
-                table_resumen.cell(6, 0).paragraphs[0].add_run('TRANSPORTE\n').font.size = Pt(8)
-                table_resumen.cell(6, 0).paragraphs[0].add_run('TRANSPORT').font.size = Pt(8)
+                table_resumen.cell(6, 0).paragraphs[0].add_run('PESO\n').font.size = Pt(8)
+                table_resumen.cell(6, 0).paragraphs[0].add_run('WEIGHT').font.size = Pt(8)
                 table_resumen.cell(6, 0).paragraphs[0].runs[0].font.bold = True
                 table_resumen.cell(6, 0).paragraphs[0].runs[1].font.italic = True
                 table_resumen.cell(6, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
@@ -477,17 +475,17 @@ class Index(View):
                 table_resumen.cell(0, 1).paragraphs[0].runs[0].font.bold = True
                 table_resumen.cell(1, 1).paragraphs[0].runs[0].font.italic = True
 
-                table_resumen.cell(3, 1).paragraphs[0].text = peso
-                table_resumen.cell(3, 1).paragraphs[0].runs[0].font.size = Pt(8)
-
                 if transportista.strip() == '':
-                    table_resumen.cell(6, 1).paragraphs[0].add_run('A concretar\n').font.size = Pt(8)
-                    table_resumen.cell(6, 1).paragraphs[0].add_run('To be determined').font.size = Pt(8)
-                    table_resumen.cell(6, 1).paragraphs[0].runs[0].font.bold = True
-                    table_resumen.cell(6, 1).paragraphs[0].runs[1].font.italic = True
+                    table_resumen.cell(3, 1).paragraphs[0].add_run('A concretar\n').font.size = Pt(8)
+                    table_resumen.cell(3, 1).paragraphs[0].add_run('To be determined').font.size = Pt(8)
+                    table_resumen.cell(3, 1).paragraphs[0].runs[0].font.bold = True
+                    table_resumen.cell(3, 1).paragraphs[0].runs[1].font.italic = True
                 else:
-                    table_resumen.cell(6, 1).paragraphs[0].text = transportista
-                    table_resumen.cell(6, 1).paragraphs[0].runs[0].font.size = Pt(8)
+                    table_resumen.cell(3, 1).paragraphs[0].text = transportista
+                    table_resumen.cell(3, 1).paragraphs[0].runs[0].font.size = Pt(8)
+
+                table_resumen.cell(6, 1).paragraphs[0].text = peso
+                table_resumen.cell(6, 1).paragraphs[0].runs[0].font.size = Pt(8)
 
                 table_resumen.cell(8, 1).paragraphs[0].add_run(contacto + '\n')
                 table_resumen.cell(8, 1).paragraphs[0].runs[0].font.size = Pt(10)
@@ -652,13 +650,13 @@ class Pedidos(View):
             if form.is_valid():
                 archivo_pedido = form.cleaned_data.get('oferta')
 
-                with open('csvofertas/oferta.csv', 'wb+') as destination:
+                with open('csvofertas/pedido.csv', 'wb+') as destination:
                     for chunk in archivo_pedido.chunks():
                         destination.write(chunk)
 
                 pedido = ''
                 fecha = ''
-                validez = ''
+                plazo = ''
                 cliente = ''
                 proveedor = ''
                 rsoc = ''
@@ -687,11 +685,11 @@ class Pedidos(View):
                 forma_pago = ''
                 transportista = ''
                 iban = 'ES25 2100-1083-1102-0005-4013'
-                tel_fijo = '+34 937 14 45 61'
+                tel_fijo = '+34 937144561'
 
                 doc = DocxTemplate("csvofertas/plantilla_pedido.docx")
 
-                with open('csvofertas/oferta.csv') as csv_file:
+                with open('csvofertas/pedido.csv') as csv_file:
                     csv_reader = csv.reader(csv_file, delimiter=';')
                     line_count = 0
 
@@ -699,7 +697,7 @@ class Pedidos(View):
                         if line_count == 1:
                             pedido = row[0]
                             fecha = row[1]
-                            validez = row[2]
+                            plazo = row[2]
                             cliente = row[3]
                             proveedor = row[4]
                             rsoc = row[5]
@@ -733,9 +731,10 @@ class Pedidos(View):
                     {
                         'PEDIDO': pedido,
                         'FECHA': fecha,
-                        'VALIDEZ': validez,
                         'CLIENTE': cliente,
                         'PROVEEDOR': proveedor,
+                        'AGENTE': contacto,
+                        'PLAZOENTREGA': plazo,
                         'RSOC': rsoc,
                         'EMPRESA': empresa,
                         'DIR': dir,
@@ -852,11 +851,13 @@ class Pedidos(View):
                             row_prod.height = Cm(1)
                             row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                            row_cells[0].paragraphs[0].add_run(row[22]).font.size = Pt(10)
-                            row_cells[0].paragraphs[0].add_run('\n' + row[4]).font.size = Pt(10)
+                            row_cells[0].paragraphs[0].add_run(row[8]).font.size = Pt(10)
+                            row_cells[0].paragraphs[0].add_run('\n' + row[1]).font.size = Pt(10)
                             row_cells[0].paragraphs[0].runs[1].font.italic = True
 
-                            if comprovar_stock(str(fecha), str(row[16]).strip()):
+                            row_cells[1].paragraphs[0].add_run(row[9]).font.size = Pt(10)
+
+                            '''if comprovar_stock(str(fecha), str(row[16]).strip()):
                                 if str(row[23]).strip() == 'Especial' or str(row[23]).strip() == 'Texto':
                                     row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
                                 else:
@@ -876,26 +877,22 @@ class Pedidos(View):
                                     row_cells[1].paragraphs[0].add_run(
                                         '  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(9)
                                     row_cells[1].paragraphs[0].runs[2].font.italic = True
-                                    row_cells[1].paragraphs[0].runs[3].font.bold = True
+                                    row_cells[1].paragraphs[0].runs[3].font.bold = True'''
 
-                            row_cells[2].text = row[9]
+                            row_cells[2].text = row[3]
                             row_cells[2].paragraphs[0].runs[0].font.size = Pt(10)
                             row_cells[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                            row_cells[3].text = row[18]
+                            row_cells[3].text = row[4]
                             row_cells[3].paragraphs[0].runs[0].font.size = Pt(10)
                             row_cells[3].paragraphs[0].runs[0].font.bold = True
                             row_cells[3].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                            if str(row[19]).strip() == '':
-                                row_cells[4].text = 'NETO'
-                            else:
-                                row_cells[4].text = row[19]
-
+                            row_cells[4].text = row[6]
                             row_cells[4].paragraphs[0].runs[0].font.size = Pt(10)
                             row_cells[4].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                            row_cells[5].text = row[20]
+                            row_cells[5].text = row[7]
                             row_cells[5].paragraphs[0].runs[0].font.size = Pt(10)
                             row_cells[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
@@ -922,15 +919,13 @@ class Pedidos(View):
                 pie_tabla[3].merge(pie_tabla[2])
                 pie_tabla[0].merge(pie_tabla[1])
 
-                pie_tabla[0].text = 'PRECIOS VÁLIDOS PARA LAS CANTIDADES OFERTADAS'
-                pie_tabla[0].paragraphs[0].runs[0].font.size = Pt(10)
-                pie_tabla[0].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
-                pie_tabla[0].paragraphs[0].runs[0].font.bold = True
-
-                pie_tabla[2].text = 'OFERTA VIGENTE HASTA LA FECHA:\n' + validez
-                pie_tabla[2].paragraphs[0].runs[0].font.size = Pt(10)
+                pie_tabla[2].paragraphs[0].add_run('PLAZO DE ENTREGA:\n').font.size = Pt(10)
+                pie_tabla[2].paragraphs[0].add_run(plazo).font.size = Pt(10)
                 pie_tabla[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                 pie_tabla[2].paragraphs[0].runs[0].font.bold = True
+                pie_tabla[2].paragraphs[0].runs[0].font.color.rgb = RGBColor(191, 34, 34)
+                pie_tabla[2].paragraphs[0].runs[1].font.bold = True
+                pie_tabla[2].paragraphs[0].runs[1].font.italic = True
 
                 doc.add_paragraph()
                 doc.add_paragraph()
@@ -974,16 +969,24 @@ class Pedidos(View):
                 table_resumen.cell(1, 0).paragraphs[0].runs[0].font.italic = True
                 table_resumen.cell(1, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
-                table_resumen.cell(3, 0).paragraphs[0].add_run('PESO').font.size = Pt(8)
+                table_resumen.cell(0, 0).paragraphs[0].add_run('PORTES').font.size = Pt(8)
+                table_resumen.cell(0, 0).paragraphs[0].runs[0].font.bold = True
+                table_resumen.cell(0, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+
+                table_resumen.cell(1, 0).paragraphs[0].add_run('TRANSPORT').font.size = Pt(8)
+                table_resumen.cell(1, 0).paragraphs[0].runs[0].font.italic = True
+                table_resumen.cell(1, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+
+                table_resumen.cell(3, 0).paragraphs[0].add_run('TRANSPORTE').font.size = Pt(8)
                 table_resumen.cell(3, 0).paragraphs[0].runs[0].font.bold = True
                 table_resumen.cell(3, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
-                table_resumen.cell(4, 0).paragraphs[0].add_run('WEIGHT').font.size = Pt(8)
+                table_resumen.cell(4, 0).paragraphs[0].add_run('TRANSPORT').font.size = Pt(8)
                 table_resumen.cell(4, 0).paragraphs[0].runs[0].font.italic = True
                 table_resumen.cell(4, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
-                table_resumen.cell(6, 0).paragraphs[0].add_run('TRANSPORTE\n').font.size = Pt(8)
-                table_resumen.cell(6, 0).paragraphs[0].add_run('TRANSPORT').font.size = Pt(8)
+                table_resumen.cell(6, 0).paragraphs[0].add_run('PESO\n').font.size = Pt(8)
+                table_resumen.cell(6, 0).paragraphs[0].add_run('WEIGHT').font.size = Pt(8)
                 table_resumen.cell(6, 0).paragraphs[0].runs[0].font.bold = True
                 table_resumen.cell(6, 0).paragraphs[0].runs[1].font.italic = True
                 table_resumen.cell(6, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
@@ -997,14 +1000,14 @@ class Pedidos(View):
                 table_resumen.cell(9, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
                 if str(portes).strip() == 'D':
-                    table_resumen.cell(0, 1).paragraphs[0].text = 'Portes debidos'
-                    table_resumen.cell(1, 1).paragraphs[0].text = 'Transport not included'
+                    table_resumen.cell(0, 1).paragraphs[0].add_run('Portes debidos')
+                    table_resumen.cell(1, 1).paragraphs[0].add_run('Transport not included')
                 elif str(portes).strip() == 'P':
-                    table_resumen.cell(0, 1).paragraphs[0].text = 'Portes pagados'
-                    table_resumen.cell(1, 1).paragraphs[0].text = 'Transport included'
+                    table_resumen.cell(0, 1).paragraphs[0].add_run('Portes pagados')
+                    table_resumen.cell(1, 1).paragraphs[0].add_run('Transport included')
                 elif str(portes).strip() == 'F':
-                    table_resumen.cell(0, 1).paragraphs[0].text = 'Portes en factura'
-                    table_resumen.cell(1, 1).paragraphs[0].text = 'Transport in invoice'
+                    table_resumen.cell(0, 1).paragraphs[0].add_run('Portes en factura')
+                    table_resumen.cell(1, 1).paragraphs[0].add_run('Transport in invoice')
                 else:
                     table_resumen.cell(0, 1).paragraphs[0].text = 'A concretar'
                     table_resumen.cell(1, 1).paragraphs[0].text = 'To be determined'
@@ -1014,17 +1017,17 @@ class Pedidos(View):
                 table_resumen.cell(0, 1).paragraphs[0].runs[0].font.bold = True
                 table_resumen.cell(1, 1).paragraphs[0].runs[0].font.italic = True
 
-                table_resumen.cell(3, 1).paragraphs[0].text = peso
-                table_resumen.cell(3, 1).paragraphs[0].runs[0].font.size = Pt(8)
-
                 if transportista.strip() == '':
-                    table_resumen.cell(6, 1).paragraphs[0].add_run('A concretar\n').font.size = Pt(8)
-                    table_resumen.cell(6, 1).paragraphs[0].add_run('To be determined').font.size = Pt(8)
-                    table_resumen.cell(6, 1).paragraphs[0].runs[0].font.bold = True
-                    table_resumen.cell(6, 1).paragraphs[0].runs[1].font.italic = True
+                    table_resumen.cell(3, 1).paragraphs[0].add_run('A concretar\n').font.size = Pt(8)
+                    table_resumen.cell(3, 1).paragraphs[0].runs[0].font.bold = True
+                    table_resumen.cell(4, 1).paragraphs[0].add_run('To be determined').font.size = Pt(8)
+                    table_resumen.cell(4, 1).paragraphs[0].runs[0].font.italic = True
                 else:
-                    table_resumen.cell(6, 1).paragraphs[0].text = transportista
-                    table_resumen.cell(6, 1).paragraphs[0].runs[0].font.size = Pt(8)
+                    table_resumen.cell(3, 1).paragraphs[0].text = transportista
+                    table_resumen.cell(3, 1).paragraphs[0].runs[0].font.size = Pt(8)
+
+                table_resumen.cell(6, 1).paragraphs[0].text = peso
+                table_resumen.cell(6, 1).paragraphs[0].runs[0].font.size = Pt(8)
 
                 table_resumen.cell(8, 1).paragraphs[0].add_run(contacto + '\n')
                 table_resumen.cell(8, 1).paragraphs[0].runs[0].font.size = Pt(10)
@@ -1033,7 +1036,7 @@ class Pedidos(View):
                 table_resumen.cell(9, 1).paragraphs[0].add_run(tel_fijo)
                 table_resumen.cell(9, 1).paragraphs[0].runs[0].font.size = Pt(10)
 
-                '''Resumen del pedido'''
+                #Resumen del pedido
 
                 table_resumen.cell(0, 3).paragraphs[0].add_run('IMPORTE BRUTO / ').font.size = Pt(8)
                 table_resumen.cell(0, 3).paragraphs[0].add_run('GROSS AMOUNT').font.size = Pt(8)
@@ -1130,9 +1133,9 @@ class Pedidos(View):
 
                 doc.save(ruta_guardado)
 
-                #os.startfile(ruta_guardado)
+                os.startfile(ruta_guardado)
 
-                return redirect('inicio')
+                return redirect('pedidos')
             else:
                 form = CargarOferta()
                 msg = 'Fichero no válido. Porfavor, compruebe el archivo.'
