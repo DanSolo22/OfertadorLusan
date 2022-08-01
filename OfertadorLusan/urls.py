@@ -25,7 +25,7 @@ urlpatterns = [
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
     path('admin/', admin.site.urls),
 
-    path('', views.Index.as_view(), name='inicio'),
+    path('', views.Ofertas.as_view(), name='inicio'),
     path('pedidos/', views.Pedidos.as_view(), name='pedidos'),
     path('prealb/', views.PreAlbaranes.as_view(), name='pre-albaranes'),
     path('consultas/', views.Consultas.as_view(), name='consultas'),
