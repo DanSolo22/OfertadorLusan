@@ -143,6 +143,10 @@ class Ofertas(View):
                 imp_rec_quiv = ''
                 total = ''
                 forma_pago = ''
+                giros = ''
+                dp1 = ''
+                dp2 = ''
+                dp3 = ''
                 transportista = ''
                 iban = 'ES25 2100-1083-1102-0005-4013'
                 tel_fijo = '+34 937144561'
@@ -185,6 +189,10 @@ class Ofertas(View):
                             imp_rec_quiv = row[30]
                             total = row[31]
                             forma_pago = row[49]
+                            giros = ''
+                            dp1 = ''
+                            dp2 = ''
+                            dp3 = ''
                             transportista = row[50]
                         line_count += 1
 
@@ -220,9 +228,9 @@ class Ofertas(View):
                 for i in range(6):
                     for cell in table.columns[i].cells:
                         if i == 0:
-                            cell.width = Inches(0.5)
+                            cell.width = Cm(2.75)
                         elif i == 1:
-                            cell.width = Inches(8)
+                            cell.width = Cm(8)
                         elif i == 2:
                             cell.width = Inches(0.2)
                             cell.paragraphs[0].paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
@@ -591,6 +599,22 @@ class Ofertas(View):
                     table_resumen.cell(11, 5).paragraphs[0].add_run(iban).font.size = Pt(9)
                     table_resumen.cell(11, 5).paragraphs[0].runs[0].font.bold = True
                     table_resumen.cell(11, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                elif str(forma_pago).strip() == 'GIRO':
+                    table_resumen.cell(11, 5).paragraphs[0].add_run('a' + giros + ' DIAS').font.size = Pt(8)
+                    table_resumen.cell(12, 5).paragraphs[0].add_run('DIAS ').font.size = Pt(9)
+
+                    if str(dp1).strip() != '0':
+                        table_resumen.cell(12, 5).paragraphs[0].add_run(dp1).font.size = Pt(9)
+                        table_resumen.cell(12, 5).paragraphs[0].runs[1].font.bold = True
+                        table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                    if str(dp2).strip() != '0':
+                        table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp2).font.size = Pt(9)
+                        table_resumen.cell(12, 5).paragraphs[0].runs[2].font.bold = True
+                        table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                    if str(dp3).strip() != '0':
+                        table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp3).font.size = Pt(9)
+                        table_resumen.cell(12, 5).paragraphs[0].runs[3].font.bold = True
+                        table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                 barra_cond = doc.add_paragraph()
                 insertHR(barra_cond)
@@ -686,6 +710,10 @@ class Pedidos(View):
                 imp_rec_quiv = ''
                 total = ''
                 forma_pago = ''
+                giros = ''
+                dp1 = ''
+                dp2 = ''
+                dp3 = ''
                 transportista = ''
                 icoterm = ''
                 iban = 'ES25 2100-1083-1102-0005-4013'
@@ -716,6 +744,10 @@ class Pedidos(View):
                             icoterm = row[17]
                             agente = row[18]
                             forma_pago = row[21]
+                            giros = row[22]
+                            dp1 = row[25]
+                            dp2 = row[26]
+                            dp3 = row[27]
                             contacto = row[28]
                             transportista = row[30]
                             peso = row[31] + ' kg.'
@@ -763,9 +795,9 @@ class Pedidos(View):
                 for i in range(6):
                     for cell in table.columns[i].cells:
                         if i == 0:
-                            cell.width = Inches(0.5)
+                            cell.width = Cm(2.68)
                         elif i == 1:
-                            cell.width = Inches(8)
+                            cell.width = Cm(19)
                         elif i == 2:
                             cell.width = Inches(0.2)
                             cell.paragraphs[0].paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
@@ -860,28 +892,9 @@ class Pedidos(View):
                             row_cells[0].paragraphs[0].runs[1].font.italic = True
 
                             row_cells[1].paragraphs[0].add_run(row[2]).font.size = Pt(10)
-
-                            '''if comprovar_stock(str(fecha), str(row[16]).strip()):
-                                if str(row[23]).strip() == 'Especial' or str(row[23]).strip() == 'Texto':
-                                    row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
-                                else:
-                                    row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
-                                    row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(9)
-                                    row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(9)
-                                    row_cells[1].paragraphs[0].add_run('  [STOCK]').font.size = Pt(9)
-                                    row_cells[1].paragraphs[0].runs[2].font.italic = True
-                                    row_cells[1].paragraphs[0].runs[3].font.bold = True
-                            else:
-                                if str(row[23]).strip() == 'Especial' or str(row[23]).strip() == 'Texto':
-                                    row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
-                                else:
-                                    row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
-                                    row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(9)
-                                    row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(9)
-                                    row_cells[1].paragraphs[0].add_run(
-                                        '  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(9)
-                                    row_cells[1].paragraphs[0].runs[2].font.italic = True
-                                    row_cells[1].paragraphs[0].runs[3].font.bold = True'''
+                            row_cells[1].paragraphs[0].add_run('\nPedido: ').font.size = Pt(9)
+                            row_cells[1].paragraphs[0].add_run(row[0]).font.size = Pt(9)
+                            row_cells[1].paragraphs[0].runs[2].font.bold = True
 
                             row_cells[2].text = row[3]
                             row_cells[2].paragraphs[0].runs[0].font.size = Pt(10)
@@ -1135,10 +1148,26 @@ class Pedidos(View):
                     table_resumen.cell(12, 5).paragraphs[0].add_run(iban).font.size = Pt(9)
                     table_resumen.cell(12, 5).paragraphs[0].runs[0].font.bold = True
                     table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                elif str(forma_pago).strip() == 'GIRO':
+                    table_resumen.cell(11, 5).paragraphs[0].add_run('a ' + giros + ' DIAS').font.size = Pt(8)
+                    table_resumen.cell(12, 5).paragraphs[0].add_run('DIAS ').font.size = Pt(9)
+
+                    if str(dp1).strip() != '0':
+                        table_resumen.cell(12, 5).paragraphs[0].add_run(dp1).font.size = Pt(9)
+                        table_resumen.cell(12, 5).paragraphs[0].runs[1].font.bold = True
+                        table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                    if str(dp2).strip() != '0':
+                        table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp2).font.size = Pt(9)
+                        table_resumen.cell(12, 5).paragraphs[0].runs[2].font.bold = True
+                        table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                    if str(dp3).strip() != '0':
+                        table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp3).font.size = Pt(9)
+                        table_resumen.cell(12, 5).paragraphs[0].runs[3].font.bold = True
+                        table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                 doc.save(ruta_guardado)
 
-                os.startfile(ruta_guardado)
+                #os.startfile(ruta_guardado)
 
                 return redirect('pedidos')
             else:
@@ -1194,6 +1223,10 @@ class PreAlbaranes(View):
                 imp_rec_quiv = ''
                 total = ''
                 forma_pago = ''
+                giros = ''
+                dp1 = ''
+                dp2 = ''
+                dp3 = ''
                 transportista = ''
                 iban = 'ES25 2100-1083-1102-0005-4013'
                 icoterm = ''
@@ -1222,6 +1255,10 @@ class PreAlbaranes(View):
                             icoterm = row[17]
                             agente = '(' + row[18] + ')'
                             forma_pago = row[24]
+                            giros = row[25]
+                            dp1 = row[28]
+                            dp2 = row[29]
+                            dp3 = row[30]
                             transportista = row[35]
                             peso = row[48] + ' kg.'
                             importe_bruto = row[51]
@@ -1269,9 +1306,9 @@ class PreAlbaranes(View):
                 for i in range(6):
                     for cell in table.columns[i].cells:
                         if i == 0:
-                            cell.width = Inches(0.5)
+                            cell.width = Cm(2.68)
                         elif i == 1:
-                            cell.width = Inches(8)
+                            cell.width = Cm(19)
                         elif i == 2:
                             cell.width = Inches(0.2)
                             cell.paragraphs[0].paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
@@ -1361,11 +1398,15 @@ class PreAlbaranes(View):
                             row_prod.height = Cm(1)
                             row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                            row_cells[0].paragraphs[0].add_run(row[3]).font.size = Pt(10)
-                            row_cells[0].paragraphs[0].add_run('\n' + row[24]).font.size = Pt(10)
+                            row_cells[0].paragraphs[0].add_run(row[24]).font.size = Pt(9)
+                            row_cells[0].paragraphs[0].add_run('\n' + row[3]).font.size = Pt(9)
                             row_cells[0].paragraphs[0].runs[1].font.italic = True
+                            row_cells[0].paragraphs[0].runs[1].font.bold = True
 
                             row_cells[1].paragraphs[0].add_run(row[25]).font.size = Pt(10)
+                            row_cells[1].paragraphs[0].add_run('\nPedido: ').font.size = Pt(9)
+                            row_cells[1].paragraphs[0].add_run(row[2]).font.size = Pt(9)
+                            row_cells[1].paragraphs[0].runs[2].font.bold = True
 
                             row_cells[2].text = row[12]
                             row_cells[2].paragraphs[0].runs[0].font.size = Pt(10)
@@ -1593,10 +1634,25 @@ class PreAlbaranes(View):
                     table_resumen.cell(12, 5).paragraphs[0].add_run(iban).font.size = Pt(9)
                     table_resumen.cell(12, 5).paragraphs[0].runs[0].font.bold = True
                     table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                elif str(forma_pago).strip() == 'GIRO':
+                    table_resumen.cell(11, 5).paragraphs[0].add_run('a ' + giros + ' DIAS').font.size = Pt(8)
+                    table_resumen.cell(12, 5).paragraphs[0].add_run('DIAS ').font.size = Pt(9)
 
+                    if str(dp1).strip() != '0':
+                        table_resumen.cell(12, 5).paragraphs[0].add_run(dp1).font.size = Pt(9)
+                        table_resumen.cell(12, 5).paragraphs[0].runs[1].font.bold = True
+                        table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                    if str(dp2).strip() != '0':
+                        table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp2).font.size = Pt(9)
+                        table_resumen.cell(12, 5).paragraphs[0].runs[2].font.bold = True
+                        table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                    if str(dp3).strip() != '0':
+                        table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp3).font.size = Pt(9)
+                        table_resumen.cell(12, 5).paragraphs[0].runs[3].font.bold = True
+                        table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                 doc.save(ruta_guardado)
 
-                os.startfile(ruta_guardado)
+                #os.startfile(ruta_guardado)
 
                 return redirect('pre-albaranes')
             else:
@@ -1652,6 +1708,10 @@ class Consultas(View):
                 imp_rec_quiv = ''
                 total = ''
                 forma_pago = ''
+                giros = ''
+                dp1 = ''
+                dp2 = ''
+                dp3 = ''
                 transportista = ''
                 iban = 'ES25 2100-1083-1102-0005-4013'
                 tel_fijo = '+34 937 14 45 61'
@@ -2086,6 +2146,22 @@ class Consultas(View):
                     table_resumen.cell(11, 5).paragraphs[0].add_run(iban).font.size = Pt(9)
                     table_resumen.cell(11, 5).paragraphs[0].runs[0].font.bold = True
                     table_resumen.cell(11, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                elif str(forma_pago).strip() == 'GIRO':
+                    table_resumen.cell(11, 5).paragraphs[0].add_run('a ' + giros + ' DIAS').font.size = Pt(8)
+                    table_resumen.cell(12, 5).paragraphs[0].add_run('DIAS ').font.size = Pt(9)
+
+                    if str(dp1).strip() != '0':
+                        table_resumen.cell(12, 5).paragraphs[0].add_run(dp1).font.size = Pt(9)
+                        table_resumen.cell(12, 5).paragraphs[0].runs[1].font.bold = True
+                        table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                    if str(dp2).strip() != '0':
+                        table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp2).font.size = Pt(9)
+                        table_resumen.cell(12, 5).paragraphs[0].runs[2].font.bold = True
+                        table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                    if str(dp3).strip() != '0':
+                        table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp3).font.size = Pt(9)
+                        table_resumen.cell(12, 5).paragraphs[0].runs[3].font.bold = True
+                        table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                 barra_cond = doc.add_paragraph()
                 insertHR(barra_cond)
@@ -2126,7 +2202,7 @@ class Consultas(View):
 
                 doc.save(ruta_guardado)
 
-                os.startfile(ruta_guardado)
+                #os.startfile(ruta_guardado)
 
                 return redirect('inicio')
             else:
@@ -2182,6 +2258,10 @@ class PedidosProv(View):
                 imp_rec_quiv = ''
                 total = ''
                 forma_pago = ''
+                giros = ''
+                dp1 = ''
+                dp2 = ''
+                dp3 = ''
                 transportista = ''
                 iban = 'ES25 2100-1083-1102-0005-4013'
                 tel_fijo = '+34 937 14 45 61'
@@ -2616,6 +2696,22 @@ class PedidosProv(View):
                     table_resumen.cell(11, 5).paragraphs[0].add_run(iban).font.size = Pt(9)
                     table_resumen.cell(11, 5).paragraphs[0].runs[0].font.bold = True
                     table_resumen.cell(11, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                elif str(forma_pago).strip() == 'GIRO':
+                    table_resumen.cell(11, 5).paragraphs[0].add_run('a ' + giros + ' DIAS').font.size = Pt(8)
+                    table_resumen.cell(12, 5).paragraphs[0].add_run('DIAS ').font.size = Pt(9)
+
+                    if str(dp1).strip() != '0':
+                        table_resumen.cell(12, 5).paragraphs[0].add_run(dp1).font.size = Pt(9)
+                        table_resumen.cell(12, 5).paragraphs[0].runs[1].font.bold = True
+                        table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                    if str(dp2).strip() != '0':
+                        table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp2).font.size = Pt(9)
+                        table_resumen.cell(12, 5).paragraphs[0].runs[2].font.bold = True
+                        table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                    if str(dp3).strip() != '0':
+                        table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp3).font.size = Pt(9)
+                        table_resumen.cell(12, 5).paragraphs[0].runs[3].font.bold = True
+                        table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                 barra_cond = doc.add_paragraph()
                 insertHR(barra_cond)
@@ -2656,7 +2752,7 @@ class PedidosProv(View):
 
                 doc.save(ruta_guardado)
 
-                os.startfile(ruta_guardado)
+                #os.startfile(ruta_guardado)
 
                 return redirect('inicio')
             else:
