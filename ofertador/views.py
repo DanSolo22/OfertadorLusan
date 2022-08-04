@@ -1272,7 +1272,6 @@ class PreAlbaranes(View):
                             rec_quiv = row[62]
                             imp_rec_quiv = row[63]
                             total = row[64]
-                            icoterm = row[65]
                         line_count += 1
 
                 context = \
