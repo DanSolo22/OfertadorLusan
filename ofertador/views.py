@@ -586,35 +586,22 @@ class Ofertas(View):
                 table_resumen.cell(10, 3).paragraphs[0].runs[1].font.italic = True
                 table_resumen.cell(10, 3).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
-                table_resumen.cell(10, 5).paragraphs[0].add_run(forma_pago).font.size = Pt(8)
-                table_resumen.cell(10, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-
                 table_resumen.cell(11, 5).merge(table_resumen.cell(11, 4))
+                table_resumen.cell(11, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                 if str(forma_pago).strip() == 'TRANSFERENCIA' or str(forma_pago).strip() == 'CONTADO':
+                    table_resumen.cell(10, 5).paragraphs[0].add_run(str(forma_pago).strip()).font.size = Pt(8)
+                    table_resumen.cell(10, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                     table_resumen.cell(11, 3).paragraphs[0].add_run('SWIFT/IBAN').font.size = Pt(9)
                     table_resumen.cell(11, 3).paragraphs[0].runs[0].font.bold = True
                     table_resumen.cell(11, 3).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
                     table_resumen.cell(11, 5).paragraphs[0].add_run(iban).font.size = Pt(9)
                     table_resumen.cell(11, 5).paragraphs[0].runs[0].font.bold = True
-                    table_resumen.cell(11, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-                elif str(forma_pago).strip() == 'GIRO':
-                    table_resumen.cell(11, 5).paragraphs[0].add_run('a' + giros + ' DIAS').font.size = Pt(8)
-                    table_resumen.cell(12, 5).paragraphs[0].add_run('DIAS ').font.size = Pt(9)
 
-                    if str(dp1).strip() != '0':
-                        table_resumen.cell(12, 5).paragraphs[0].add_run(dp1).font.size = Pt(9)
-                        table_resumen.cell(12, 5).paragraphs[0].runs[1].font.bold = True
-                        table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-                    if str(dp2).strip() != '0':
-                        table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp2).font.size = Pt(9)
-                        table_resumen.cell(12, 5).paragraphs[0].runs[2].font.bold = True
-                        table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-                    if str(dp3).strip() != '0':
-                        table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp3).font.size = Pt(9)
-                        table_resumen.cell(12, 5).paragraphs[0].runs[3].font.bold = True
-                        table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                else:
+                    table_resumen.cell(10, 5).paragraphs[0].add_run(str(forma_pago).strip()).font.size = Pt(8)
+                    table_resumen.cell(10, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                 barra_cond = doc.add_paragraph()
                 insertHR(barra_cond)
@@ -1135,12 +1122,11 @@ class Pedidos(View):
                 table_resumen.cell(11, 3).paragraphs[0].runs[1].font.italic = True
                 table_resumen.cell(11, 3).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
-                table_resumen.cell(11, 5).paragraphs[0].add_run(forma_pago).font.size = Pt(8)
-                table_resumen.cell(11, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-
                 table_resumen.cell(12, 5).merge(table_resumen.cell(12, 4))
 
                 if str(forma_pago).strip() == 'TRANSFERENCIA' or str(forma_pago).strip() == 'CONTADO':
+                    table_resumen.cell(11, 5).paragraphs[0].add_run(str(forma_pago).strip()).font.size = Pt(8)
+                    table_resumen.cell(11, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                     table_resumen.cell(12, 3).paragraphs[0].add_run('SWIFT/IBAN').font.size = Pt(9)
                     table_resumen.cell(12, 3).paragraphs[0].runs[0].font.bold = True
                     table_resumen.cell(12, 3).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
@@ -1149,21 +1135,25 @@ class Pedidos(View):
                     table_resumen.cell(12, 5).paragraphs[0].runs[0].font.bold = True
                     table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                 elif str(forma_pago).strip() == 'GIRO':
-                    table_resumen.cell(11, 5).paragraphs[0].add_run('a ' + giros + ' DIAS').font.size = Pt(8)
+                    table_resumen.cell(11, 5).paragraphs[0].add_run(str(forma_pago).strip() + ' a ' + giros + ' DIAS').font.size = Pt(8)
                     table_resumen.cell(12, 5).paragraphs[0].add_run('DIAS ').font.size = Pt(9)
 
-                    if str(dp1).strip() != '0':
+                    if str(dp1).strip() != '0' or str(dp1).strip() != '':
                         table_resumen.cell(12, 5).paragraphs[0].add_run(dp1).font.size = Pt(9)
                         table_resumen.cell(12, 5).paragraphs[0].runs[1].font.bold = True
                         table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-                    if str(dp2).strip() != '0':
+                    if str(dp2).strip() != '0' or str(dp1).strip() != '':
                         table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp2).font.size = Pt(9)
                         table_resumen.cell(12, 5).paragraphs[0].runs[2].font.bold = True
                         table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-                    if str(dp3).strip() != '0':
+                    if str(dp3).strip() != '0' or str(dp1).strip() != '':
                         table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp3).font.size = Pt(9)
                         table_resumen.cell(12, 5).paragraphs[0].runs[3].font.bold = True
                         table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+
+                else:
+                    table_resumen.cell(11, 5).paragraphs[0].add_run(str(forma_pago).strip()).font.size = Pt(8)
+                    table_resumen.cell(11, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                 doc.save(ruta_guardado)
 
@@ -1620,12 +1610,11 @@ class PreAlbaranes(View):
                 table_resumen.cell(11, 3).paragraphs[0].runs[1].font.italic = True
                 table_resumen.cell(11, 3).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
-                table_resumen.cell(11, 5).paragraphs[0].add_run(forma_pago).font.size = Pt(8)
-                table_resumen.cell(11, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-
                 table_resumen.cell(12, 5).merge(table_resumen.cell(12, 4))
 
                 if str(forma_pago).strip() == 'TRANSFERENCIA' or str(forma_pago).strip() == 'CONTADO':
+                    table_resumen.cell(11, 5).paragraphs[0].add_run(str(forma_pago).strip()).font.size = Pt(8)
+                    table_resumen.cell(11, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                     table_resumen.cell(12, 3).paragraphs[0].add_run('SWIFT/IBAN').font.size = Pt(9)
                     table_resumen.cell(12, 3).paragraphs[0].runs[0].font.bold = True
                     table_resumen.cell(12, 3).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
@@ -1633,22 +1622,29 @@ class PreAlbaranes(View):
                     table_resumen.cell(12, 5).paragraphs[0].add_run(iban).font.size = Pt(9)
                     table_resumen.cell(12, 5).paragraphs[0].runs[0].font.bold = True
                     table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+
                 elif str(forma_pago).strip() == 'GIRO':
-                    table_resumen.cell(11, 5).paragraphs[0].add_run('a ' + giros + ' DIAS').font.size = Pt(8)
+                    table_resumen.cell(11, 5).paragraphs[0].add_run(str(forma_pago).strip() + ' a ' + giros + ' DIAS').font.size = Pt(8)
+                    table_resumen.cell(11, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                     table_resumen.cell(12, 5).paragraphs[0].add_run('DIAS ').font.size = Pt(9)
 
-                    if str(dp1).strip() != '0':
+                    if str(dp1).strip() != '0' or str(dp1).strip() != '':
                         table_resumen.cell(12, 5).paragraphs[0].add_run(dp1).font.size = Pt(9)
                         table_resumen.cell(12, 5).paragraphs[0].runs[1].font.bold = True
                         table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-                    if str(dp2).strip() != '0':
+                    if str(dp2).strip() != '0' or str(dp1).strip() != '':
                         table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp2).font.size = Pt(9)
                         table_resumen.cell(12, 5).paragraphs[0].runs[2].font.bold = True
                         table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-                    if str(dp3).strip() != '0':
+                    if str(dp3).strip() != '0' or str(dp1).strip() != '':
                         table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp3).font.size = Pt(9)
                         table_resumen.cell(12, 5).paragraphs[0].runs[3].font.bold = True
                         table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+
+                else:
+                    table_resumen.cell(11, 5).paragraphs[0].add_run(str(forma_pago).strip()).font.size = Pt(8)
+                    table_resumen.cell(11, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+
                 doc.save(ruta_guardado)
 
                 #os.startfile(ruta_guardado)
