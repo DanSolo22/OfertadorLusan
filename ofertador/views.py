@@ -1822,7 +1822,7 @@ class Consultas(View):
                             row_prod.height = Cm(1)
                             row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                            row_cells[0].paragraphs[0].add_run(row[6] + row[7] + row[8] + row[9]).font.size = Pt(10)
+                            row_cells[0].paragraphs[0].add_run(str(row[6]).strip() + str(row[7]).strip() + str(row[8]).strip() + str(row[9]).strip()).font.size = Pt(10)
                             row_cells[0].paragraphs[0].add_run('\nRef. ' + row[4]).font.size = Pt(10)
                             row_cells[0].paragraphs[0].runs[1].font.italic = True
 
@@ -1870,10 +1870,10 @@ class PedidosProv(View):
         if request.POST:
             form = CargarOferta(request.POST, request.FILES)
             if form.is_valid():
-                archivo_consulta = form.cleaned_data.get('oferta')
+                archivo_pedido = form.cleaned_data.get('oferta')
 
-                with open('csvofertas/consulta.csv', 'wb+') as destination:
-                    for chunk in archivo_consulta.chunks():
+                with open('csvofertas/pedprov.csv', 'wb+') as destination:
+                    for chunk in archivo_pedido.chunks():
                         destination.write(chunk)
 
                 consulta = ''
@@ -1932,22 +1932,17 @@ class PedidosProv(View):
 
                 doc.render(context)
 
-                nombre_consulta = str(archivo_consulta).split('.')[0]
-                ruta_guardado = 'C:/generador/consultas/' + nombre_consulta + '.docx'
+                nombre_pedido = str(archivo_pedido).split('.')[0]
+                ruta_guardado = 'C:/generador/ped_proveedores/' + nombre_pedido + '.docx'
                 doc.save(ruta_guardado)
 
                 doc = docx.Document(ruta_guardado)
 
-                condiciones = doc.add_paragraph()
-                condiciones.add_run(
-                    '\tMuy Sres. Nuestros: \n\t  Rogamos nos envíen su mejor precio y plazo de entrega para los siguientes artículos.\n\t  Please, send us your best price and delivery date for the following references.').font.size = Pt(
-                    11)
-
                 doc.add_paragraph()
 
-                table = doc.add_table(rows=1, cols=4)
+                table = doc.add_table(rows=1, cols=5)
 
-                for i in range(4):
+                for i in range(5):
                     for cell in table.columns[i].cells:
                         if i == 0:
                             cell.width = Inches(4)
@@ -1958,6 +1953,9 @@ class PedidosProv(View):
                             cell.paragraphs[0].paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                         elif i == 3:
                             cell.width = Inches(0.5)
+                            cell.paragraphs[0].paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                        elif i == 4:
+                            cell.width = Inches(1.5)
                             cell.paragraphs[0].paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                 hdr = table.rows[0]
@@ -1991,12 +1989,21 @@ class PedidosProv(View):
                 hdr_cells[3].paragraphs[0].runs[2].font.bold = True
                 hdr_cells[3].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
+                hdr_cells[4].paragraphs[0].add_run('IMPORTE\n').font.size = Pt(9)
+                hdr_cells[4].paragraphs[0].add_run('AMOUNT\n').font.size = Pt(9)
+                hdr_cells[4].paragraphs[0].add_run('EURO').font.size = Pt(9)
+                hdr_cells[4].paragraphs[0].runs[0].font.bold = True
+                hdr_cells[4].paragraphs[0].runs[1].font.italic = True
+                hdr_cells[4].paragraphs[0].runs[2].font.bold = True
+                hdr_cells[4].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+
                 hdr.height = Cm(1.25)
                 hdr.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
                 barra_cabeza = table.add_row()
                 barra_cabeza_tabla = barra_cabeza.cells
 
+                barra_cabeza_tabla[4].merge(barra_cabeza_tabla[3])
                 barra_cabeza_tabla[3].merge(barra_cabeza_tabla[2])
                 barra_cabeza_tabla[2].merge(barra_cabeza_tabla[1])
                 barra_cabeza_tabla[1].merge(barra_cabeza_tabla[0])
@@ -2009,31 +2016,62 @@ class PedidosProv(View):
                 set_repeat_table_header(table.rows[0])
                 set_repeat_table_header(table.rows[1])
 
+                peso = 0
+
                 with open('csvofertas/consulta.csv') as csv_file:
                     csv_reader = csv.reader(csv_file, delimiter=';')
                     count = 0
 
                     for row in csv_reader:
                         if count > 0:
-                            row_prod = table.add_row()
-                            row_cells = row_prod.cells
+                            if str(row[7]).strip() != 'Texto':
+                                row_prod = table.add_row()
+                                row_cells = row_prod.cells
 
-                            row_prod.height = Cm(1)
-                            row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
+                                row_prod.height = Cm(1)
+                                row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                            row_cells[0].paragraphs[0].add_run(row[6] + row[7] + row[8] + row[9]).font.size = Pt(10)
-                            row_cells[0].paragraphs[0].add_run('\nRef. ' + row[4]).font.size = Pt(10)
-                            row_cells[0].paragraphs[0].runs[1].font.italic = True
+                                row_cells[0].paragraphs[0].add_run(str(row[6]).strip() + str(row[7]).strip() + str(row[8]).strip() + str(row[9]).strip()).font.size = Pt(10)
 
-                            row_cells[1].text = row[10]
-                            row_cells[1].paragraphs[0].runs[0].font.size = Pt(10)
-                            row_cells[1].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                                row_cells[1].text = row[10]
+                                row_cells[1].paragraphs[0].runs[0].font.size = Pt(10)
+                                row_cells[1].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
+                                row_cells[2].text = row[12]
+                                row_cells[2].paragraphs[0].runs[0].font.size = Pt(10)
+                                row_cells[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+
+                                row_cells[3].text = row[13]
+                                row_cells[3].paragraphs[0].runs[0].font.size = Pt(10)
+                                row_cells[3].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+
+                                row_cells[4].text = row[14]
+                                row_cells[4].paragraphs[0].runs[0].font.size = Pt(10)
+                                row_cells[4].paragraphs[0].runs[0].font.bold = True
+                                row_cells[4].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+
+                                peso += float(str(row[18]).replace(',', '.'))
+                            else:
+                                row_prod = table.add_row()
+                                row_cells = row_prod.cells
+
+                                row_cells[1].merge(row_cells[0])
+                                row_cells[0].paragraphs[0].add_run(row[6]).font.size = Pt(10)
+                                row_cells[0].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                         count += 1
+
+                row_peso = table.add_row()
+                row_cells = row_peso.cells
+
+                row_cells[1].merge(row_cells[0])
+
+                row_cells[0].paragraphs[0].add_run('PESO/Weight:\t' + str(peso) + ' Kg.').font.size = Pt(10)
+                row_cells[0].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                 barra_pie = table.add_row()
                 barra_pie_tabla = barra_pie.cells
 
+                barra_pie_tabla[4].merge(barra_pie_tabla[3])
                 barra_pie_tabla[3].merge(barra_pie_tabla[2])
                 barra_pie_tabla[2].merge(barra_pie_tabla[1])
                 barra_pie_tabla[1].merge(barra_pie_tabla[0])
@@ -2043,14 +2081,11 @@ class PedidosProv(View):
 
                 insertHR(barra_pie_tabla[0].paragraphs[0])
 
-                condiciones = doc.add_paragraph()
-                condiciones.add_run('\n\n\tROGAMOS NOS COMINIQUEN EL PAIS DE ORIGEN Y TARIC').font.size = Pt(11)
-
                 doc.save(ruta_guardado)
 
                 # os.startfile(ruta_guardado)
 
-                return redirect('consultas')
+                return redirect('pedidos-prov')
 
         else:
             form = CargarOferta()
