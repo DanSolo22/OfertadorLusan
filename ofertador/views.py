@@ -143,10 +143,6 @@ class Ofertas(View):
                 imp_rec_quiv = ''
                 total = ''
                 forma_pago = ''
-                giros = ''
-                dp1 = ''
-                dp2 = ''
-                dp3 = ''
                 transportista = ''
                 iban = 'ES25 2100-1083-1102-0005-4013'
                 tel_fijo = '+34 937144561'
@@ -189,10 +185,6 @@ class Ofertas(View):
                             imp_rec_quiv = row[30]
                             total = row[31]
                             forma_pago = row[49]
-                            giros = ''
-                            dp1 = ''
-                            dp2 = ''
-                            dp3 = ''
                             transportista = row[50]
                         line_count += 1
 
@@ -1138,18 +1130,18 @@ class Pedidos(View):
                 elif str(forma_pago).strip() == 'GIRO':
                     table_resumen.cell(11, 5).paragraphs[0].add_run(
                         str(forma_pago).strip() + ' a ' + giros + ' DIAS').font.size = Pt(8)
-                    table_resumen.cell(12, 5).paragraphs[0].add_run('DIAS ').font.size = Pt(9)
+                    table_resumen.cell(12, 5).paragraphs[0].add_run('DIAS ').font.size = Pt(8)
 
                     if str(dp1).strip() != '0' or str(dp1).strip() != '':
-                        table_resumen.cell(12, 5).paragraphs[0].add_run(dp1).font.size = Pt(9)
+                        table_resumen.cell(12, 5).paragraphs[0].add_run(dp1).font.size = Pt(8)
                         table_resumen.cell(12, 5).paragraphs[0].runs[1].font.bold = True
                         table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                     if str(dp2).strip() != '0' or str(dp1).strip() != '':
-                        table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp2).font.size = Pt(9)
+                        table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp2).font.size = Pt(8)
                         table_resumen.cell(12, 5).paragraphs[0].runs[2].font.bold = True
                         table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                     if str(dp3).strip() != '0' or str(dp1).strip() != '':
-                        table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp3).font.size = Pt(9)
+                        table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp3).font.size = Pt(8)
                         table_resumen.cell(12, 5).paragraphs[0].runs[3].font.bold = True
                         table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
@@ -1629,18 +1621,18 @@ class PreAlbaranes(View):
                     table_resumen.cell(11, 5).paragraphs[0].add_run(
                         str(forma_pago).strip() + ' a ' + giros + ' DIAS').font.size = Pt(8)
                     table_resumen.cell(11, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-                    table_resumen.cell(12, 5).paragraphs[0].add_run('DIAS ').font.size = Pt(9)
+                    table_resumen.cell(12, 5).paragraphs[0].add_run('DIAS ').font.size = Pt(8)
 
                     if str(dp1).strip() != '0' or str(dp1).strip() != '':
-                        table_resumen.cell(12, 5).paragraphs[0].add_run(dp1).font.size = Pt(9)
+                        table_resumen.cell(12, 5).paragraphs[0].add_run(dp1).font.size = Pt(8)
                         table_resumen.cell(12, 5).paragraphs[0].runs[1].font.bold = True
                         table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                     if str(dp2).strip() != '0' or str(dp1).strip() != '':
-                        table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp2).font.size = Pt(9)
+                        table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp2).font.size = Pt(8)
                         table_resumen.cell(12, 5).paragraphs[0].runs[2].font.bold = True
                         table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                     if str(dp3).strip() != '0' or str(dp1).strip() != '':
-                        table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp3).font.size = Pt(9)
+                        table_resumen.cell(12, 5).paragraphs[0].add_run('/' + dp3).font.size = Pt(8)
                         table_resumen.cell(12, 5).paragraphs[0].runs[3].font.bold = True
                         table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
@@ -1704,14 +1696,14 @@ class Consultas(View):
                             fecha = row[2]
                             validez = row[3]
                             proveedor = row[4]
-                            rsoc = row[5]
-                            empresa = row[6]
-                            dir = row[7]
-                            cp = row[8]
-                            pob = row[9]
-                            pro = row[10]
-                            tel = row[11]
-                            mail = row[13]
+                            rsoc = ''
+                            empresa = ''
+                            dir = ''
+                            cp = ''
+                            pob = ''
+                            pro = ''
+                            tel = ''
+                            mail = ''
                             break
                         line_count += 1
 
@@ -1876,9 +1868,9 @@ class PedidosProv(View):
                     for chunk in archivo_pedido.chunks():
                         destination.write(chunk)
 
-                consulta = ''
+                pedido = ''
                 fecha = ''
-                validez = ''
+                entrega = ''
                 proveedor = ''
                 rsoc = ''
                 empresa = ''
@@ -1903,14 +1895,14 @@ class PedidosProv(View):
                             fecha = row[2]
                             entrega = row[3]
                             proveedor = row[4]
-                            rsoc = row[5]
-                            empresa = row[6]
-                            dir = row[7]
-                            cp = row[8]
-                            pob = row[9]
-                            pro = row[10]
-                            tel = row[11]
-                            mail = row[13]
+                            rsoc = ''
+                            empresa = ''
+                            dir = ''
+                            cp = ''
+                            pob = ''
+                            pro = ''
+                            tel = ''
+                            mail = ''
                             break
                         line_count += 1
 
