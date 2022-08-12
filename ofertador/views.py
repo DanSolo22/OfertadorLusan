@@ -167,7 +167,7 @@ class Ofertas(View):
                             pro = row[10]
                             tel = row[11]
                             mail = row[13]
-                            cab = row[42]
+                            cab = str(row[42]).strip()
                             peso = row[17] + ' kg.'
                             contacto = row[32]
                             importe_bruto = row[20]
@@ -866,9 +866,9 @@ class Pedidos(View):
                             row_cells[0].paragraphs[0].add_run('\n' + row[1]).font.size = Pt(10)
                             row_cells[0].paragraphs[0].runs[1].font.italic = True
 
-                            row_cells[1].paragraphs[0].add_run(row[2]).font.size = Pt(10)
-                            row_cells[1].paragraphs[0].add_run('\nPedido: ').font.size = Pt(9)
-                            row_cells[1].paragraphs[0].add_run(row[0]).font.size = Pt(9)
+                            row_cells[1].paragraphs[0].add_run(row[2]).font.size = Pt(8.5)
+                            row_cells[1].paragraphs[0].add_run('\nPedido: ').font.size = Pt(8)
+                            row_cells[1].paragraphs[0].add_run(row[0]).font.size = Pt(8)
                             row_cells[1].paragraphs[0].runs[2].font.bold = True
 
                             row_cells[2].text = row[3]
@@ -1208,7 +1208,6 @@ class PreAlbaranes(View):
                 dp3 = ''
                 transportista = ''
                 iban = 'ES25 2100-1083-1102-0005-4013'
-                icoterm = ''
 
                 doc = DocxTemplate("csvofertas/plantilla_pedido.docx")
 
@@ -1381,9 +1380,9 @@ class PreAlbaranes(View):
                             row_cells[0].paragraphs[0].runs[1].font.italic = True
                             row_cells[0].paragraphs[0].runs[1].font.bold = True
 
-                            row_cells[1].paragraphs[0].add_run(row[25]).font.size = Pt(10)
-                            row_cells[1].paragraphs[0].add_run('\nPedido: ').font.size = Pt(9)
-                            row_cells[1].paragraphs[0].add_run(row[2]).font.size = Pt(9)
+                            row_cells[1].paragraphs[0].add_run(row[25]).font.size = Pt(8.5)
+                            row_cells[1].paragraphs[0].add_run('\nPedido: ').font.size = Pt(8)
+                            row_cells[1].paragraphs[0].add_run(row[2]).font.size = Pt(8)
                             row_cells[1].paragraphs[0].runs[2].font.bold = True
 
                             row_cells[2].text = row[12]
