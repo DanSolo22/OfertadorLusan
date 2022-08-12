@@ -1,19 +1,20 @@
 import os
 
-import docx
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
+
+import docx
 from docx.enum.table import WD_ROW_HEIGHT_RULE
 from docx.shared import Inches, Pt, Cm, RGBColor
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+from docx.oxml.shared import OxmlElement
+from docx.oxml.ns import qn
 
 from ofertador.forms import CargarOferta
 
 import csv
-from docxtpl import DocxTemplate
 
-from docx.oxml.shared import OxmlElement
-from docx.oxml.ns import qn
+from docxtpl import DocxTemplate
 
 
 def set_repeat_table_header(row):
@@ -127,8 +128,6 @@ class Ofertas(View):
                 tel = ''
                 mail = ''
                 cab = ''
-                moneda = ''
-                des_moneda = ''
                 peso = ''
                 contacto = ''
                 importe_bruto = ''
@@ -169,8 +168,6 @@ class Ofertas(View):
                             tel = row[11]
                             mail = row[13]
                             cab = row[42]
-                            moneda = row[15]
-                            des_moneda = row[16]
                             peso = row[17] + ' kg.'
                             contacto = row[32]
                             importe_bruto = row[20]
@@ -204,8 +201,6 @@ class Ofertas(View):
                         'TEL': tel,
                         'MAIL': mail,
                         'CABECERA': cab,
-                        'MONEDA': moneda,
-                        'DES_MON': des_moneda,
                     }
 
                 doc.render(context)
@@ -313,7 +308,7 @@ class Ofertas(View):
                             row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
                             if str(row[23]).strip() == 'Texto':
-                                row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
+                                row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
                             else:
                                 row_cells[0].paragraphs[0].add_run(row[22]).font.size = Pt(10)
                                 row_cells[0].paragraphs[0].add_run('\n' + row[4]).font.size = Pt(10)
@@ -321,25 +316,25 @@ class Ofertas(View):
 
                                 if comprovar_stock(str(fecha), str(row[16]).strip()):
                                     if str(row[23]).strip() == 'Especial':
-                                        row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
+                                        row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(9)
                                     else:
-                                        row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
+                                        row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(9)
 
-                                    row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(9)
-                                    row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(9)
-                                    row_cells[1].paragraphs[0].add_run('  [STOCK]').font.size = Pt(9)
+                                    row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(8)
+                                    row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
+                                    row_cells[1].paragraphs[0].add_run('  [STOCK]').font.size = Pt(8)
                                     row_cells[1].paragraphs[0].runs[2].font.italic = True
                                     row_cells[1].paragraphs[0].runs[3].font.bold = True
                                 else:
                                     if str(row[23]).strip() == 'Especial':
-                                        row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(10)
+                                        row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(9)
                                     else:
-                                        row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(10)
+                                        row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(9)
 
-                                    row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(9)
-                                    row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(9)
+                                    row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(8)
+                                    row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
                                     row_cells[1].paragraphs[0].add_run(
-                                        '  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(9)
+                                        '  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(8)
                                     row_cells[1].paragraphs[0].runs[2].font.italic = True
                                     row_cells[1].paragraphs[0].runs[3].font.bold = True
 
