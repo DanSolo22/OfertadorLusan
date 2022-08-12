@@ -316,9 +316,9 @@ class Ofertas(View):
 
                                 if comprovar_stock(str(fecha), str(row[16]).strip()):
                                     if str(row[23]).strip() == 'Especial':
-                                        row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(9)
+                                        row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
                                     else:
-                                        row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(9)
+                                        row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(8.5)
 
                                     row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(8)
                                     row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
@@ -327,9 +327,9 @@ class Ofertas(View):
                                     row_cells[1].paragraphs[0].runs[3].font.bold = True
                                 else:
                                     if str(row[23]).strip() == 'Especial':
-                                        row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(9)
+                                        row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
                                     else:
-                                        row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(9)
+                                        row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(8.5)
 
                                     row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(8)
                                     row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
