@@ -29,8 +29,8 @@
 
 </head>
 <body>
-{% block content %}
-    <nav class='navbar-inner header'>
+<div id="container">
+    <nav id='nav' class='navbar-inner header'>
         <ul class='nav pull-right'>
             <li class="prin-li" id="1">
                 <a class='nav-link' href="{{ url('inicio') }}">OFERTAS</a>
@@ -43,7 +43,7 @@
             </li>
             <li class="dropdown prin-li" id="4">
                 <a class='nav-link'>
-                    <p class="prov-text">PROVEEDORES<br>v</p>
+                    <p id='prov' class="prov-text">PROVEEDORES</p>
                     <ul class='dropdown-menu' id="drop">
                         <li>
                             <a class='nav-link' onclick="redirect({{ url('consultas') }})">CONSULTAS</a>
@@ -56,7 +56,7 @@
             </li>
         </ul>
     </nav>
-    <div class="form-div">
+    <div id='form' class="form-div">
         <h1 class="titulo">{{ titulo }}</h1>
         {% if mensaje != '' %}
             <div id="msg" class="alert alert-error">
@@ -82,6 +82,6 @@
             <input class="submit" type="submit" value="Generar oferta">
         </form>
     </div>
-{% endblock content %}
+</div>
 </body>
 </html>

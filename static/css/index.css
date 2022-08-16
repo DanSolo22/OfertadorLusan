@@ -8,15 +8,34 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     background-position-y: 14vh;
+    height: 100%;
+    width: 100%;
+}
+
+#container {
+    display: grid;
+    grid-template-areas:
+        'nav'
+        'form';
+    grid-template-rows: 20vh 40vh;
+    grid-template-columns: 100%;
+}
+
+#nav {
+    display: grid;
+    grid-area: nav;
+}
+
+#form {
+    display: grid;
+    grid-area: form;
 }
 
 .header {
     background: linear-gradient(315deg, #1f1f1c 60%, #ff7d1e 40%);
     line-height: 40px;
     box-shadow: 0 12px 6px -6px rgba(0, 0, 0, 0.2);
-    height: 5vh;
-    vertical-align: middle;
-    padding-top: 1vh;
+    height: 8vh;
 }
 
 ul {
@@ -84,17 +103,14 @@ a:link, a:visited, a:hover, a:active {
 }
 
 .dropdown {
-    display: inline-block;
-    width: fit-content;
     justify-content: center;
-    margin-top: 1.4vh;
 }
 
 .dropdown-menu {
     display: none;
-    margin: -2vh 0 0 -0.7vw;
+    margin: auto;
     text-align: center;
-    width: 6.5vw;
+    width: inherit;
     z-index: -3;
     padding: 0;
     background: #ff7d1e;
@@ -108,8 +124,8 @@ a:link, a:visited, a:hover, a:active {
         'form';
     grid-template-rows: 10vh 3vh 20vh;
     grid-template-columns: 50vw;
-    margin: 6vh auto auto auto;
-    height: 50vh;
+    margin: auto;
+    height: fit-content;
     width: 50vw;
     align-content: center;
     align-items: center;
@@ -126,6 +142,7 @@ h1 {
     display: grid;
     grid-area: titulo;
     text-align: center;
+    margin: 0;
 }
 
 .alert {
