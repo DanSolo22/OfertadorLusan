@@ -31,33 +31,35 @@
 <body>
 <div id="container">
     <nav id='nav' class='navbar-inner header'>
-        <ul class='nav pull-right'>
+        <ul id='clientes' class='nav1 pull-right'>
+            <li class="prin-li tit1">CLIENTES:
+            </li>
             <li class="prin-li" id="1">
-                <a class='nav-link' href="{{ url('inicio') }}">OFERTAS</a>
+                <a class='nav-link1' href="{{ url('inicio') }}">OFERTAS</a>
             </li>
             <li class="prin-li" id="2">
-                <a class='nav-link' href="{{ url('pedidos') }}">PEDIDOS</a>
+                <a class='nav-link1' href="{{ url('pedidos') }}">PEDIDOS</a>
             </li>
             <li class="prin-li" id="3">
-                <a class='nav-link' href="{{ url('pre-albaranes') }}">PRE-ALBARANES</a>
+                <a class='nav-link1' href="{{ url('pre-albaranes') }}">PRE-ALBARANES</a>
             </li>
-            <li class="dropdown prin-li" id="4">
-                <a class='nav-link'>
-                    <p id='prov' class="prov-text">PROVEEDORES</p>
-                    <ul class='dropdown-menu' id="drop">
-                        <li>
-                            <a class='nav-link' onclick="redirect({{ url('consultas') }})">CONSULTAS</a>
-                        </li>
-                        <li>
-                            <a class='nav-link' onclick="redirect({{ url('pedidos-prov') }})">PEDIDOS</a>
-                        </li>
-                    </ul>
-                </a>
+        </ul>
+        <ul id='proveedores' class='nav2 pull-right'>
+            <li class="prin-li tit2">PROVEEDORES:
+            </li>
+            <li class="prin-li" id="4">
+                <a class='nav-link2' href="{{ url('consultas') }}">CONSULTAS</a>
+            </li>
+            <li class="prin-li" id="5">
+                <a class='nav-link2' href="{{ url('pedidos-prov') }}">PEDIDOS</a>
             </li>
         </ul>
     </nav>
     <div id='form' class="form-div">
-        <h1 class="titulo">{{ titulo }}</h1>
+        <div class="neato-header titulo">
+            <h1>{{ titulo }}</h1>
+        </div>
+
         {% if mensaje != '' %}
             <div id="msg" class="alert alert-error">
                 <div class="icon__wrapper">
