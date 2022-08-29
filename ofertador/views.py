@@ -1674,7 +1674,6 @@ class Consultas(View):
                 pob = ''
                 pro = ''
                 tel = ''
-                mail = ''
                 iban = 'ES25 2100-1083-1102-0005-4013'
                 tel_fijo = '+34 937 14 45 61'
 
@@ -1687,17 +1686,16 @@ class Consultas(View):
                     for row in csv_reader:
                         if line_count == 1:
                             consulta = row[0]
-                            fecha = row[2]
-                            validez = row[3]
-                            proveedor = row[4]
-                            rsoc = ''
-                            empresa = ''
-                            dir = ''
-                            cp = ''
-                            pob = ''
-                            pro = ''
-                            tel = ''
-                            mail = ''
+                            fecha = row[1]
+                            validez = row[2]
+                            proveedor = row[3]
+                            rsoc = row[5]
+                            empresa = row[6]
+                            dir = row[7]
+                            cp = row[8]
+                            pob = row[9]
+                            pro = row[10]
+                            tel = row[11]
                             break
                         line_count += 1
 
@@ -1714,7 +1712,7 @@ class Consultas(View):
                         'POB': pob,
                         'PRO': pro,
                         'TEL': tel,
-                        'MAIL': mail,
+                        #'MAIL': mail,
                     }
 
                 doc.render(context)
@@ -1801,7 +1799,7 @@ class Consultas(View):
                     count = 0
 
                     for row in csv_reader:
-                        if count > 0:
+                        if count > 2:
                             row_prod = table.add_row()
                             row_cells = row_prod.cells
 
@@ -1876,6 +1874,7 @@ class PedidosProv(View):
                 mail = ''
                 iban = 'ES25 2100-1083-1102-0005-4013'
                 tel_fijo = '+34 937 14 45 61'
+                peso = ''
 
                 doc = DocxTemplate("csvofertas/plantilla_pedprov.docx")
 
@@ -1886,17 +1885,18 @@ class PedidosProv(View):
                     for row in csv_reader:
                         if line_count == 1:
                             pedido = row[0]
-                            fecha = row[2]
-                            entrega = row[3]
-                            proveedor = row[4]
-                            rsoc = ''
-                            empresa = ''
-                            dir = ''
-                            cp = ''
-                            pob = ''
-                            pro = ''
-                            tel = ''
-                            mail = ''
+                            fecha = row[1]
+                            entrega = row[2]
+                            proveedor = row[3]
+                            rsoc = row[5]
+                            empresa = row[6]
+                            dir = row[7]
+                            cp = row[8]
+                            pob = row[9]
+                            pro = row[10]
+                            tel = row[11]
+                            mail = row[13]
+                            peso = float(str(row[18]).replace(',', '.'))
                             break
                         line_count += 1
 
@@ -2002,14 +2002,12 @@ class PedidosProv(View):
                 set_repeat_table_header(table.rows[0])
                 set_repeat_table_header(table.rows[1])
 
-                peso = 0
-
                 with open('csvofertas/consulta.csv') as csv_file:
                     csv_reader = csv.reader(csv_file, delimiter=';')
                     count = 0
 
                     for row in csv_reader:
-                        if count > 0:
+                        if count > 2:
                             if str(row[7]).strip() != 'Texto':
                                 row_prod = table.add_row()
                                 row_cells = row_prod.cells
@@ -2035,8 +2033,6 @@ class PedidosProv(View):
                                 row_cells[4].paragraphs[0].runs[0].font.size = Pt(10)
                                 row_cells[4].paragraphs[0].runs[0].font.bold = True
                                 row_cells[4].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-
-                                peso += float(str(row[18]).replace(',', '.'))
                             else:
                                 row_prod = table.add_row()
                                 row_cells = row_prod.cells
