@@ -1674,8 +1674,7 @@ class Consultas(View):
                 pob = ''
                 pro = ''
                 tel = ''
-                iban = 'ES25 2100-1083-1102-0005-4013'
-                tel_fijo = '+34 937 14 45 61'
+                observaciones = ''
 
                 doc = DocxTemplate("csvofertas/plantilla_cons.docx")
 
@@ -1696,6 +1695,7 @@ class Consultas(View):
                             pob = row[9]
                             pro = row[10]
                             tel = row[11]
+                            observaciones = str(row[13]) + str(row[14]) + str(row[15]) + str(row[16])
                             break
                         line_count += 1
 
@@ -1831,6 +1831,9 @@ class Consultas(View):
                 condiciones = doc.add_paragraph()
                 condiciones.add_run('\n\n\tROGAMOS NOS COMINIQUEN EL PAIS DE ORIGEN Y TARIC').font.size = Pt(11)
 
+                obs = doc.add_paragraph()
+                obs.add_run('\n' + observaciones).font.size = Pt(11)
+
                 doc.save(ruta_guardado)
 
                 # os.startfile(ruta_guardado)
@@ -1872,9 +1875,8 @@ class PedidosProv(View):
                 pro = ''
                 tel = ''
                 mail = ''
-                iban = 'ES25 2100-1083-1102-0005-4013'
-                tel_fijo = '+34 937 14 45 61'
                 peso = ''
+                observaciones = ''
 
                 doc = DocxTemplate("csvofertas/plantilla_pedprov.docx")
 
@@ -1897,6 +1899,7 @@ class PedidosProv(View):
                             tel = row[11]
                             mail = row[13]
                             peso = float(str(row[18]).replace(',', '.'))
+                            observaciones = str(row[21]) + str(row[22]) + str(row[23]) + str(row[24])
                             break
                         line_count += 1
 
@@ -2002,7 +2005,7 @@ class PedidosProv(View):
                 set_repeat_table_header(table.rows[0])
                 set_repeat_table_header(table.rows[1])
 
-                with open('csvofertas/consulta.csv') as csv_file:
+                with open('csvofertas/pedprov.csv') as csv_file:
                     csv_reader = csv.reader(csv_file, delimiter=';')
                     count = 0
 
@@ -2025,7 +2028,10 @@ class PedidosProv(View):
                                 row_cells[2].paragraphs[0].runs[0].font.size = Pt(10)
                                 row_cells[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                                row_cells[3].text = row[13]
+                                if int(float(str(row[13]).replace(',', '.'))) == 0:
+                                    row_cells[3].text = 'Neto'
+                                else:
+                                    row_cells[3].text = row[13]
                                 row_cells[3].paragraphs[0].runs[0].font.size = Pt(10)
                                 row_cells[3].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
@@ -2062,6 +2068,9 @@ class PedidosProv(View):
                 barra_pie.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
                 insertHR(barra_pie_tabla[0].paragraphs[0])
+
+                obs = doc.add_paragraph()
+                obs.add_run('\n' + observaciones).font.size = Pt(11)
 
                 doc.save(ruta_guardado)
 
