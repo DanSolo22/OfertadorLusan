@@ -1898,7 +1898,7 @@ class PedidosProv(View):
                             pro = row[10]
                             tel = row[11]
                             mail = row[13]
-                            peso = float(str(row[18]).replace(',', '.'))
+                            peso = str(row[18]).replace(',', '.')
                             observaciones = str(row[21]) + str(row[22]) + str(row[23]) + str(row[24])
                             break
                         line_count += 1
