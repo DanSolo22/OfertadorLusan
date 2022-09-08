@@ -303,7 +303,26 @@ class Ofertas(View):
 
                     for row in csv_reader:
                         if count > 2:
-                            if linias <= 15 and linias % 16 != 0 or linias > 16 and linias % 17 != 0:
+                            if linias == 15 or (linias - 15) % 17 == 0:
+                                if linias != 0:
+                                    row_line = table.add_row()
+                                    row_line_tabla = row_line.cells
+                                    row_line_tabla[5].merge(row_line_tabla[4])
+                                    row_line_tabla[4].merge(row_line_tabla[3])
+                                    row_line_tabla[3].merge(row_line_tabla[2])
+                                    row_line_tabla[2].merge(row_line_tabla[1])
+                                    row_line_tabla[1].merge(row_line_tabla[0])
+
+                                    row_line.height = Cm(0.65)
+                                    row_line.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
+
+                                    insertHR(row_line_tabla[0].paragraphs[0])
+
+                                    row_line = table.add_row()
+                                    row_line_tabla = row_line.cells
+                                    row_line_tabla[5].text = "Sigue..."
+                                    row_line_tabla[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                            else:
                                 row_prod = table.add_row()
                                 row_cells = row_prod.cells
 
@@ -361,25 +380,6 @@ class Ofertas(View):
                                     row_cells[5].text = row[20]
                                     row_cells[5].paragraphs[0].runs[0].font.size = Pt(10)
                                     row_cells[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-                            else:
-                                if linias != 0:
-                                    row_line = table.add_row()
-                                    row_line_tabla = row_line.cells
-                                    row_line_tabla[5].merge(row_line_tabla[4])
-                                    row_line_tabla[4].merge(row_line_tabla[3])
-                                    row_line_tabla[3].merge(row_line_tabla[2])
-                                    row_line_tabla[2].merge(row_line_tabla[1])
-                                    row_line_tabla[1].merge(row_line_tabla[0])
-
-                                    row_line.height = Cm(0.65)
-                                    row_line.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
-
-                                    insertHR(row_line_tabla[0].paragraphs[0])
-
-                                    row_line = table.add_row()
-                                    row_line_tabla = row_line.cells
-                                    row_line_tabla[5].text = "Sigue..."
-                                    row_line_tabla[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                             linias += 1
 
@@ -618,8 +618,6 @@ class Ofertas(View):
 
                 barra_cond = doc.add_paragraph()
                 insertHR(barra_cond)
-
-                doc.add_page_break()
                 doc.add_paragraph("")
 
                 condiciones = doc.add_paragraph()
