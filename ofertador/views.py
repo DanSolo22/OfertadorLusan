@@ -295,69 +295,93 @@ class Ofertas(View):
                 set_repeat_table_header(table.rows[0])
                 set_repeat_table_header(table.rows[1])
 
+                linias = 0
+
                 with open('csvofertas/oferta.csv') as csv_file:
                     csv_reader = csv.reader(csv_file, delimiter=';')
                     count = 0
 
                     for row in csv_reader:
                         if count > 2:
-                            row_prod = table.add_row()
-                            row_cells = row_prod.cells
+                            if linias <= 15 and linias % 16 != 0 or linias > 16 and linias % 17 != 0:
+                                row_prod = table.add_row()
+                                row_cells = row_prod.cells
 
-                            row_prod.height = Cm(1)
-                            row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
+                                row_prod.height = Cm(1)
+                                row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                            if str(row[23]).strip() == 'Texto':
-                                row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
+                                if str(row[23]).strip() == 'Texto':
+                                    row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
+                                else:
+                                    row_cells[0].paragraphs[0].add_run(row[22]).font.size = Pt(10)
+                                    row_cells[0].paragraphs[0].add_run('\n' + row[4]).font.size = Pt(10)
+                                    row_cells[0].paragraphs[0].runs[1].font.italic = True
+
+                                    if comprovar_stock(str(fecha), str(row[16]).strip()):
+                                        if str(row[23]).strip() == 'Especial':
+                                            row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
+                                        else:
+                                            row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(8.5)
+
+                                        row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(8)
+                                        row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
+                                        row_cells[1].paragraphs[0].add_run('  [STOCK]').font.size = Pt(8)
+                                        row_cells[1].paragraphs[0].runs[2].font.italic = True
+                                        row_cells[1].paragraphs[0].runs[3].font.bold = True
+                                    else:
+                                        if str(row[23]).strip() == 'Especial':
+                                            row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
+                                        else:
+                                            row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(8.5)
+
+                                        row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(8)
+                                        row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
+                                        row_cells[1].paragraphs[0].add_run(
+                                            '  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(8)
+                                        row_cells[1].paragraphs[0].runs[2].font.italic = True
+                                        row_cells[1].paragraphs[0].runs[3].font.bold = True
+
+                                    row_cells[2].text = row[9]
+                                    row_cells[2].paragraphs[0].runs[0].font.size = Pt(10)
+                                    row_cells[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+
+                                    row_cells[3].text = row[18]
+                                    row_cells[3].paragraphs[0].runs[0].font.size = Pt(10)
+                                    row_cells[3].paragraphs[0].runs[0].font.bold = True
+                                    row_cells[3].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+
+                                    if str(row[19]).strip() == '':
+                                        row_cells[4].text = 'NETO'
+                                    else:
+                                        row_cells[4].text = row[19]
+
+                                    row_cells[4].paragraphs[0].runs[0].font.size = Pt(10)
+                                    row_cells[4].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+
+                                    row_cells[5].text = row[20]
+                                    row_cells[5].paragraphs[0].runs[0].font.size = Pt(10)
+                                    row_cells[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                             else:
-                                row_cells[0].paragraphs[0].add_run(row[22]).font.size = Pt(10)
-                                row_cells[0].paragraphs[0].add_run('\n' + row[4]).font.size = Pt(10)
-                                row_cells[0].paragraphs[0].runs[1].font.italic = True
+                                if linias != 0:
+                                    row_line = table.add_row()
+                                    row_line_tabla = row_line.cells
+                                    row_line_tabla[5].merge(row_line_tabla[4])
+                                    row_line_tabla[4].merge(row_line_tabla[3])
+                                    row_line_tabla[3].merge(row_line_tabla[2])
+                                    row_line_tabla[2].merge(row_line_tabla[1])
+                                    row_line_tabla[1].merge(row_line_tabla[0])
 
-                                if comprovar_stock(str(fecha), str(row[16]).strip()):
-                                    if str(row[23]).strip() == 'Especial':
-                                        row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
-                                    else:
-                                        row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(8.5)
+                                    row_line.height = Cm(0.65)
+                                    row_line.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                                    row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(8)
-                                    row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
-                                    row_cells[1].paragraphs[0].add_run('  [STOCK]').font.size = Pt(8)
-                                    row_cells[1].paragraphs[0].runs[2].font.italic = True
-                                    row_cells[1].paragraphs[0].runs[3].font.bold = True
-                                else:
-                                    if str(row[23]).strip() == 'Especial':
-                                        row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
-                                    else:
-                                        row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(8.5)
+                                    insertHR(row_line_tabla[0].paragraphs[0])
 
-                                    row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(8)
-                                    row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
-                                    row_cells[1].paragraphs[0].add_run(
-                                        '  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(8)
-                                    row_cells[1].paragraphs[0].runs[2].font.italic = True
-                                    row_cells[1].paragraphs[0].runs[3].font.bold = True
+                                    row_line = table.add_row()
+                                    row_line_tabla = row_line.cells
+                                    row_line_tabla[5].text = "Sigue..."
+                                    row_line_tabla[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                                row_cells[2].text = row[9]
-                                row_cells[2].paragraphs[0].runs[0].font.size = Pt(10)
-                                row_cells[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-
-                                row_cells[3].text = row[18]
-                                row_cells[3].paragraphs[0].runs[0].font.size = Pt(10)
-                                row_cells[3].paragraphs[0].runs[0].font.bold = True
-                                row_cells[3].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-
-                                if str(row[19]).strip() == '':
-                                    row_cells[4].text = 'NETO'
-                                else:
-                                    row_cells[4].text = row[19]
-
-                                row_cells[4].paragraphs[0].runs[0].font.size = Pt(10)
-                                row_cells[4].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-
-                                row_cells[5].text = row[20]
-                                row_cells[5].paragraphs[0].runs[0].font.size = Pt(10)
-                                row_cells[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                            linias += 1
 
                         count += 1
 
@@ -392,8 +416,9 @@ class Ofertas(View):
                 pie_tabla[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                 pie_tabla[2].paragraphs[0].runs[0].font.bold = True
 
-                doc.add_paragraph()
-                doc.add_paragraph()
+                if linias % 6 != 0:
+                    doc.add_page_break()
+                    doc.add_paragraph("\n\n\n")
 
                 table_resumen = doc.add_table(rows=12, cols=6)
 
@@ -593,6 +618,9 @@ class Ofertas(View):
 
                 barra_cond = doc.add_paragraph()
                 insertHR(barra_cond)
+
+                doc.add_page_break()
+                doc.add_paragraph("")
 
                 condiciones = doc.add_paragraph()
                 condiciones.add_run('CONDICIONES:\n').font.size = Pt(11)
@@ -1712,7 +1740,7 @@ class Consultas(View):
                         'POB': pob,
                         'PRO': pro,
                         'TEL': tel,
-                        #'MAIL': mail,
+                        # 'MAIL': mail,
                     }
 
                 doc.render(context)
@@ -1806,7 +1834,9 @@ class Consultas(View):
                             row_prod.height = Cm(1)
                             row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                            row_cells[0].paragraphs[0].add_run(str(row[6]).strip() + str(row[7]).strip() + str(row[8]).strip() + str(row[9]).strip()).font.size = Pt(10)
+                            row_cells[0].paragraphs[0].add_run(
+                                str(row[6]).strip() + str(row[7]).strip() + str(row[8]).strip() + str(
+                                    row[9]).strip()).font.size = Pt(10)
                             row_cells[0].paragraphs[0].add_run('\nRef. ' + row[4]).font.size = Pt(10)
                             row_cells[0].paragraphs[0].runs[1].font.italic = True
 
@@ -2018,7 +2048,9 @@ class PedidosProv(View):
                                 row_prod.height = Cm(1)
                                 row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                                row_cells[0].paragraphs[0].add_run(str(row[6]).strip() + str(row[7]).strip() + str(row[8]).strip() + str(row[9]).strip()).font.size = Pt(10)
+                                row_cells[0].paragraphs[0].add_run(
+                                    str(row[6]).strip() + str(row[7]).strip() + str(row[8]).strip() + str(
+                                        row[9]).strip()).font.size = Pt(10)
 
                                 row_cells[1].text = row[10]
                                 row_cells[1].paragraphs[0].runs[0].font.size = Pt(10)
