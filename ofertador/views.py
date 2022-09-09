@@ -212,23 +212,25 @@ class Ofertas(View):
 
                 table = doc.add_table(rows=1, cols=6)
 
+                table.allow_autofit = False
+
                 for i in range(6):
                     for cell in table.columns[i].cells:
                         if i == 0:
                             cell.width = Cm(2.75)
                         elif i == 1:
-                            cell.width = Cm(8)
+                            cell.width = Cm(8.25)
                         elif i == 2:
-                            cell.width = Inches(0.2)
+                            cell.width = Cm(2.25)
                             cell.paragraphs[0].paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                         elif i == 3:
-                            cell.width = Inches(0.2)
+                            cell.width = Cm(2)
                             cell.paragraphs[0].paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                         elif i == 4:
-                            cell.width = Inches(0.03)
+                            cell.width = Cm(1.25)
                             cell.paragraphs[0].paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                         elif i == 5:
-                            cell.width = Inches(0.2)
+                            cell.width = Cm(2)
                             cell.paragraphs[0].paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                 hdr = table.rows[0]
@@ -303,7 +305,7 @@ class Ofertas(View):
 
                     for row in csv_reader:
                         if count > 2:
-                            if linias == 15 or (linias - 15) % 17 == 0:
+                            if linias == 15 or (linias - 15) % 16 == 0:
                                 if linias != 0:
                                     row_line = table.add_row()
                                     row_line_tabla = row_line.cells
@@ -322,64 +324,64 @@ class Ofertas(View):
                                     row_line_tabla = row_line.cells
                                     row_line_tabla[5].text = "Sigue..."
                                     row_line_tabla[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+
+                            row_prod = table.add_row()
+                            row_cells = row_prod.cells
+
+                            row_prod.height = Cm(1)
+                            row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
+
+                            if str(row[23]).strip() == 'Texto':
+                                row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
                             else:
-                                row_prod = table.add_row()
-                                row_cells = row_prod.cells
+                                row_cells[0].paragraphs[0].add_run(row[22]).font.size = Pt(10)
+                                row_cells[0].paragraphs[0].add_run('\n' + row[4]).font.size = Pt(10)
+                                row_cells[0].paragraphs[0].runs[1].font.italic = True
 
-                                row_prod.height = Cm(1)
-                                row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
+                                if comprovar_stock(str(fecha), str(row[16]).strip()):
+                                    if str(row[23]).strip() == 'Especial':
+                                        row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
+                                    else:
+                                        row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(8.5)
 
-                                if str(row[23]).strip() == 'Texto':
-                                    row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
+                                    row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(8)
+                                    row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
+                                    row_cells[1].paragraphs[0].add_run('  [STOCK]').font.size = Pt(8)
+                                    row_cells[1].paragraphs[0].runs[2].font.italic = True
+                                    row_cells[1].paragraphs[0].runs[3].font.bold = True
                                 else:
-                                    row_cells[0].paragraphs[0].add_run(row[22]).font.size = Pt(10)
-                                    row_cells[0].paragraphs[0].add_run('\n' + row[4]).font.size = Pt(10)
-                                    row_cells[0].paragraphs[0].runs[1].font.italic = True
-
-                                    if comprovar_stock(str(fecha), str(row[16]).strip()):
-                                        if str(row[23]).strip() == 'Especial':
-                                            row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
-                                        else:
-                                            row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(8.5)
-
-                                        row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(8)
-                                        row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
-                                        row_cells[1].paragraphs[0].add_run('  [STOCK]').font.size = Pt(8)
-                                        row_cells[1].paragraphs[0].runs[2].font.italic = True
-                                        row_cells[1].paragraphs[0].runs[3].font.bold = True
+                                    if str(row[23]).strip() == 'Especial':
+                                        row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
                                     else:
-                                        if str(row[23]).strip() == 'Especial':
-                                            row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
-                                        else:
-                                            row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(8.5)
+                                        row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(8.5)
 
-                                        row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(8)
-                                        row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
-                                        row_cells[1].paragraphs[0].add_run(
-                                            '  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(8)
-                                        row_cells[1].paragraphs[0].runs[2].font.italic = True
-                                        row_cells[1].paragraphs[0].runs[3].font.bold = True
+                                    row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(8)
+                                    row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
+                                    row_cells[1].paragraphs[0].add_run(
+                                        '  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(8)
+                                    row_cells[1].paragraphs[0].runs[2].font.italic = True
+                                    row_cells[1].paragraphs[0].runs[3].font.bold = True
 
-                                    row_cells[2].text = row[9]
-                                    row_cells[2].paragraphs[0].runs[0].font.size = Pt(10)
-                                    row_cells[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                                row_cells[2].text = row[9]
+                                row_cells[2].paragraphs[0].runs[0].font.size = Pt(10)
+                                row_cells[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                                    row_cells[3].text = row[18]
-                                    row_cells[3].paragraphs[0].runs[0].font.size = Pt(10)
-                                    row_cells[3].paragraphs[0].runs[0].font.bold = True
-                                    row_cells[3].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                                row_cells[3].text = row[18]
+                                row_cells[3].paragraphs[0].runs[0].font.size = Pt(10)
+                                row_cells[3].paragraphs[0].runs[0].font.bold = True
+                                row_cells[3].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                                    if str(row[19]).strip() == '':
-                                        row_cells[4].text = 'NETO'
-                                    else:
-                                        row_cells[4].text = row[19]
+                                if str(row[19]).strip() == '':
+                                    row_cells[4].text = 'NETO'
+                                else:
+                                    row_cells[4].text = row[19]
 
-                                    row_cells[4].paragraphs[0].runs[0].font.size = Pt(10)
-                                    row_cells[4].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                                row_cells[4].paragraphs[0].runs[0].font.size = Pt(10)
+                                row_cells[4].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                                    row_cells[5].text = row[20]
-                                    row_cells[5].paragraphs[0].runs[0].font.size = Pt(10)
-                                    row_cells[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                                row_cells[5].text = row[20]
+                                row_cells[5].paragraphs[0].runs[0].font.size = Pt(10)
+                                row_cells[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                             linias += 1
 
@@ -416,10 +418,11 @@ class Ofertas(View):
                 pie_tabla[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                 pie_tabla[2].paragraphs[0].runs[0].font.bold = True
 
-                if linias % 6 != 0:
+                if 15 >= linias > 3 or linias > 15 and (linias - 15) % 16 > 3:
                     doc.add_page_break()
                     doc.add_paragraph("\n\n\n")
 
+                doc.add_paragraph("")
                 table_resumen = doc.add_table(rows=12, cols=6)
 
                 for i in range(5):
