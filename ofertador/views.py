@@ -219,7 +219,7 @@ class Ofertas(View):
                         if i == 0:
                             cell.width = Cm(2.75)
                         elif i == 1:
-                            cell.width = Cm(8.25)
+                            cell.width = Cm(19)
                         elif i == 2:
                             cell.width = Cm(2.25)
                             cell.paragraphs[0].paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
@@ -305,7 +305,7 @@ class Ofertas(View):
 
                     for row in csv_reader:
                         if count > 2:
-                            if linias == 15 or (linias - 15) % 16 == 0:
+                            if linias == 16 or (linias - 16) % 18 == 0:
                                 if linias != 0:
                                     row_line = table.add_row()
                                     row_line_tabla = row_line.cells
@@ -418,11 +418,12 @@ class Ofertas(View):
                 pie_tabla[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                 pie_tabla[2].paragraphs[0].runs[0].font.bold = True
 
-                if 15 >= linias > 3 or linias > 15 and (linias - 15) % 16 > 3:
+                if 16 >= linias > 4 or linias > 16 and (linias - 16) % 18 > 7:
                     doc.add_page_break()
                     doc.add_paragraph("\n\n\n")
+                else:
+                    doc.add_paragraph().add_run().font.size = Pt(6)
 
-                doc.add_paragraph("")
                 table_resumen = doc.add_table(rows=12, cols=6)
 
                 for i in range(5):
@@ -879,12 +880,34 @@ class Pedidos(View):
                 set_repeat_table_header(table.rows[0])
                 set_repeat_table_header(table.rows[1])
 
+                linias = 0
+
                 with open('csvofertas/pedido.csv') as csv_file:
                     csv_reader = csv.reader(csv_file, delimiter=';')
                     count = 0
 
                     for row in csv_reader:
                         if count > 2:
+                            if linias == 14 or (linias - 14) % 16 == 0:
+                                if linias != 0:
+                                    row_line = table.add_row()
+                                    row_line_tabla = row_line.cells
+                                    row_line_tabla[5].merge(row_line_tabla[4])
+                                    row_line_tabla[4].merge(row_line_tabla[3])
+                                    row_line_tabla[3].merge(row_line_tabla[2])
+                                    row_line_tabla[2].merge(row_line_tabla[1])
+                                    row_line_tabla[1].merge(row_line_tabla[0])
+
+                                    row_line.height = Cm(0.65)
+                                    row_line.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
+
+                                    insertHR(row_line_tabla[0].paragraphs[0])
+
+                                    row_line = table.add_row()
+                                    row_line_tabla = row_line.cells
+                                    row_line_tabla[5].text = "Sigue..."
+                                    row_line_tabla[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+
                             row_prod = table.add_row()
                             row_cells = row_prod.cells
 
@@ -916,6 +939,8 @@ class Pedidos(View):
                             row_cells[5].text = row[7]
                             row_cells[5].paragraphs[0].runs[0].font.size = Pt(10)
                             row_cells[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+
+                            linias += 1
 
                         count += 1
 
@@ -949,7 +974,13 @@ class Pedidos(View):
                 pie_tabla[2].paragraphs[0].runs[1].font.italic = True
 
                 doc.add_paragraph()
-                doc.add_paragraph()
+
+                print("Linias: " + str(linias))
+                print((linias - 14) % 21)
+
+                if 14 >= linias > 8 or linias > 14 and (linias - 14) % 16 > 8:
+                    doc.add_page_break()
+                    doc.add_paragraph("\n\n\n")
 
                 table_resumen = doc.add_table(rows=13, cols=6)
 
