@@ -2080,7 +2080,10 @@ class PedidosProv(View):
 
                                 if str(row[9]).strip() != 'Especial':
                                     row_cells[0].paragraphs[0].add_run(
-                                        str(row[8]).strip()).font.size = Pt(8.5)
+                                        str(row[8]).strip() + str(row[9]).strip() + str(row[10]).strip() + str(
+                                            row[11]).strip()).font.size = Pt(8.5)
+                                else:
+                                    row_cells[0].paragraphs[0].add_run(str(row[8]).strip()).font.size = Pt(8.5)
                                     row_cells[0].paragraphs[0].add_run('\nRef. ' + row[7]).font.size = Pt(10)
                                     row_cells[0].paragraphs[0].runs[1].font.italic = True
 
