@@ -1785,10 +1785,8 @@ class Consultas(View):
 
                 condiciones = doc.add_paragraph()
                 condiciones.add_run(
-                    '\tMuy Sres. Nuestros: \n\t  Rogamos nos envíen su mejor precio y plazo de entrega para los siguientes artículos.\n\t  Please, send us your best price and delivery date for the following references.').font.size = Pt(
+                    'Muy Sres. Nuestros: \nRogamos nos envíen su mejor precio y plazo de entrega para los siguientes artículos.\nPlease, send us your best price and delivery date for the following references.').font.size = Pt(
                     11)
-
-                doc.add_paragraph()
 
                 table = doc.add_table(rows=1, cols=4)
 
