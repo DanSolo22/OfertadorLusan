@@ -2078,11 +2078,11 @@ class PedidosProv(View):
                                 row_prod.height = Cm(1)
                                 row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                                row_cells[0].paragraphs[0].add_run(
-                                    str(row[8]).strip() + str(row[9]).strip() + str(row[10]).strip() + str(
-                                        row[11]).strip()).font.size = Pt(10)
-                                row_cells[0].paragraphs[0].add_run('\nRef. ' + row[7]).font.size = Pt(10)
-                                row_cells[0].paragraphs[0].runs[1].font.italic = True
+                                if str(row[9]).strip() != 'Especial':
+                                    row_cells[0].paragraphs[0].add_run(
+                                        str(row[8]).strip()).font.size = Pt(8.5)
+                                    row_cells[0].paragraphs[0].add_run('\nRef. ' + row[7]).font.size = Pt(10)
+                                    row_cells[0].paragraphs[0].runs[1].font.italic = True
 
                                 row_cells[1].text = row[12]
                                 row_cells[1].paragraphs[0].runs[0].font.size = Pt(10)
@@ -2108,8 +2108,9 @@ class PedidosProv(View):
                                 row_cells = row_prod.cells
 
                                 row_cells[1].merge(row_cells[0])
-                                row_cells[0].paragraphs[0].add_run(row[8]).font.size = Pt(10)
-                                row_cells[0].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                                row_cells[0].paragraphs[0].add_run(row[8]).font.size = Pt(8.5)
+
+
                         count += 1
 
                 row_peso = table.add_row()
