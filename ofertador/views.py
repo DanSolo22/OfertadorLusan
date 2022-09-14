@@ -1867,9 +1867,9 @@ class Consultas(View):
                             row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
                             row_cells[0].paragraphs[0].add_run(
-                                str(row[6]).strip() + str(row[7]).strip() + str(row[8]).strip() + str(
-                                    row[9]).strip()).font.size = Pt(10)
-                            row_cells[0].paragraphs[0].add_run('\nRef. ' + row[4]).font.size = Pt(10)
+                                str(row[8]).strip() + str(row[9]).strip() + str(row[10]).strip() + str(
+                                    row[11]).strip()).font.size = Pt(10)
+                            row_cells[0].paragraphs[0].add_run('\nRef. ' + row[7]).font.size = Pt(10)
                             row_cells[0].paragraphs[0].runs[1].font.italic = True
 
                             row_cells[1].text = row[10]
@@ -2073,7 +2073,7 @@ class PedidosProv(View):
 
                     for row in csv_reader:
                         if count > 2:
-                            if str(row[7]).strip() != 'Texto':
+                            if str(row[9]).strip() != 'Texto':
                                 row_prod = table.add_row()
                                 row_cells = row_prod.cells
 
@@ -2081,25 +2081,27 @@ class PedidosProv(View):
                                 row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
                                 row_cells[0].paragraphs[0].add_run(
-                                    str(row[6]).strip() + str(row[7]).strip() + str(row[8]).strip() + str(
-                                        row[9]).strip()).font.size = Pt(10)
+                                    str(row[8]).strip() + str(row[9]).strip() + str(row[10]).strip() + str(
+                                        row[11]).strip()).font.size = Pt(10)
+                                row_cells[0].paragraphs[0].add_run('\nRef. ' + row[7]).font.size = Pt(10)
+                                row_cells[0].paragraphs[0].runs[1].font.italic = True
 
-                                row_cells[1].text = row[10]
+                                row_cells[1].text = row[12]
                                 row_cells[1].paragraphs[0].runs[0].font.size = Pt(10)
                                 row_cells[1].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                                row_cells[2].text = row[12]
+                                row_cells[2].text = row[14]
                                 row_cells[2].paragraphs[0].runs[0].font.size = Pt(10)
                                 row_cells[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                                if int(float(str(row[13]).replace(',', '.'))) == 0:
+                                if int(float(str(row[15]).replace(',', '.'))) == 0:
                                     row_cells[3].text = 'Neto'
                                 else:
-                                    row_cells[3].text = row[13]
+                                    row_cells[3].text = row[15]
                                 row_cells[3].paragraphs[0].runs[0].font.size = Pt(10)
                                 row_cells[3].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                                row_cells[4].text = row[14]
+                                row_cells[4].text = row[16]
                                 row_cells[4].paragraphs[0].runs[0].font.size = Pt(10)
                                 row_cells[4].paragraphs[0].runs[0].font.bold = True
                                 row_cells[4].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
@@ -2108,7 +2110,7 @@ class PedidosProv(View):
                                 row_cells = row_prod.cells
 
                                 row_cells[1].merge(row_cells[0])
-                                row_cells[0].paragraphs[0].add_run(row[6]).font.size = Pt(10)
+                                row_cells[0].paragraphs[0].add_run(row[8]).font.size = Pt(10)
                                 row_cells[0].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                         count += 1
 
