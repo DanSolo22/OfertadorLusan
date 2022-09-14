@@ -1872,7 +1872,7 @@ class Consultas(View):
                             row_cells[0].paragraphs[0].add_run('\nRef. ' + row[7]).font.size = Pt(10)
                             row_cells[0].paragraphs[0].runs[1].font.italic = True
 
-                            row_cells[1].text = row[10]
+                            row_cells[1].text = row[12]
                             row_cells[1].paragraphs[0].runs[0].font.size = Pt(10)
                             row_cells[1].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
