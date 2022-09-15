@@ -1864,11 +1864,11 @@ class Consultas(View):
                             row_prod.height = Cm(1)
                             row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                            row_cells[0].paragraphs[0].add_run(
-                                str(row[8]).strip() + str(row[9]).strip() + str(row[10]).strip() + str(
-                                    row[11]).strip()).font.size = Pt(10)
-                            row_cells[0].paragraphs[0].add_run('\nRef. ' + row[7]).font.size = Pt(10)
-                            row_cells[0].paragraphs[0].runs[1].font.italic = True
+                            row_cells[0].paragraphs[0].add_run(str(row[29]).strip()).font.size = Pt(8.5)
+
+                            if str(row[7]).strip() != '':
+                                row_cells[0].paragraphs[0].add_run('\nRef. ' + row[7]).font.size = Pt(8)
+                                row_cells[0].paragraphs[0].runs[1].font.italic = True
 
                             row_cells[1].text = row[12]
                             row_cells[1].paragraphs[0].runs[0].font.size = Pt(10)
@@ -2078,14 +2078,12 @@ class PedidosProv(View):
                                 row_prod.height = Cm(1)
                                 row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                                if str(row[9]).strip() != 'Especial':
-                                    row_cells[0].paragraphs[0].add_run(
-                                        str(row[8]).strip() + str(row[9]).strip() + str(row[10]).strip() + str(
-                                            row[11]).strip()).font.size = Pt(8.5)
-                                    row_cells[0].paragraphs[0].add_run('\nRef. ' + row[7]).font.size = Pt(10)
+                                row_cells[0].paragraphs[0].add_run(
+                                    str(row[29]).strip()).font.size = Pt(8.5)
+
+                                if str(row[9]).strip() != 'Especial' and str(row[7]).strip() != '':
+                                    row_cells[0].paragraphs[0].add_run('\nRef. ' + row[7]).font.size = Pt(8)
                                     row_cells[0].paragraphs[0].runs[1].font.italic = True
-                                else:
-                                    row_cells[0].paragraphs[0].add_run(str(row[8]).strip()).font.size = Pt(8.5)
 
                                 row_cells[1].text = row[12]
                                 row_cells[1].paragraphs[0].runs[0].font.size = Pt(10)
