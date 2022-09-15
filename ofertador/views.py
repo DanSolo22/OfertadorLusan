@@ -234,26 +234,29 @@ class Ofertas(View):
                             cell.paragraphs[0].paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                 hdr = table.rows[0]
+                hdr.height = Cm(1.7)
+                hdr.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
+
                 hdr_cells = hdr.cells
 
-                hdr_cells[0].paragraphs[0].add_run('\n\nREF.\n').font.size = Pt(9)
+                hdr_cells[0].paragraphs[0].add_run('\nREF.\n').font.size = Pt(9)
                 hdr_cells[0].paragraphs[0].add_run('REF.\n').font.size = Pt(9)
                 hdr_cells[0].paragraphs[0].runs[0].font.bold = True
                 hdr_cells[0].paragraphs[0].runs[1].font.italic = True
 
-                hdr_cells[1].paragraphs[0].add_run('\n\nDESCRIPCION\n').font.size = Pt(9)
+                hdr_cells[1].paragraphs[0].add_run('\nDESCRIPCION\n').font.size = Pt(9)
                 hdr_cells[1].paragraphs[0].add_run('SPECIFICATION\n').font.size = Pt(9)
                 hdr_cells[1].paragraphs[0].runs[0].font.bold = True
                 hdr_cells[1].paragraphs[0].runs[1].font.italic = True
                 hdr_cells[1].paragraphs[0].runs[1].font.bold = False
 
-                hdr_cells[2].paragraphs[0].add_run('\n\nCANTIDAD\n').font.size = Pt(9)
+                hdr_cells[2].paragraphs[0].add_run('\nCANTIDAD\n').font.size = Pt(9)
                 hdr_cells[2].paragraphs[0].add_run('QUANTITY\n').font.size = Pt(9)
                 hdr_cells[2].paragraphs[0].runs[0].font.bold = True
                 hdr_cells[2].paragraphs[0].runs[1].font.italic = True
                 hdr_cells[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                hdr_cells[3].paragraphs[0].add_run('\n\nPRECIO\n').font.size = Pt(9)
+                hdr_cells[3].paragraphs[0].add_run('\nPRECIO\n').font.size = Pt(9)
                 hdr_cells[3].paragraphs[0].add_run('PRICE\n').font.size = Pt(9)
                 hdr_cells[3].paragraphs[0].add_run('EUROx100').font.size = Pt(9)
                 hdr_cells[3].paragraphs[0].runs[0].font.bold = True
@@ -261,7 +264,7 @@ class Ofertas(View):
                 hdr_cells[3].paragraphs[0].runs[2].font.bold = True
                 hdr_cells[3].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                hdr_cells[4].paragraphs[0].add_run('\n\nDTO.\n').font.size = Pt(9)
+                hdr_cells[4].paragraphs[0].add_run('\nDTO.\n').font.size = Pt(9)
                 hdr_cells[4].paragraphs[0].add_run('DIS.\n').font.size = Pt(9)
                 hdr_cells[4].paragraphs[0].add_run('%').font.size = Pt(9)
                 hdr_cells[4].paragraphs[0].runs[0].font.bold = True
@@ -269,16 +272,13 @@ class Ofertas(View):
                 hdr_cells[4].paragraphs[0].runs[2].font.bold = True
                 hdr_cells[4].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                hdr_cells[5].paragraphs[0].add_run('\n\nIMPORTE\n').font.size = Pt(9)
+                hdr_cells[5].paragraphs[0].add_run('\nIMPORTE\n').font.size = Pt(9)
                 hdr_cells[5].paragraphs[0].add_run('AMOUNT\n').font.size = Pt(9)
                 hdr_cells[5].paragraphs[0].add_run('EURO').font.size = Pt(9)
                 hdr_cells[5].paragraphs[0].runs[0].font.bold = True
                 hdr_cells[5].paragraphs[0].runs[1].font.italic = True
                 hdr_cells[5].paragraphs[0].runs[2].font.bold = True
                 hdr_cells[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-
-                hdr.height = Cm(2)
-                hdr.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
                 barra_cabeza = table.add_row()
                 barra_cabeza_tabla = barra_cabeza.cells
