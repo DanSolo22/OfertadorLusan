@@ -418,11 +418,15 @@ class Ofertas(View):
                 pie_tabla[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                 pie_tabla[2].paragraphs[0].runs[0].font.bold = True
 
-                if 16 >= linias > 4 or linias > 16 and (linias - 16) % 18 > 7:
+                if 16 >= linias > 7 or linias > 16 and (linias - 16) % 18 > 7:
                     doc.add_page_break()
                     doc.add_paragraph("\n\n\n")
                 else:
-                    doc.add_paragraph().add_run().font.size = Pt(6)
+                    salto = doc.add_paragraph()
+                    salto.add_run(' ').font.size = Pt(3)
+                    salto_format = salto.paragraph_format
+                    salto_format.space_before = Pt(0)
+                    salto_format.space_after = Pt(0)
 
                 table_resumen = doc.add_table(rows=12, cols=6)
 
@@ -620,10 +624,6 @@ class Ofertas(View):
                     table_resumen.cell(10, 5).paragraphs[0].add_run(str(forma_pago).strip()).font.size = Pt(8)
                     table_resumen.cell(10, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                barra_cond = doc.add_paragraph()
-                insertHR(barra_cond)
-                doc.add_paragraph("")
-
                 condiciones = doc.add_paragraph()
                 condiciones.add_run('CONDICIONES:\n').font.size = Pt(11)
                 condiciones.add_run('\n').font.size = Pt(3)
@@ -641,11 +641,8 @@ class Ofertas(View):
                 condiciones.add_run('- No se aceptan devolución de piezas especiales ').font.size = Pt(9)
                 condiciones.add_run('ni medidas fuera de catálogo.\n').font.size = Pt(9)
                 condiciones.add_run('- ').font.size = Pt(9)
-                condiciones.add_run(
-                    'Las piezas especiales se podrán suministrar con un +/- 10% de la cantidad ofertada.').font.size = Pt(
-                    9)
-                condiciones.add_run(
-                    '\n\n- El suministro quedará supeditado a la concesión de riesgo por parte de ').font.size = Pt(9)
+                condiciones.add_run('Las piezas especiales se podrán suministrar con un +/- 10% de la cantidad ofertada.').font.size = Pt(9)
+                condiciones.add_run('\n- El suministro quedará supeditado a la concesión de riesgo por parte de ').font.size = Pt(9)
                 condiciones.add_run('Crédito y Caución.').font.size = Pt(9)
 
                 condiciones.runs[0].font.bold = True
