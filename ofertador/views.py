@@ -78,23 +78,15 @@ def comprovar_stock(fecha_pedido, fecha_plazo):
         array_fecha_pedido = str(fecha_pedido).split('/')
         array_fecha_plazo = str(fecha_plazo).split('/')
 
-        if (array_fecha_pedido[0][0] == '0' or array_fecha_pedido[0][0] == ' ') and (
-                array_fecha_plazo[0][0] == '0' or array_fecha_pedido[0][0] == ' '):
-            if (array_fecha_pedido[1][0] == '0' or array_fecha_pedido[1][0] == ' ') and (
-                    array_fecha_plazo[1][0] == '0' or array_fecha_pedido[1][0] == ' '):
-                if array_fecha_pedido[0][1] == array_fecha_plazo[0][1] and array_fecha_pedido[1][1] == \
-                        array_fecha_plazo[1][1] and array_fecha_pedido[2] == array_fecha_plazo[2]:
-                    return True
-                else:
-                    return False
+        print(array_fecha_pedido)
+        print(array_fecha_plazo)
+
+        if int(str(array_fecha_pedido[0]).strip()) == int(str(array_fecha_plazo[0]).strip()) and int(
+                str(array_fecha_pedido[1]).strip()) == int(str(array_fecha_plazo[1]).strip()) and int(
+            str(array_fecha_pedido[2]).strip()) == int(str(array_fecha_plazo[2]).strip()):
+            return True
         else:
-            if (array_fecha_pedido[1][0] == '0' or array_fecha_pedido[1][0] == ' ') and (
-                    array_fecha_plazo[1][0] == '0' or array_fecha_pedido[1][0] == ' '):
-                if array_fecha_pedido[0] == array_fecha_plazo[0] and array_fecha_pedido[1][1] == array_fecha_plazo[1][
-                    1] and array_fecha_pedido[2] == array_fecha_plazo[2]:
-                    return True
-                else:
-                    return False
+            return False
 
 
 class Ofertas(View):
@@ -641,8 +633,11 @@ class Ofertas(View):
                 condiciones.add_run('- No se aceptan devolución de piezas especiales ').font.size = Pt(9)
                 condiciones.add_run('ni medidas fuera de catálogo.\n').font.size = Pt(9)
                 condiciones.add_run('- ').font.size = Pt(9)
-                condiciones.add_run('Las piezas especiales se podrán suministrar con un +/- 10% de la cantidad ofertada.').font.size = Pt(9)
-                condiciones.add_run('\n- El suministro quedará supeditado a la concesión de riesgo por parte de ').font.size = Pt(9)
+                condiciones.add_run(
+                    'Las piezas especiales se podrán suministrar con un +/- 10% de la cantidad ofertada.').font.size = Pt(
+                    9)
+                condiciones.add_run(
+                    '\n- El suministro quedará supeditado a la concesión de riesgo por parte de ').font.size = Pt(9)
                 condiciones.add_run('Crédito y Caución.').font.size = Pt(9)
 
                 condiciones.runs[0].font.bold = True
@@ -2107,7 +2102,6 @@ class PedidosProv(View):
 
                                 row_cells[1].merge(row_cells[0])
                                 row_cells[0].paragraphs[0].add_run(row[8]).font.size = Pt(8.5)
-
 
                         count += 1
 
