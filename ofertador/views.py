@@ -1,4 +1,4 @@
-import os
+# import os
 
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
@@ -21,19 +21,19 @@ def set_repeat_table_header(row):
     """ set repeat table row on every new page
     """
     tr = row._tr
-    trPr = tr.get_or_add_trPr()
-    tblHeader = OxmlElement('w:tblHeader')
-    tblHeader.set(qn('w:val'), "true")
-    trPr.append(tblHeader)
+    tr_pr = tr.get_or_add_trPr()
+    tbl_header = OxmlElement('w:tblHeader')
+    tbl_header.set(qn('w:val'), "true")
+    tr_pr.append(tbl_header)
     return row
 
 
-def insertHR(paragraph):
+def insert_hr(paragraph):
     p = paragraph._p
-    pPr = p.get_or_add_pPr()
-    pBdr = OxmlElement('w:pBdr')
-    pPr.insert_element_before(
-        pBdr,
+    p_pr = p.get_or_add_pPr()
+    p_bdr = OxmlElement('w:pBdr')
+    p_pr.insert_element_before(
+        p_bdr,
         'w:shd', 'w:tabs', 'w:suppressAutoHyphens', 'w:kinsoku', 'w:wordWrap',
         'w:overflowPunct', 'w:topLinePunct', 'w:autoSpaceDE', 'w:autoSpaceDN',
         'w:bidi', 'w:adjustRightInd', 'w:snapToGrid', 'w:spacing', 'w:ind',
@@ -47,7 +47,7 @@ def insertHR(paragraph):
     bottom.set(qn('w:sz'), '6')
     bottom.set(qn('w:space'), '1')
     bottom.set(qn('w:color'), 'auto')
-    pBdr.append(bottom)
+    p_bdr.append(bottom)
 
 
 def comprovar_plazo(fecha):
@@ -87,6 +87,30 @@ def comprovar_stock(fecha_pedido, fecha_plazo):
             return True
         else:
             return False
+
+
+def comprovar_usuario(usuario):
+    match usuario:
+        case 'lai':
+            return 'Laia'
+        case 'jor':
+            return 'Jordi'
+        case 'car':
+            return 'Carmen'
+        case 'jos':
+            return 'José'
+        case 'ant':
+            return 'Antonio'
+        case 'lou':
+            return 'Lourdes'
+        case 'ang':
+            return 'Angeles'
+        case 'luz':
+            return 'Mari Luz'
+        case 'jua':
+            return 'Juan Manuel'
+        case _:
+            return 'Lusan'
 
 
 class Ofertas(View):
@@ -284,7 +308,7 @@ class Ofertas(View):
                 barra_cabeza.height = Cm(0.65)
                 barra_cabeza.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                insertHR(barra_cabeza_tabla[0].paragraphs[0])
+                insert_hr(barra_cabeza_tabla[0].paragraphs[0])
 
                 set_repeat_table_header(table.rows[0])
                 set_repeat_table_header(table.rows[1])
@@ -310,7 +334,7 @@ class Ofertas(View):
                                     row_line.height = Cm(0.65)
                                     row_line.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                                    insertHR(row_line_tabla[0].paragraphs[0])
+                                    insert_hr(row_line_tabla[0].paragraphs[0])
 
                                     row_line = table.add_row()
                                     row_line_tabla = row_line.cells
@@ -391,7 +415,7 @@ class Ofertas(View):
                 barra_pie.height = Cm(0.65)
                 barra_pie.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                insertHR(barra_pie_tabla[0].paragraphs[0])
+                insert_hr(barra_pie_tabla[0].paragraphs[0])
 
                 pie_tabla = table.add_row().cells
 
@@ -581,7 +605,7 @@ class Ofertas(View):
 
                 table_resumen.cell(6, 3).merge(table_resumen.cell(6, 4))
                 table_resumen.cell(6, 4).merge(table_resumen.cell(6, 5))
-                insertHR(table_resumen.cell(6, 3).paragraphs[0])
+                insert_hr(table_resumen.cell(6, 3).paragraphs[0])
 
                 table_resumen.cell(7, 3).paragraphs[0].add_run('IMPORTE TOTAL / ').font.size = Pt(9)
                 table_resumen.cell(7, 3).paragraphs[0].add_run('TOTAL AMOUNT').font.size = Pt(9)
@@ -867,7 +891,7 @@ class Pedidos(View):
                 barra_cabeza.height = Cm(0.65)
                 barra_cabeza.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                insertHR(barra_cabeza_tabla[0].paragraphs[0])
+                insert_hr(barra_cabeza_tabla[0].paragraphs[0])
 
                 set_repeat_table_header(table.rows[0])
                 set_repeat_table_header(table.rows[1])
@@ -893,7 +917,7 @@ class Pedidos(View):
                                     row_line.height = Cm(0.65)
                                     row_line.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                                    insertHR(row_line_tabla[0].paragraphs[0])
+                                    insert_hr(row_line_tabla[0].paragraphs[0])
 
                                     row_line = table.add_row()
                                     row_line_tabla = row_line.cells
@@ -948,7 +972,7 @@ class Pedidos(View):
                 barra_pie.height = Cm(0.65)
                 barra_pie.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                insertHR(barra_pie_tabla[0].paragraphs[0])
+                insert_hr(barra_pie_tabla[0].paragraphs[0])
 
                 pie_tabla = table.add_row().cells
 
@@ -1144,7 +1168,7 @@ class Pedidos(View):
 
                 table_resumen.cell(7, 3).merge(table_resumen.cell(7, 4))
                 table_resumen.cell(7, 4).merge(table_resumen.cell(7, 5))
-                insertHR(table_resumen.cell(7, 3).paragraphs[0])
+                insert_hr(table_resumen.cell(7, 3).paragraphs[0])
 
                 table_resumen.cell(8, 3).paragraphs[0].add_run('IMPORTE TOTAL / ').font.size = Pt(9)
                 table_resumen.cell(8, 3).paragraphs[0].add_run('TOTAL AMOUNT').font.size = Pt(9)
@@ -1260,6 +1284,8 @@ class PreAlbaranes(View):
                 dp3 = ''
                 transportista = ''
                 iban = 'ES25 2100-1083-1102-0005-4013'
+                contacto = ''
+                tel_fijo = '+34 937144561'
 
                 doc = DocxTemplate("csvofertas/plantilla_pedido.docx")
 
@@ -1302,6 +1328,7 @@ class PreAlbaranes(View):
                             rec_quiv = row[62]
                             imp_rec_quiv = row[63]
                             total = row[64]
+                            contacto = row[43]
                         line_count += 1
 
                 context = \
@@ -1410,10 +1437,12 @@ class PreAlbaranes(View):
                 barra_cabeza.height = Cm(0.65)
                 barra_cabeza.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                insertHR(barra_cabeza_tabla[0].paragraphs[0])
+                insert_hr(barra_cabeza_tabla[0].paragraphs[0])
 
                 set_repeat_table_header(table.rows[0])
                 set_repeat_table_header(table.rows[1])
+
+                linias = 0
 
                 with open('csvofertas/albaran.csv') as csv_file:
                     csv_reader = csv.reader(csv_file, delimiter=';')
@@ -1421,6 +1450,26 @@ class PreAlbaranes(View):
 
                     for row in csv_reader:
                         if count > 2:
+                            '''if linias == 14 or (linias - 14) % 16 == 0:
+                                if linias != 0:
+                                    row_line = table.add_row()
+                                    row_line_tabla = row_line.cells
+                                    row_line_tabla[5].merge(row_line_tabla[4])
+                                    row_line_tabla[4].merge(row_line_tabla[3])
+                                    row_line_tabla[3].merge(row_line_tabla[2])
+                                    row_line_tabla[2].merge(row_line_tabla[1])
+                                    row_line_tabla[1].merge(row_line_tabla[0])
+
+                                    row_line.height = Cm(0.65)
+                                    row_line.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
+
+                                    insert_hr(row_line_tabla[0].paragraphs[0])
+
+                                    row_line = table.add_row()
+                                    row_line_tabla = row_line.cells
+                                    row_line_tabla[5].text = "Sigue..."
+                                    row_line_tabla[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT'''
+
                             row_prod = table.add_row()
                             row_cells = row_prod.cells
 
@@ -1473,7 +1522,7 @@ class PreAlbaranes(View):
                 barra_pie.height = Cm(0.65)
                 barra_pie.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                insertHR(barra_pie_tabla[0].paragraphs[0])
+                insert_hr(barra_pie_tabla[0].paragraphs[0])
 
                 doc.add_paragraph()
                 doc.add_paragraph()
@@ -1537,6 +1586,14 @@ class PreAlbaranes(View):
                 table_resumen.cell(9, 0).paragraphs[0].runs[0].font.italic = True
                 table_resumen.cell(9, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
+                table_resumen.cell(11, 0).paragraphs[0].add_run('CONTACTO\n').font.size = Pt(8)
+                table_resumen.cell(11, 0).paragraphs[0].runs[0].font.bold = True
+                table_resumen.cell(11, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+
+                table_resumen.cell(12, 0).paragraphs[0].add_run('CONTACT PERSON').font.size = Pt(8)
+                table_resumen.cell(12, 0).paragraphs[0].runs[0].font.italic = True
+                table_resumen.cell(12, 0).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+
                 table_resumen.cell(0, 1).paragraphs[0].add_run(icoterm).font.size = Pt(8)
 
                 if str(portes).strip() == 'D':
@@ -1568,6 +1625,12 @@ class PreAlbaranes(View):
 
                 table_resumen.cell(8, 1).paragraphs[0].text = peso
                 table_resumen.cell(8, 1).paragraphs[0].runs[0].font.size = Pt(8)
+
+                table_resumen.cell(11, 1).paragraphs[0].add_run('          ' + comprovar_usuario(contacto))
+                table_resumen.cell(11, 1).paragraphs[0].runs[0].font.size = Pt(10)
+
+                table_resumen.cell(12, 1).paragraphs[0].add_run(tel_fijo)
+                table_resumen.cell(12, 1).paragraphs[0].runs[0].font.size = Pt(10)
 
                 # Resumen del pedido
 
@@ -1632,7 +1695,7 @@ class PreAlbaranes(View):
 
                 table_resumen.cell(7, 3).merge(table_resumen.cell(7, 4))
                 table_resumen.cell(7, 4).merge(table_resumen.cell(7, 5))
-                insertHR(table_resumen.cell(7, 3).paragraphs[0])
+                insert_hr(table_resumen.cell(7, 3).paragraphs[0])
 
                 table_resumen.cell(8, 3).paragraphs[0].add_run('IMPORTE TOTAL / ').font.size = Pt(9)
                 table_resumen.cell(8, 3).paragraphs[0].add_run('TOTAL AMOUNT').font.size = Pt(9)
@@ -1777,7 +1840,9 @@ class Consultas(View):
 
                 condiciones = doc.add_paragraph()
                 condiciones.add_run(
-                    'Muy Sres. Nuestros: \nRogamos nos envíen su mejor precio y plazo de entrega para los siguientes artículos.\nPlease, send us your best price and delivery date for the following references.').font.size = Pt(
+                    'Muy Sres. Nuestros: \nRogamos nos envíen su mejor precio y plazo de entrega para los siguientes '
+                    'artículos.\nPlease, send us your best price and delivery date for the following '
+                    'references.').font.size = Pt(
                     11)
 
                 table = doc.add_table(rows=1, cols=4)
@@ -1839,10 +1904,12 @@ class Consultas(View):
                 barra_cabeza.height = Cm(0.65)
                 barra_cabeza.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                insertHR(barra_cabeza_tabla[0].paragraphs[0])
+                insert_hr(barra_cabeza_tabla[0].paragraphs[0])
 
                 set_repeat_table_header(table.rows[0])
                 set_repeat_table_header(table.rows[1])
+
+                linias = 0
 
                 with open('csvofertas/consulta.csv') as csv_file:
                     csv_reader = csv.reader(csv_file, delimiter=';')
@@ -1850,6 +1917,26 @@ class Consultas(View):
 
                     for row in csv_reader:
                         if count > 2:
+                            '''if linias == 14 or (linias - 14) % 16 == 0:
+                                if linias != 0:
+                                    row_line = table.add_row()
+                                    row_line_tabla = row_line.cells
+                                    row_line_tabla[5].merge(row_line_tabla[4])
+                                    row_line_tabla[4].merge(row_line_tabla[3])
+                                    row_line_tabla[3].merge(row_line_tabla[2])
+                                    row_line_tabla[2].merge(row_line_tabla[1])
+                                    row_line_tabla[1].merge(row_line_tabla[0])
+
+                                    row_line.height = Cm(0.65)
+                                    row_line.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
+
+                                    insert_hr(row_line_tabla[0].paragraphs[0])
+
+                                    row_line = table.add_row()
+                                    row_line_tabla = row_line.cells
+                                    row_line_tabla[5].text = "Sigue..."
+                                    row_line_tabla[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT'''
+
                             row_prod = table.add_row()
                             row_cells = row_prod.cells
 
@@ -1878,7 +1965,7 @@ class Consultas(View):
                 barra_pie.height = Cm(0.65)
                 barra_pie.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                insertHR(barra_pie_tabla[0].paragraphs[0])
+                insert_hr(barra_pie_tabla[0].paragraphs[0])
 
                 condiciones = doc.add_paragraph()
                 condiciones.add_run('\n\n\tROGAMOS NOS COMINIQUEN EL PAIS DE ORIGEN Y TARIC').font.size = Pt(11)
@@ -2052,10 +2139,12 @@ class PedidosProv(View):
                 barra_cabeza.height = Cm(0.65)
                 barra_cabeza.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                insertHR(barra_cabeza_tabla[0].paragraphs[0])
+                insert_hr(barra_cabeza_tabla[0].paragraphs[0])
 
                 set_repeat_table_header(table.rows[0])
                 set_repeat_table_header(table.rows[1])
+
+                linias = 0
 
                 with open('csvofertas/pedprov.csv') as csv_file:
                     csv_reader = csv.reader(csv_file, delimiter=';')
@@ -2063,6 +2152,26 @@ class PedidosProv(View):
 
                     for row in csv_reader:
                         if count > 2:
+                            '''if linias == 14 or (linias - 14) % 16 == 0:
+                                if linias != 0:
+                                    row_line = table.add_row()
+                                    row_line_tabla = row_line.cells
+                                    row_line_tabla[5].merge(row_line_tabla[4])
+                                    row_line_tabla[4].merge(row_line_tabla[3])
+                                    row_line_tabla[3].merge(row_line_tabla[2])
+                                    row_line_tabla[2].merge(row_line_tabla[1])
+                                    row_line_tabla[1].merge(row_line_tabla[0])
+
+                                    row_line.height = Cm(0.65)
+                                    row_line.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
+
+                                    insert_hr(row_line_tabla[0].paragraphs[0])
+
+                                    row_line = table.add_row()
+                                    row_line_tabla = row_line.cells
+                                    row_line_tabla[5].text = "Sigue..."
+                                    row_line_tabla[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT'''
+
                             if str(row[9]).strip() != 'Texto':
                                 row_prod = table.add_row()
                                 row_cells = row_prod.cells
@@ -2124,7 +2233,7 @@ class PedidosProv(View):
                 barra_pie.height = Cm(0.65)
                 barra_pie.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                insertHR(barra_pie_tabla[0].paragraphs[0])
+                insert_hr(barra_pie_tabla[0].paragraphs[0])
 
                 obs = doc.add_paragraph()
                 obs.add_run('\n' + observaciones).font.size = Pt(11)
