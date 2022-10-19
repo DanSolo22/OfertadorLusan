@@ -1,5 +1,7 @@
+import mimetypes
 import os
 
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
 
@@ -16,6 +18,21 @@ import csv
 
 from docxtpl import DocxTemplate
 
+
+def download_file(file):
+    filename = file
+    # Define the full file path
+    filepath = 'C:/Generador/ofertas/' + filename
+    # Open the file for reading content
+    path = open(filepath, 'r')
+    # Set the mime type
+    mime_type, _ = mimetypes.guess_type(filepath)
+    # Set the return value of the HttpResponse
+    response = HttpResponse(path, content_type=mime_type)
+    # Set the HTTP header for sending to browser
+    response['Content-Disposition'] = "attachment; filename=%s" % filename
+    # Return the response value
+    return response
 
 def set_repeat_table_header(row):
     """ set repeat table row on every new page
@@ -674,6 +691,7 @@ class Ofertas(View):
                 condiciones.runs[15].font.bold = True
                 condiciones.runs[17].font.bold = True
 
+                download_file(nombre_oferta + '.docx')
                 doc.save(ruta_guardado)
                 os.startfile(ruta_guardado, 'open')
 
