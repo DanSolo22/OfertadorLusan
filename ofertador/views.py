@@ -1,4 +1,4 @@
-# import os
+import os
 
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
@@ -675,7 +675,7 @@ class Ofertas(View):
                 condiciones.runs[17].font.bold = True
 
                 doc.save(ruta_guardado)
-                # os.startfile(ruta_guardado, 'open')
+                os.startfile(ruta_guardado, 'open')
 
                 return redirect('inicio')
             else:
@@ -1450,7 +1450,7 @@ class PreAlbaranes(View):
 
                     for row in csv_reader:
                         if count > 2:
-                            '''if linias == 14 or (linias - 14) % 16 == 0:
+                            if linias == 14 or (linias - 14) % 16 == 0:
                                 if linias != 0:
                                     row_line = table.add_row()
                                     row_line_tabla = row_line.cells
@@ -1468,7 +1468,7 @@ class PreAlbaranes(View):
                                     row_line = table.add_row()
                                     row_line_tabla = row_line.cells
                                     row_line_tabla[5].text = "Sigue..."
-                                    row_line_tabla[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT'''
+                                    row_line_tabla[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                             row_prod = table.add_row()
                             row_cells = row_prod.cells
@@ -1508,6 +1508,8 @@ class PreAlbaranes(View):
                             row_cells[5].paragraphs[0].runs[0].font.size = Pt(10)
                             row_cells[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
+                            linias += 1
+
                         count += 1
 
                 barra_pie = table.add_row()
@@ -1524,8 +1526,18 @@ class PreAlbaranes(View):
 
                 insert_hr(barra_pie_tabla[0].paragraphs[0])
 
-                doc.add_paragraph()
-                doc.add_paragraph()
+                if 14 >= linias > 10 or linias > 14 and (linias - 14) % 17 > 11:
+                    row_line = table.add_row()
+                    row_line_tabla = row_line.cells
+                    row_line_tabla[5].text = "Sigue..."
+                    row_line_tabla[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+
+                    print((linias - 14) % 17)
+
+                    if (linias - 14) % 17 < 16:
+                        doc.add_page_break()
+
+                    doc.add_paragraph("\n\n\n")
 
                 table_resumen = doc.add_table(rows=13, cols=6)
 
@@ -1917,7 +1929,7 @@ class Consultas(View):
 
                     for row in csv_reader:
                         if count > 2:
-                            '''if linias == 14 or (linias - 14) % 16 == 0:
+                            if linias == 14 or (linias - 14) % 16 == 0:
                                 if linias != 0:
                                     row_line = table.add_row()
                                     row_line_tabla = row_line.cells
@@ -1935,7 +1947,7 @@ class Consultas(View):
                                     row_line = table.add_row()
                                     row_line_tabla = row_line.cells
                                     row_line_tabla[5].text = "Sigue..."
-                                    row_line_tabla[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT'''
+                                    row_line_tabla[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                             row_prod = table.add_row()
                             row_cells = row_prod.cells
@@ -1952,6 +1964,8 @@ class Consultas(View):
                             row_cells[1].text = row[12]
                             row_cells[1].paragraphs[0].runs[0].font.size = Pt(10)
                             row_cells[1].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+
+                            linias += 1
 
                         count += 1
 
@@ -2152,7 +2166,7 @@ class PedidosProv(View):
 
                     for row in csv_reader:
                         if count > 2:
-                            '''if linias == 14 or (linias - 14) % 16 == 0:
+                            if linias == 14 or (linias - 14) % 16 == 0:
                                 if linias != 0:
                                     row_line = table.add_row()
                                     row_line_tabla = row_line.cells
@@ -2170,7 +2184,7 @@ class PedidosProv(View):
                                     row_line = table.add_row()
                                     row_line_tabla = row_line.cells
                                     row_line_tabla[5].text = "Sigue..."
-                                    row_line_tabla[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT'''
+                                    row_line_tabla[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                             if str(row[9]).strip() != 'Texto':
                                 row_prod = table.add_row()
@@ -2211,6 +2225,8 @@ class PedidosProv(View):
 
                                 row_cells[1].merge(row_cells[0])
                                 row_cells[0].paragraphs[0].add_run(row[8]).font.size = Pt(8.5)
+
+                            linias += 1
 
                         count += 1
 
