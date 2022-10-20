@@ -7,7 +7,7 @@ body {
     margin: 0;
     background-repeat: no-repeat;
     background-position: center;
-    background-position-y: 8vh;
+    background-position-y: 14vh;
     height: 100%;
     width: 100%;
 }
@@ -15,14 +15,153 @@ body {
 #container {
     display: grid;
     grid-template-areas:
+        'nav'
         'form';
-    grid-template-rows: 85vh;
-    grid-template-columns: 100vw;
+    grid-template-rows: 20vh 40vh;
+    grid-template-columns: 100%;
+}
+
+#nav {
+    display: grid;
+    grid-area: nav;
+    grid-template-areas:
+        'clientes proveedores';
+    grid-template-columns: 41% 59%;
+}
+
+#clientes {
+    display: grid;
+    grid-area: clientes;
+}
+
+#proveedores {
+    display: grid;
+    grid-area: proveedores;
 }
 
 #form {
     display: grid;
     grid-area: form;
+}
+
+.header {
+    background: linear-gradient(315deg, #1f1f1c 60%, #ff7d1e 40%);
+    line-height: 40px;
+    box-shadow: 0 12px 6px -6px rgba(0, 0, 0, 0.2);
+    height: 8vh;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+}
+
+.nav1 {
+    display: grid;
+    grid-template-areas:
+        'tit1 1 2 3';
+    grid-template-rows: 4vh;
+    grid-template-columns: 6.5vw;
+    width: 30vw;
+    align-content: center;
+    align-items: center;
+    justify-items: center;
+}
+
+.nav2 {
+    display: grid;
+    grid-template-areas:
+        'tit2 4 5';
+    grid-template-rows: 4vh;
+    grid-template-columns: 12vw 6.5vw 6.5vw;
+    width: 25vw;
+    align-content: center;
+    align-items: center;
+    justify-items: center;
+}
+
+li {
+    font-family: 'bold', Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+.tit1 {
+    display: grid;
+    grid-area: tit1;
+    color: #595959;
+}
+
+.tit2 {
+    display: grid;
+    grid-area: tit2;
+    color: #b6b5b5;
+}
+
+#1 {
+    grid-area: 1;
+}
+
+#2 {
+    grid-area: 2;
+}
+
+#3 {
+    grid-area: 3;
+}
+
+#4 {
+    grid-area: 4;
+    color: #b6b5b5;
+}
+
+#5 {
+    grid-area: 5;
+    color: #b6b5b5;
+}
+
+#4 a:link, #4 a:visited, #4 a:hover, #4 a:active {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+#5 a:link, #5 a:visited, #5 a:hover, #5 a:active {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.nav-link1:link, .nav-link1:visited, .nav-link1:active {
+    color: #595959;
+    text-decoration: none;
+}
+
+.nav-link1:hover {
+    color: #e1e1e1;
+    cursor: pointer;
+}
+
+.nav-link2:link, .nav-link2:visited, .nav-link2:active {
+    color: #b6b5b5;
+    text-decoration: none;
+}
+
+.nav-link2:hover {
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.prin-li {
+    display: inline;
+}
+
+.nav-link1 {
+    transition: 0.8s;
+
+}
+
+.nav-link2 {
+    transition: 0.8s;
+
 }
 
 .form-div {
