@@ -2,9 +2,7 @@ import csv
 import os
 
 import docx
-from django.http import FileResponse, HttpResponse
 from django.shortcuts import render, redirect
-from django.utils.encoding import smart_str
 from django.views.generic.base import View
 from docx.enum.table import WD_ROW_HEIGHT_RULE
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
@@ -14,22 +12,6 @@ from docx.shared import Inches, Pt, Cm, RGBColor
 from docxtpl import DocxTemplate
 
 from ofertador.forms import CargarOferta
-
-
-def download_file(file, path):
-    if os.path.exists(file_path):
-        with open(file_path, 'rb') as fh:
-            response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
-            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
-            return response
-    raise Http404
-    FileResponse(open(path, 'rb'))
-    file_name = file
-    path_to_file = path
-    response = HttpResponse(mimetype='application/force-download')
-    response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(file_name)
-    response['X-Sendfile'] = smart_str(path_to_file)
-    return response
 
 
 def set_repeat_table_header(row):
@@ -92,9 +74,6 @@ def comprovar_stock(fecha_pedido, fecha_plazo):
     else:
         array_fecha_pedido = str(fecha_pedido).split('/')
         array_fecha_plazo = str(fecha_plazo).split('/')
-
-        print(array_fecha_pedido)
-        print(array_fecha_plazo)
 
         if int(str(array_fecha_pedido[0]).strip()) == int(str(array_fecha_plazo[0]).strip()) and int(
                 str(array_fecha_pedido[1]).strip()) == int(str(array_fecha_plazo[1]).strip()) and int(
@@ -449,7 +428,7 @@ class Ofertas(View):
                 pie_tabla[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                 pie_tabla[2].paragraphs[0].runs[0].font.bold = True
 
-                if 16 >= linias > 7 or linias > 16 and (linias - 16) % 18 > 7:
+                if 16 > linias > 7 or linias > 16 and (linias - 16) % 18 > 7:
                     doc.add_page_break()
                     doc.add_paragraph("\n\n\n")
                 else:
@@ -689,9 +668,7 @@ class Ofertas(View):
                 condiciones.runs[15].font.bold = True
                 condiciones.runs[17].font.bold = True
 
-                download_file(nombre_oferta + '.docx', ruta_guardado)
                 doc.save(ruta_guardado)
-                os.startfile(ruta_guardado, 'open')
 
                 return redirect('inicio')
             else:
@@ -985,8 +962,12 @@ class Pedidos(View):
                 barra_pie_tabla[2].merge(barra_pie_tabla[1])
                 barra_pie_tabla[1].merge(barra_pie_tabla[0])
 
-                barra_pie.height = Cm(0.65)
+                barra_pie.height = Cm(0.2)
                 barra_pie.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
+
+                barra_pie_tabla[0].paragraphs[0].add_run('.')
+                barra_pie_tabla[0].paragraphs[0].runs[0].font.size = Pt(3)
+                barra_pie_tabla[0].paragraphs[0].runs[0].font.color.rgb = RGBColor(255, 255, 255)
 
                 insert_hr(barra_pie_tabla[0].paragraphs[0])
 
@@ -1008,11 +989,18 @@ class Pedidos(View):
                 doc.add_paragraph()
 
                 print("Linias: " + str(linias))
-                print((linias - 14) % 21)
+                print((linias - 14) % 16)
 
-                if 14 >= linias > 8 or linias > 14 and (linias - 14) % 16 > 8:
-                    doc.add_page_break()
+                if 14 > linias > 8 or linias > 14 and (linias - 14) % 16 > 8:
+                    if (linias - 14) % 16 != 15:
+                        doc.add_page_break()
                     doc.add_paragraph("\n\n\n")
+                else:
+                    salto = doc.add_paragraph()
+                    salto.add_run(' ').font.size = Pt(3)
+                    salto_format = salto.paragraph_format
+                    salto_format.space_before = Pt(0)
+                    salto_format.space_after = Pt(0)
 
                 table_resumen = doc.add_table(rows=13, cols=6)
 
@@ -1237,8 +1225,6 @@ class Pedidos(View):
                     table_resumen.cell(11, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                 doc.save(ruta_guardado)
-
-                # os.startfile(ruta_guardado)
 
                 return redirect('pedidos')
             else:
@@ -1779,7 +1765,7 @@ class PreAlbaranes(View):
 
                 doc.save(ruta_guardado)
 
-                # os.startfile(ruta_guardado)
+                os.startfile(ruta_guardado)
 
                 return redirect('pre-albaranes')
             else:
