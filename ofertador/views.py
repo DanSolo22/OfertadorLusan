@@ -988,9 +988,6 @@ class Pedidos(View):
 
                 doc.add_paragraph()
 
-                print("Linias: " + str(linias))
-                print((linias - 14) % 16)
-
                 if 14 > linias > 8 or linias > 14 and (linias - 14) % 16 > 8:
                     if (linias - 14) % 16 != 15:
                         doc.add_page_break()
@@ -1534,8 +1531,6 @@ class PreAlbaranes(View):
                     row_line_tabla[5].text = "Sigue..."
                     row_line_tabla[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                    print((linias - 14) % 17)
-
                     if (linias - 14) % 17 < 16:
                         doc.add_page_break()
 
@@ -1931,12 +1926,10 @@ class Consultas(View):
 
                     for row in csv_reader:
                         if count > 2:
-                            if linias == 14 or (linias - 14) % 16 == 0:
+                            if linias == 15 or (linias - 15) % 19 == 0:
                                 if linias != 0:
                                     row_line = table.add_row()
                                     row_line_tabla = row_line.cells
-                                    row_line_tabla[5].merge(row_line_tabla[4])
-                                    row_line_tabla[4].merge(row_line_tabla[3])
                                     row_line_tabla[3].merge(row_line_tabla[2])
                                     row_line_tabla[2].merge(row_line_tabla[1])
                                     row_line_tabla[1].merge(row_line_tabla[0])
@@ -1948,8 +1941,8 @@ class Consultas(View):
 
                                     row_line = table.add_row()
                                     row_line_tabla = row_line.cells
-                                    row_line_tabla[5].text = "Sigue..."
-                                    row_line_tabla[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                                    row_line_tabla[3].text = "Sigue..."
+                                    row_line_tabla[3].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                             row_prod = table.add_row()
                             row_cells = row_prod.cells
@@ -1990,8 +1983,6 @@ class Consultas(View):
                 obs.add_run('\n' + observaciones).font.size = Pt(11)
 
                 doc.save(ruta_guardado)
-
-                # os.startfile(ruta_guardado)
 
                 return redirect('consultas')
             else:
@@ -2168,11 +2159,10 @@ class PedidosProv(View):
 
                     for row in csv_reader:
                         if count > 2:
-                            if linias == 14 or (linias - 14) % 16 == 0:
+                            if linias == 16 or (linias - 16) % 21 == 0:
                                 if linias != 0:
                                     row_line = table.add_row()
                                     row_line_tabla = row_line.cells
-                                    row_line_tabla[5].merge(row_line_tabla[4])
                                     row_line_tabla[4].merge(row_line_tabla[3])
                                     row_line_tabla[3].merge(row_line_tabla[2])
                                     row_line_tabla[2].merge(row_line_tabla[1])
@@ -2185,8 +2175,8 @@ class PedidosProv(View):
 
                                     row_line = table.add_row()
                                     row_line_tabla = row_line.cells
-                                    row_line_tabla[5].text = "Sigue..."
-                                    row_line_tabla[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                                    row_line_tabla[4].text = "Sigue..."
+                                    row_line_tabla[4].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                             if str(row[9]).strip() != 'Texto':
                                 row_prod = table.add_row()
@@ -2258,7 +2248,7 @@ class PedidosProv(View):
 
                 doc.save(ruta_guardado)
 
-                # os.startfile(ruta_guardado)
+                os.startfile(ruta_guardado)
 
                 return redirect('pedidos-prov')
 
