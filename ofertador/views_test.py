@@ -1069,18 +1069,6 @@ class Index(View):
                     barra_pie = table.add_row()
                     barra_pie_tabla = barra_pie.cells
 
-                    barra_pie_tabla[3].merge(barra_pie_tabla[2])
-                    barra_pie_tabla[2].merge(barra_pie_tabla[1])
-                    barra_pie_tabla[1].merge(barra_pie_tabla[0])
-
-                    barra_pie.height = Cm(0.65)
-                    barra_pie.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
-
-                    insert_hr(barra_pie_tabla[0].paragraphs[0])
-
-                    barra_pie = table.add_row()
-                    barra_pie_tabla = barra_pie.cells
-
                     barra_pie_tabla[4].merge(barra_pie_tabla[3])
                     barra_pie_tabla[3].merge(barra_pie_tabla[2])
                     barra_pie_tabla[2].merge(barra_pie_tabla[1])
