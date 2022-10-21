@@ -1,4 +1,5 @@
 import csv
+import pathlib
 
 import docx
 from django.shortcuts import render, redirect
@@ -26,8 +27,9 @@ class Index(View):
             if form.is_valid():
                 archivo = form.cleaned_data.get('oferta')
 
-                doc = ''
-                nombre_archivo = str(archivo).split('.')[0]
+                doc = DocxTemplate("csvofertas/plantilla.docx")
+
+                nombre_archivo = str(pathlib.Path(str(archivo)).stem)
                 ruta_guardado = ''
 
                 with open('csvofertas/archivo.csv', 'wb+') as destination:
@@ -84,7 +86,10 @@ class Index(View):
                 iban = 'ES25 2100-1083-1102-0005-4013'
                 tel_fijo = '+34 937144561'
 
+                print(nombre_archivo)
+
                 if "OFE" in str(nombre_archivo):
+
                     doc = DocxTemplate("csvofertas/plantilla.docx")
 
                     with open('csvofertas/archivo.csv') as csv_file:
@@ -144,6 +149,7 @@ class Index(View):
 
                     doc.render(context)
                     ruta_guardado = 'C:/generador/ofertas/' + nombre_archivo + '.docx'
+                    print(ruta_guardado)
                     doc.save(ruta_guardado)
 
                     doc = docx.Document(ruta_guardado)
@@ -700,7 +706,8 @@ class Index(View):
 
                     '''Información del pedido'''
 
-                    crear_tabla_resumen_pedido(True, table_resumen, icoterm, portes, transportista, peso, contacto, tel_fijo,
+                    crear_tabla_resumen_pedido(True, table_resumen, icoterm, portes, transportista, peso, contacto,
+                                               tel_fijo,
                                                importe_bruto, imp_portes, dtopp, imp_dtopp, base_imp, iva, imp_iva,
                                                imp_rec_quiv, rec_quiv, total, forma_pago, iban, giros, dp1, dp2, dp3)
 
@@ -891,7 +898,8 @@ class Index(View):
 
                     '''Información del pedido'''
 
-                    crear_tabla_resumen_pedido(False, table_resumen, icoterm, portes, transportista, peso, contacto, tel_fijo,
+                    crear_tabla_resumen_pedido(False, table_resumen, icoterm, portes, transportista, peso, contacto,
+                                               tel_fijo,
                                                importe_bruto, imp_portes, dtopp, imp_dtopp, base_imp, iva, imp_iva,
                                                imp_rec_quiv, rec_quiv, total, forma_pago, iban, giros, dp1, dp2, dp3)
 
@@ -1082,8 +1090,6 @@ class Index(View):
                     barra_pie.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
                     insert_hr(barra_pie_tabla[0].paragraphs[0])
-
-
 
                     condiciones = doc.add_paragraph()
                     condiciones.add_run('\n\n\tROGAMOS NOS COMINIQUEN EL PAIS DE ORIGEN Y TARIC').font.size = Pt(11)
