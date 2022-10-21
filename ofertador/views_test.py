@@ -645,21 +645,21 @@ class Index(View):
 
                     context = \
                         {
-                            'PEDIDO': pedido,
-                            'FECHA': fecha,
-                            'CLIENTE': cliente,
-                            'PROVEEDOR': proveedor,
-                            'AGENTE': agente,
-                            'PLAZOENTREGA': plazo,
-                            'RSOC': str(rsoc).replace('&', ' AND '),
-                            'EMPRESA': str(empresa).replace('&', ' AND '),
-                            'DIR': str(dir).replace('&', ' AND '),
-                            'CP': str(cp).replace('&', ' AND '),
-                            'POB': str(pob).replace('&', ' AND '),
-                            'PRO': str(pro).replace('&', ' AND '),
-                            'NIF': nif,
-                            'TEL': tel,
-                            'MAIL': mail,
+                            'PEDIDO': str(pedido).strip(),
+                            'FECHA': str(fecha).strip(),
+                            'CLIENTE': str(cliente).strip(),
+                            'PROVEEDOR': str(proveedor).strip(),
+                            'AGENTE': str(agente).strip(),
+                            'PLAZOENTREGA': str(plazo).strip(),
+                            'RSOC': str(rsoc).replace('&', ' AND ').strip(),
+                            'EMPRESA': str(empresa).replace('&', ' AND ').strip(),
+                            'DIR': str(dir).replace('&', ' AND ').strip(),
+                            'CP': str(cp).replace('&', ' AND ').strip(),
+                            'POB': str(pob).replace('&', ' AND ').strip(),
+                            'PRO': str(pro).replace('&', ' AND ').strip(),
+                            'NIF': str(nif).strip(),
+                            'TEL': str(tel).strip(),
+                            'MAIL': str(mail).strip(),
                         }
 
                     doc.render(context)
@@ -1132,21 +1132,21 @@ class Index(View):
 
                     context = \
                         {
-                            'PEDIDO': albaran,
-                            'FECHA': fecha,
-                            'CLIENTE': cliente,
-                            'PROVEEDOR': proveedor,
-                            'AGENTE': agente,
-                            'PLAZOENTREGA': plazo,
-                            'RSOC': str(rsoc).replace('&', ' AND '),
-                            'EMPRESA': str(empresa).replace('&', ' AND '),
-                            'DIR': str(dir).replace('&', ' AND '),
-                            'CP': str(cp).replace('&', ' AND '),
-                            'POB': str(pob).replace('&', ' AND '),
-                            'PRO': str(pro).replace('&', ' AND '),
-                            'NIF': nif,
-                            'TEL': tel,
-                            'MAIL': mail,
+                            'PEDIDO': str(albaran).strip(),
+                            'FECHA': str(fecha).strip(),
+                            'CLIENTE': str(cliente).strip(),
+                            'PROVEEDOR': str(proveedor).strip(),
+                            'AGENTE': str(agente).strip(),
+                            'PLAZOENTREGA': str(plazo).strip(),
+                            'RSOC': str(rsoc).replace('&', ' AND ').strip(),
+                            'EMPRESA': str(empresa).replace('&', ' AND ').strip(),
+                            'DIR': str(dir).replace('&', ' AND ').strip(),
+                            'CP': str(cp).replace('&', ' AND ').strip(),
+                            'POB': str(pob).replace('&', ' AND ').strip(),
+                            'PRO': str(pro).replace('&', ' AND ').strip(),
+                            'NIF': str(nif).strip(),
+                            'TEL': str(tel).strip(),
+                            'MAIL': str(mail).strip(),
                         }
 
                     doc.render(context)
@@ -1583,18 +1583,17 @@ class Index(View):
 
                     context = \
                         {
-                            'CONSULTA': consulta,
-                            'FECHA': fecha,
-                            'VALIDEZ': validez,
-                            'PROVEEDOR': proveedor,
-                            'RSOC': str(rsoc).replace('&', ' AND '),
-                            'EMPRESA': str(empresa).replace('&', ' AND '),
-                            'DIR': str(dir).replace('&', ' AND '),
-                            'CP': str(cp).replace('&', ' AND '),
-                            'POB': str(pob).replace('&', ' AND '),
-                            'PRO': str(pro).replace('&', ' AND '),
-                            'TEL': tel,
-                            # 'MAIL': mail,
+                            'CONSULTA': str(consulta).strip(),
+                            'FECHA': str(fecha).strip(),
+                            'VALIDEZ': str(validez).strip(),
+                            'PROVEEDOR': str(proveedor).strip(),
+                            'RSOC': str(rsoc).replace('&', ' AND ').strip(),
+                            'EMPRESA': str(empresa).replace('&', ' AND ').strip(),
+                            'DIR': str(dir).replace('&', ' AND ').strip(),
+                            'CP': str(cp).replace('&', ' AND ').strip(),
+                            'POB': str(pob).replace('&', ' AND ').strip(),
+                            'PRO': str(pro).replace('&', ' AND ').strip(),
+                            'TEL': str(tel).strip(),
                         }
 
                     doc.render(context)
@@ -1767,18 +1766,18 @@ class Index(View):
 
                     context = \
                         {
-                            'PEDIDO': pedido,
-                            'FECHA': fecha,
-                            'ENTREGA': entrega,
-                            'PROVEEDOR': proveedor,
-                            'RSOC': str(rsoc).replace('&', ' AND '),
-                            'EMPRESA': str(empresa).replace('&', ' AND '),
-                            'DIR': str(dir).replace('&', ' AND '),
-                            'CP': str(cp).replace('&', ' AND '),
-                            'POB': str(pob).replace('&', ' AND '),
-                            'PRO': str(pro).replace('&', ' AND '),
-                            'TEL': tel,
-                            'MAIL': mail,
+                            'PEDIDO': str(pedido).strip(),
+                            'FECHA': str(fecha).strip(),
+                            'ENTREGA': str(entrega).strip(),
+                            'PROVEEDOR': str(proveedor).strip(),
+                            'RSOC': str(rsoc).replace('&', ' AND ').strip(),
+                            'EMPRESA': str(empresa).replace('&', ' AND ').strip(),
+                            'DIR': str(dir).replace('&', ' AND ').strip(),
+                            'CP': str(cp).replace('&', ' AND ').strip(),
+                            'POB': str(pob).replace('&', ' AND ').strip(),
+                            'PRO': str(pro).replace('&', ' AND ').strip(),
+                            'TEL': str(tel).strip(),
+                            'MAIL': str(mail).strip(),
                         }
 
                     doc.render(context)
