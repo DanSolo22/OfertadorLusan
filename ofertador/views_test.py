@@ -1069,7 +1069,6 @@ class Index(View):
                     barra_pie = table.add_row()
                     barra_pie_tabla = barra_pie.cells
 
-                    barra_pie_tabla[4].merge(barra_pie_tabla[3])
                     barra_pie_tabla[3].merge(barra_pie_tabla[2])
                     barra_pie_tabla[2].merge(barra_pie_tabla[1])
                     barra_pie_tabla[1].merge(barra_pie_tabla[0])
