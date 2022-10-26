@@ -866,6 +866,12 @@ class Index(View):
                             doc.add_page_break()
 
                         doc.add_paragraph("\n\n\n")
+                    else:
+                        salto = doc.add_paragraph()
+                        salto.add_run(' ').font.size = Pt(3)
+                        salto_format = salto.paragraph_format
+                        salto_format.space_before = Pt(0)
+                        salto_format.space_after = Pt(0)
 
                     table_resumen = doc.add_table(rows=13, cols=6)
 
