@@ -1112,6 +1112,7 @@ class Index(View):
                                 tel = row[11]
                                 mail = row[13]
                                 peso = str(row[18]).replace(',', '.')
+                                total = row[19]
                                 observaciones = str(row[21]) + str(row[22]) + str(row[23]) + str(row[24])
                                 break
                             line_count += 1
@@ -1295,6 +1296,7 @@ class Index(View):
 
                     row_cells[0].paragraphs[0].add_run('PESO/Weight:\t' + str(peso) + ' Kg.').font.size = Pt(10)
                     row_cells[0].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                    row_cells[0].paragraphs[0].runs[0].font.bold = True
 
                     barra_pie = table.add_row()
                     barra_pie_tabla = barra_pie.cells
@@ -1308,6 +1310,19 @@ class Index(View):
                     barra_pie.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
                     insert_hr(barra_pie_tabla[0].paragraphs[0])
+
+                    pie_tabla = table.add_row().cells
+
+                    pie_tabla[4].merge(pie_tabla[3])
+                    pie_tabla[2].merge(pie_tabla[1])
+                    pie_tabla[0].merge(pie_tabla[1])
+
+                    pie_tabla[0].paragraphs[0].add_run('IMPORTE TOTAL:\n').font.size = Pt(10)
+                    pie_tabla[3].paragraphs[0].add_run(total).font.size = Pt(10)
+                    pie_tabla[0].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                    pie_tabla[3].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                    pie_tabla[0].paragraphs[0].runs[0].font.bold = True
+                    pie_tabla[3].paragraphs[0].runs[0].font.bold = True
 
                     obs = doc.add_paragraph()
                     obs.add_run('\n' + observaciones).font.size = Pt(11)
