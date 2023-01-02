@@ -41,20 +41,17 @@ def insert_hr(paragraph):
 def comprovar_plazo(fecha):
     array_fecha = fecha.split("/")
 
-    if array_fecha[1] != '00' and array_fecha[2] != '0000':
+    if array_fecha[0] != '00' and array_fecha[1] != '00' and array_fecha[2] != '0000':
         return fecha
     elif array_fecha[1] == '00' and array_fecha[2] == '0000':
-        return str(array_fecha[0]) + ' dias'
+        return str(int(array_fecha[0])) + ' dias'
     elif array_fecha[0] == '00' and array_fecha[2] == '0000':
         if array_fecha[1] == '01' or array_fecha[1] == '1':
-            return str(array_fecha[1]) + ' mes'
+            return str(int(array_fecha[1])) + ' mes'
         else:
             return str(array_fecha[1]) + ' meses'
     elif array_fecha[0] != '00' and array_fecha[1] != '00' and array_fecha[2] == '0000':
-        if array_fecha[1] == '01' or array_fecha[1] == '1':
-            return str(array_fecha[0]) + ' dias y ' + str(array_fecha[1]) + ' mes'
-        else:
-            return str(array_fecha[0]) + ' dias y ' + str(array_fecha[1]) + ' meses'
+        return str(int(array_fecha[0])) + ' / ' + str(int(array_fecha[1])) + ' dias'
     elif array_fecha[0] == '00' and array_fecha[1] == '00' and array_fecha[2] != '0000':
         return str(array_fecha[2])
 
