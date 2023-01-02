@@ -45,9 +45,9 @@ def comprovar_plazo(fecha):
         return fecha
     elif array_fecha[1] == '00' and array_fecha[2] == '0000':
         if array_fecha[0] == '01' or array_fecha[0] == '1':
-            return str(int(array_fecha[0])) + ' dias'
-        else:
             return str(int(array_fecha[0])) + ' dia'
+        else:
+            return str(int(array_fecha[0])) + ' dias'
     elif array_fecha[0] == '00' and array_fecha[2] == '0000':
         if array_fecha[1] == '01' or array_fecha[1] == '1':
             return str(int(array_fecha[1])) + ' mes'
