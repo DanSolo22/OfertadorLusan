@@ -38,18 +38,75 @@ def insert_hr(paragraph):
     p_bdr.append(bottom)
 
 
+def fecha_numerica_a_fecha(fecha):
+    array_fecha = fecha.split("/")
+
+    if int(array_fecha[0]) != 0:
+        match int(array_fecha[1]):
+            case 1:
+                return str(str(int(array_fecha[0])) + " enero " + str(int(array_fecha[2])))
+            case 2:
+                return str(str(int(array_fecha[0])) + " febrero " + str(int(array_fecha[2])))
+            case 3:
+                return str(str(int(array_fecha[0])) + " marzo " + str(int(array_fecha[2])))
+            case 4:
+                return str(str(int(array_fecha[0])) + " abril " + str(int(array_fecha[2])))
+            case 5:
+                return str(str(int(array_fecha[0])) + " mayo " + str(int(array_fecha[2])))
+            case 6:
+                return str(str(int(array_fecha[0])) + " junio " + str(int(array_fecha[2])))
+            case 7:
+                return str(str(int(array_fecha[0])) + " julio " + str(int(array_fecha[2])))
+            case 8:
+                return str(str(int(array_fecha[0])) + " agosto " + str(int(array_fecha[2])))
+            case 9:
+                return str(str(int(array_fecha[0])) + " septiembre " + str(int(array_fecha[2])))
+            case 10:
+                return str(str(int(array_fecha[0])) + " octubre " + str(int(array_fecha[2])))
+            case 11:
+                return str(str(int(array_fecha[0])) + " noviembre " + str(int(array_fecha[2])))
+            case 12:
+                return str(str(int(array_fecha[0])) + " diciembre " + str(int(array_fecha[2])))
+    else:
+        match int(array_fecha[1]):
+            case 1:
+                return str("enero de " + array_fecha[2])
+            case 2:
+                return str("febrero " + array_fecha[2])
+            case 3:
+                return str("marzo " + array_fecha[2])
+            case 4:
+                return str("abril " + array_fecha[2])
+            case 5:
+                return str("mayo " + array_fecha[2])
+            case 6:
+                return str("junio " + array_fecha[2])
+            case 7:
+                return str("julio " + array_fecha[2])
+            case 8:
+                return str("agosto " + array_fecha[2])
+            case 9:
+                return str("septiembre " + array_fecha[2])
+            case 10:
+                return str("octubre " + array_fecha[2])
+            case 11:
+                return str("noviembre " + array_fecha[2])
+            case 12:
+                return str("diciembre " + array_fecha[2])
+
+
 def comprovar_plazo(fecha):
     array_fecha = fecha.split("/")
 
-    if array_fecha[0] != '00' and array_fecha[1] != '00' and array_fecha[2] != '0000':
-        return fecha
+    if array_fecha[1] != '00' and array_fecha[2] != '0000':
+        return fecha_numerica_a_fecha(fecha)
     elif array_fecha[1] == '00' and array_fecha[2] == '0000':
-        if array_fecha[0] == '01' or array_fecha[0] == '1':
+        if int(array_fecha[0]) == 1:
             return str(int(array_fecha[0])) + ' dia'
         else:
             return str(int(array_fecha[0])) + ' dias'
     elif array_fecha[0] == '00' and array_fecha[2] == '0000':
-        if array_fecha[1] == '01' or array_fecha[1] == '1':
+        if int(array_fecha[1]) == 1:
             return str(int(array_fecha[1])) + ' mes'
         else:
             return str(int(array_fecha[1])) + ' meses'
@@ -58,15 +115,17 @@ def comprovar_plazo(fecha):
 
 
 def comprovar_stock(fecha_pedido, fecha_plazo):
-    if str(fecha_pedido) == str(fecha_plazo):
+    print(fecha_pedido)
+    print(fecha_plazo)
+    if str(fecha_pedido) == str(fecha_plazo) or str(fecha_plazo) == "00/00/0000":
         return True
     else:
         array_fecha_pedido = str(fecha_pedido).split('/')
         array_fecha_plazo = str(fecha_plazo).split('/')
 
-        if int(str(array_fecha_pedido[0]).strip()) == int(str(array_fecha_plazo[0]).strip()) and int(
-                str(array_fecha_pedido[1]).strip()) == int(str(array_fecha_plazo[1]).strip()) and int(
-            str(array_fecha_pedido[2]).strip()) == int(str(array_fecha_plazo[2]).strip()):
+        if int(str(array_fecha_pedido[0]).strip()) == int(str(array_fecha_plazo[0]).strip()) and \
+                int(str(array_fecha_pedido[1]).strip()) == int(str(array_fecha_plazo[1]).strip()) and \
+                int(str(array_fecha_pedido[2]).strip()) == int(str(array_fecha_plazo[2]).strip()):
             return True
         else:
             return False
@@ -362,7 +421,8 @@ def crear_tabla_resumen_pedido(pedido, table_resumen, icoterm, portes, transport
         table_resumen.cell(12, 5).paragraphs[0].runs[0].font.bold = True
         table_resumen.cell(12, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
     elif str(forma_pago).strip() == 'GIRO':
-        table_resumen.cell(11, 5).paragraphs[0].add_run(str(forma_pago).strip() + ' a ' + giros + ' DIAS').font.size = Pt(8)
+        table_resumen.cell(11, 5).paragraphs[0].add_run(
+            str(forma_pago).strip() + ' a ' + giros + ' DIAS').font.size = Pt(8)
         table_resumen.cell(11, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
         table_resumen.cell(12, 5).paragraphs[0].add_run('DIAS ').font.size = Pt(8)
 
