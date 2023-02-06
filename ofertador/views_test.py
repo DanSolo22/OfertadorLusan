@@ -1366,9 +1366,6 @@ def enviarMail(request):
         newmail = ol.CreateItem(olmailitem)
         newmail.Subject = ''
 
-        newmail.To = 'danielussky@gmail.com'
-        newmail.CC = 'danielussky@gmail.com'
-
         newmail.Body = ''
 
         attach = ruta_pdf
