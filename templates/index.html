@@ -28,8 +28,25 @@
 
     <script defer>
         {% if envio == True %}
-            window.onload = function enviarCorreo() {
-                if (confirm('¿Deseas enviar el documento por email?')) {
+            window.onload = function Confirm() {
+                let $content = "<div class='dialog-ovelay'>" +
+                    "<div class='dialog'><header>" +
+                    " <h3>Envio del documento</h3> " +
+                    "<i class='fa fa-close'></i>" +
+                    "</header>" +
+                    "<div class='dialog-msg'>" +
+                    " <p>¿Deseas enviar el documento por email?</p> " +
+                    "</div>" +
+                    "<footer>" +
+                    "<div class='controls'>" +
+                    " <button class='button button-danger doAction'>Enviar documento</button> " +
+                    " <button class='button button-default cancelAction'>Abrir documento</button> " +
+                    "</div>" +
+                    "</footer>" +
+                    "</div>" +
+                    "</div>";
+                $('body').prepend($content);
+                $('.doAction').click(function () {
                     $.ajax({
                         type: "POST",
                         cache: false,
@@ -40,7 +57,25 @@
                             'csrfmiddlewaretoken': '{{ csrf_token }}',
                         }
                     });
-                }
+                    $(this).parents('.dialog-ovelay').fadeOut(500, function () {
+                        $(this).remove();
+                    });
+                });
+                $('.cancelAction, .fa-close').click(function () {
+                    $.ajax({
+                        type: "POST",
+                        cache: false,
+                        header: '{{ csrf_token }}',
+                        url: '/abrirDocx',
+                        data: {
+                            'ruta': '{{ ruta }}',
+                            'csrfmiddlewaretoken': '{{ csrf_token }}',
+                        }
+                    });
+                    $(this).parents('.dialog-ovelay').fadeOut(500, function () {
+                        $(this).remove();
+                    });
+                });
             }
         {% endif %}
     </script>

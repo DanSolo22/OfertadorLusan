@@ -1347,6 +1347,15 @@ class Index(View):
                           {'form': form, 'mensaje': msg, 'titulo': titulo, 'envio': False, 'ruta': ''})
 
 
+def abrirDocx(request):
+    if request.method == "POST":
+        ruta_guardado = request.POST.get("ruta")
+
+        os.system('start ' + ruta_guardado)
+
+        return redirect('inicio')
+
+
 def enviarMail(request):
     if request.method == "POST":
         ruta_guardado = request.POST.get("ruta")

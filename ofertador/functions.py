@@ -115,8 +115,6 @@ def comprovar_plazo(fecha):
 
 
 def comprovar_stock(fecha_pedido, fecha_plazo):
-    print(fecha_pedido)
-    print(fecha_plazo)
     if str(fecha_pedido) == str(fecha_plazo) or str(fecha_plazo) == "00/00/0000":
         return True
     else:
