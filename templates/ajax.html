@@ -1,0 +1,24 @@
+<script type="text/javascript" defer>
+
+    $("#csv-form").submit(function (e) {
+
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+        console.log("Pefe");
+
+        let archivo = document.getElementById('id_ofertas').files[0];
+
+        $.ajax({
+            type: "POST",
+            cache: false,
+            header: '{{ csrf_token }}',
+            url: '',
+            data: {
+                'oferta': archivo.serialize(),// serializes the form's elements.
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+            },
+            success: function (response) {
+                console.log("Todo correcto.")
+            }
+        });
+    });
+</script>

@@ -25,6 +25,26 @@
 
     <script src="{{ static('js/jquery-3.1.1.min.js') }}" defer></script>
     <script src="{{ static('js/index.js') }}" defer></script>
+
+    <script defer>
+        {% if envio == True %}
+            window.onload = function enviarCorreo() {
+                if (confirm('¿Deseas enviar el documento por email?')) {
+                    $.ajax({
+                        type: "POST",
+                        cache: false,
+                        header: '{{ csrf_token }}',
+                        url: '/enviarMail',
+                        data: {
+                            'ruta': '{{ ruta }}',
+                            'csrfmiddlewaretoken': '{{ csrf_token }}',
+                        }
+                    });
+                }
+            }
+        {% endif %}
+    </script>
+
     {% block scripts %}{% endblock scripts %}
 
 </head>
@@ -94,5 +114,7 @@
         </div>
     </footer>
 </div>
+
 </body>
 </html>
+

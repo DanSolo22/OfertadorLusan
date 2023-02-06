@@ -19,6 +19,7 @@ from django.views.static import serve
 
 import ofertador.views as views
 import ofertador.views_test as views_t
+from ofertador.views_test import enviarMail
 from OfertadorLusan import settings
 
 urlpatterns = [
@@ -27,4 +28,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', views_t.Index.as_view(), name='inicio'),
+    path('enviarMail', enviarMail, name='enviar'),
 ]

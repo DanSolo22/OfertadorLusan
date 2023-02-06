@@ -1,7 +1,16 @@
 import csv
+import json
 import pathlib
 
+import os
+
+from django.http import JsonResponse, HttpResponse
+from win32com.client import Dispatch
+import pythoncom
+
 import docx
+from docx2pdf import convert
+
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
 from docx.enum.table import WD_ROW_HEIGHT_RULE
@@ -17,9 +26,9 @@ from ofertador.functions import set_repeat_table_header, insert_hr, comprovar_pl
 class Index(View):
     def get(self, request):
         form = CargarOferta()
-        msg = ''
         titulo = 'Generador de documentos'
-        return render(request, 'index.html', {'form': form, 'mensaje': msg, 'titulo': titulo})
+        return render(request, 'index.html',
+                      {'form': form, 'mensaje': '', 'titulo': titulo, 'envio': False, 'ruta': ''})
 
     def post(self, request):
         if request.POST:
@@ -1329,9 +1338,45 @@ class Index(View):
 
                 doc.save(ruta_guardado)
 
-                return redirect('inicio')
+                titulo = 'Generador de documentos'
+                return render(request, 'index.html',
+                              {'form': form, 'mensaje': '', 'titulo': titulo, 'envio': True, 'ruta': ruta_guardado})
         else:
             form = CargarOferta()
             msg = 'Fichero no válido. Porfavor, compruebe el archivo.'
             titulo = 'Generador de documentos'
-            return render(request, 'index.html', {'form': form, 'mensaje': msg, 'titulo': titulo})
+            return render(request, 'index.html',
+                          {'form': form, 'mensaje': msg, 'titulo': titulo, 'envio': False, 'ruta': ''})
+
+
+def enviarMail(request):
+    if request.method == "POST":
+        ruta_guardado = request.POST.get("ruta")
+
+        Dispatch("Excel.Application", pythoncom.CoInitialize())
+
+        ruta_pdf = ruta_guardado.replace('docx', 'pdf')
+        convert(ruta_guardado, ruta_pdf)
+
+        os.remove(ruta_guardado)
+
+        ol = Dispatch('Outlook.Application')
+
+        olmailitem = 0x0
+        newmail = ol.CreateItem(olmailitem)
+        newmail.Subject = ''
+
+        newmail.To = 'danielussky@gmail.com'
+        newmail.CC = 'danielussky@gmail.com'
+
+        newmail.Body = ''
+
+        attach = ruta_pdf
+        newmail.Attachments.Add(attach)
+
+        newmail.Display()
+
+        # Envio automático
+        # newmail.Send()
+
+        return redirect('inicio')
