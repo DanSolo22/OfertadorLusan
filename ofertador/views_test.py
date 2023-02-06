@@ -1,10 +1,8 @@
 import csv
-import json
 import pathlib
 
 import os
 
-from django.http import JsonResponse, HttpResponse
 from win32com.client import Dispatch
 import pythoncom
 
@@ -19,7 +17,7 @@ from docx.shared import Inches, Pt, Cm, RGBColor
 from docxtpl import DocxTemplate
 
 from ofertador.forms import CargarOferta
-from ofertador.functions import set_repeat_table_header, insert_hr, comprovar_plazo, comprovar_stock, comprovar_usuario, \
+from ofertador.functions import set_repeat_table_header, insert_hr, comprovar_plazo, comprovar_stock, \
     crear_tabla_clientes, crear_tabla_resumen_pedido, insertar_barra_final_productos
 
 
@@ -1364,7 +1362,9 @@ def enviarMail(request):
 
         olmailitem = 0x0
         newmail = ol.CreateItem(olmailitem)
-        newmail.Subject = ''
+
+        subject = ruta_pdf.split("/")
+        newmail.Subject = subject[3].replace('.pdf', '')
 
         newmail.Body = ''
 
