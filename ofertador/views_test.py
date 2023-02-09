@@ -661,14 +661,6 @@ class Index(View):
                     pie_tabla[3].merge(pie_tabla[2])
                     pie_tabla[0].merge(pie_tabla[1])
 
-                    pie_tabla[2].paragraphs[0].add_run('PLAZO DE ENTREGA:\n').font.size = Pt(10)
-                    pie_tabla[2].paragraphs[0].add_run(plazo).font.size = Pt(10)
-                    pie_tabla[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-                    pie_tabla[2].paragraphs[0].runs[0].font.bold = True
-                    pie_tabla[2].paragraphs[0].runs[0].font.color.rgb = RGBColor(191, 34, 34)
-                    pie_tabla[2].paragraphs[0].runs[1].font.bold = True
-                    pie_tabla[2].paragraphs[0].runs[1].font.italic = True
-
                     doc.add_paragraph()
 
                     if 14 > linias > 8 or linias > 14 and (linias - 14) % 16 > 8:
