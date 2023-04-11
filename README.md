@@ -24,6 +24,8 @@ pip install wheel
 pip install docxtpl
 pip install python-docx
 pip install docx
+pip install docx2pdf
+pip install python-dotenv
 cd ..
 manage.py migrate
 manage.py collectstatic
