@@ -622,3 +622,11 @@ input[type="file"] {
     border: 1px solid #ff7d1e;
     color: #f5f5f5
 }
+
+.button-cerrar {
+    background-color: #f14343;
+    border: 1px solid #f14343;
+    border-radius: 2px;
+    color: #f5f5f5;
+    float: right;
+}

@@ -2,6 +2,8 @@ import csv
 import pathlib
 
 import os
+import locale
+locale.setlocale(locale.LC_ALL, 'es_ES.utf8')
 
 from win32com.client import Dispatch
 import pythoncom
@@ -93,10 +95,7 @@ class Index(View):
                 iban = 'ES25 2100-1083-1102-0005-4013'
                 tel_fijo = '+34 937144561'
 
-                print(nombre_archivo)
-
                 if "OFE" in str(nombre_archivo):
-
                     doc = DocxTemplate("csvofertas/plantilla.docx")
 
                     with open('csvofertas/archivo.csv') as csv_file:
@@ -156,7 +155,6 @@ class Index(View):
 
                     doc.render(context)
                     ruta_guardado = 'C:/generador/ofertas/' + nombre_archivo + '.docx'
-                    print(ruta_guardado)
                     doc.save(ruta_guardado)
 
                     doc = docx.Document(ruta_guardado)
@@ -213,7 +211,10 @@ class Index(View):
 
                                         row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(8)
                                         row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
-                                        row_cells[1].paragraphs[0].add_run('  [STOCK]').font.size = Pt(8)
+                                        if str(row[16]).strip() != '00/00/0000':
+                                            row_cells[1].paragraphs[0].add_run('  [STOCK]').font.size = Pt(8)
+                                        else:
+                                            row_cells[1].paragraphs[0].add_run('  A CONVENIR').font.size = Pt(8)
                                         row_cells[1].paragraphs[0].runs[2].font.italic = True
                                         row_cells[1].paragraphs[0].runs[3].font.bold = True
                                     else:
@@ -224,8 +225,7 @@ class Index(View):
 
                                         row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(8)
                                         row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
-                                        row_cells[1].paragraphs[0].add_run(
-                                            '  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(8)
+                                        row_cells[1].paragraphs[0].add_run('  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(8)
                                         row_cells[1].paragraphs[0].runs[2].font.italic = True
                                         row_cells[1].paragraphs[0].runs[3].font.bold = True
 
@@ -233,6 +233,8 @@ class Index(View):
                                     row_cells[2].paragraphs[0].runs[0].font.size = Pt(10)
                                     row_cells[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
+                                    '''precioArt = locale.atof(row[18].strip())
+                                    print(precioArt)'''
                                     row_cells[3].text = row[18]
                                     row_cells[3].paragraphs[0].runs[0].font.size = Pt(10)
                                     row_cells[3].paragraphs[0].runs[0].font.bold = True

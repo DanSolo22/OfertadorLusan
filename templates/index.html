@@ -32,21 +32,21 @@
                 let $content = "<div class='dialog-ovelay'>" +
                     "<div class='dialog'><header>" +
                     " <h3>Envio del documento</h3> " +
-                    "<i class='fa fa-close'></i>" +
+                    "<button class='button button-cerrar cerrar'>X</button>" +
                     "</header>" +
                     "<div class='dialog-msg'>" +
                     " <p>¿Deseas enviar el documento por email?</p> " +
                     "</div>" +
                     "<footer>" +
                     "<div class='controls'>" +
-                    " <button class='button button-danger doAction'>Enviar documento</button> " +
-                    " <button class='button button-default cancelAction'>Abrir documento</button> " +
+                    " <button class='button button-danger enviar'>Enviar documento</button> " +
+                    " <button class='button button-default abrir'>Abrir documento</button> " +
                     "</div>" +
                     "</footer>" +
                     "</div>" +
                     "</div>";
                 $('body').prepend($content);
-                $('.doAction').click(function () {
+                $('.enviar').click(function () {
                     $.ajax({
                         type: "POST",
                         cache: false,
@@ -61,7 +61,7 @@
                         $(this).remove();
                     });
                 });
-                $('.cancelAction, .fa-close').click(function () {
+                $('.abrir').click(function () {
                     $.ajax({
                         type: "POST",
                         cache: false,
@@ -72,6 +72,11 @@
                             'csrfmiddlewaretoken': '{{ csrf_token }}',
                         }
                     });
+                    $(this).parents('.dialog-ovelay').fadeOut(500, function () {
+                        $(this).remove();
+                    });
+                });
+                $('.cerrar').click(function () {
                     $(this).parents('.dialog-ovelay').fadeOut(500, function () {
                         $(this).remove();
                     });
