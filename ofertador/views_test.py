@@ -233,9 +233,12 @@ class Index(View):
                                     row_cells[2].paragraphs[0].runs[0].font.size = Pt(10)
                                     row_cells[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                                    '''precioArt = locale.atof(row[18].strip())
-                                    print(precioArt)'''
-                                    row_cells[3].text = row[18]
+                                    precioArt = row[18].strip()
+                                    if "," in precioArt:
+                                        precioArt = row[18].strip() + '00'
+                                        row_cells[3].text = precioArt[0: precioArt.index(',') + 3]
+                                    else:
+                                        row_cells[3].text = precioArt
                                     row_cells[3].paragraphs[0].runs[0].font.size = Pt(10)
                                     row_cells[3].paragraphs[0].runs[0].font.bold = True
                                     row_cells[3].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
