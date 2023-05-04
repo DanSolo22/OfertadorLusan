@@ -3,6 +3,7 @@ import pathlib
 
 import os
 import locale
+
 locale.setlocale(locale.LC_ALL, 'es_ES.utf8')
 
 from win32com.client import Dispatch
@@ -15,7 +16,7 @@ from django.shortcuts import render, redirect
 from django.views.generic.base import View
 from docx.enum.table import WD_ROW_HEIGHT_RULE
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
-from docx.shared import Inches, Pt, Cm, RGBColor
+from docx.shared import Inches, Pt, Cm
 from docxtpl import DocxTemplate
 
 from ofertador.forms import CargarOferta
@@ -95,7 +96,7 @@ class Index(View):
                 iban = 'ES25 2100-1083-1102-0005-4013'
                 tel_fijo = '+34 937144561'
 
-                if "OFE" in str(nombre_archivo):
+                if "_OFE_" in str(nombre_archivo):
                     doc = DocxTemplate("csvofertas/plantilla.docx")
 
                     with open('csvofertas/archivo.csv') as csv_file:
@@ -225,7 +226,8 @@ class Index(View):
 
                                         row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(8)
                                         row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
-                                        row_cells[1].paragraphs[0].add_run('  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(8)
+                                        row_cells[1].paragraphs[0].add_run(
+                                            '  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(8)
                                         row_cells[1].paragraphs[0].runs[2].font.italic = True
                                         row_cells[1].paragraphs[0].runs[3].font.bold = True
 
@@ -233,12 +235,12 @@ class Index(View):
                                     row_cells[2].paragraphs[0].runs[0].font.size = Pt(10)
                                     row_cells[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                                    precioArt = row[18].strip()
-                                    if "," in precioArt:
-                                        precioArt = row[18].strip() + '00'
-                                        row_cells[3].text = precioArt[0: precioArt.index(',') + 3]
+                                    precio_art = row[18].strip()
+                                    if "," in precio_art:
+                                        precio_art = row[18].strip() + '00'
+                                        row_cells[3].text = precio_art[0: precio_art.index(',') + 3]
                                     else:
-                                        row_cells[3].text = precioArt
+                                        row_cells[3].text = precio_art
                                     row_cells[3].paragraphs[0].runs[0].font.size = Pt(10)
                                     row_cells[3].paragraphs[0].runs[0].font.bold = True
                                     row_cells[3].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
@@ -519,7 +521,7 @@ class Index(View):
                     condiciones.runs[15].font.bold = True
                     condiciones.runs[17].font.bold = True
 
-                elif "PEDCLIEN" in str(nombre_archivo):
+                elif "_PEDCLIEN_" in str(nombre_archivo):
                     doc = DocxTemplate("csvofertas/plantilla_pedido.docx")
 
                     with open('csvofertas/archivo.csv') as csv_file:
@@ -715,7 +717,7 @@ class Index(View):
                                                importe_bruto, imp_portes, dtopp, imp_dtopp, base_imp, iva, imp_iva,
                                                imp_rec_quiv, rec_quiv, total, forma_pago, iban, giros, dp1, dp2, dp3)
 
-                elif "ALB" in str(nombre_archivo):
+                elif "_ALB_" in str(nombre_archivo):
                     doc = DocxTemplate("csvofertas/plantilla_pedido.docx")
 
                     with open('csvofertas/archivo.csv') as csv_file:
@@ -913,7 +915,7 @@ class Index(View):
                                                importe_bruto, imp_portes, dtopp, imp_dtopp, base_imp, iva, imp_iva,
                                                imp_rec_quiv, rec_quiv, total, forma_pago, iban, giros, dp1, dp2, dp3)
 
-                elif "CON" in str(nombre_archivo):
+                elif "_CON_" in str(nombre_archivo):
                     doc = DocxTemplate("csvofertas/plantilla_cons.docx")
 
                     with open('csvofertas/archivo.csv') as csv_file:
@@ -1094,7 +1096,7 @@ class Index(View):
                     obs = doc.add_paragraph()
                     obs.add_run('\n' + observaciones).font.size = Pt(11)
 
-                elif "PEDPROV" in str(nombre_archivo):
+                elif "_PEDPROV_" in str(nombre_archivo):
                     doc = DocxTemplate("csvofertas/plantilla_pedprov.docx")
 
                     with open('csvofertas/archivo.csv') as csv_file:
