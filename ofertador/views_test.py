@@ -200,7 +200,7 @@ class Index(View):
                                 if str(row[23]).strip() == 'Texto':
                                     row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
                                 else:
-                                    row_cells[0].paragraphs[0].add_run(row[22]).font.size = Pt(10)
+                                    row_cells[0].paragraphs[0].add_run(row[23]).font.size = Pt(10)
                                     row_cells[0].paragraphs[0].add_run('\n' + row[4]).font.size = Pt(10)
                                     row_cells[0].paragraphs[0].runs[1].font.italic = True
 
@@ -208,7 +208,7 @@ class Index(View):
                                         if str(row[23]).strip() == 'Especial':
                                             row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
                                         else:
-                                            row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(8.5)
+                                            row_cells[1].paragraphs[0].add_run(row[24]).font.size = Pt(8.5)
 
                                         row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(8)
                                         row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
@@ -219,10 +219,10 @@ class Index(View):
                                         row_cells[1].paragraphs[0].runs[2].font.italic = True
                                         row_cells[1].paragraphs[0].runs[3].font.bold = True
                                     else:
-                                        if str(row[23]).strip() == 'Especial':
+                                        if str(row[24]).strip() == 'Especial':
                                             row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
                                         else:
-                                            row_cells[1].paragraphs[0].add_run(row[23]).font.size = Pt(8.5)
+                                            row_cells[1].paragraphs[0].add_run(row[24]).font.size = Pt(8.5)
 
                                         row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(8)
                                         row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
@@ -1332,6 +1332,7 @@ class Index(View):
 
                     obs = doc.add_paragraph()
                     obs.add_run('\n' + observaciones).font.size = Pt(11)
+
 
                 doc.save(ruta_guardado)
 
