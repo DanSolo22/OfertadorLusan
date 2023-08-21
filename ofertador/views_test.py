@@ -824,12 +824,12 @@ class Index(View):
                                 row_prod.height = Cm(1)
                                 row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                                row_cells[0].paragraphs[0].add_run(row[24]).font.size = Pt(9)
+                                row_cells[0].paragraphs[0].add_run(row[25]).font.size = Pt(9)
                                 row_cells[0].paragraphs[0].add_run('\n' + row[3]).font.size = Pt(9)
                                 row_cells[0].paragraphs[0].runs[1].font.italic = True
                                 row_cells[0].paragraphs[0].runs[1].font.bold = True
 
-                                row_cells[1].paragraphs[0].add_run(row[25]).font.size = Pt(8.5)
+                                row_cells[1].paragraphs[0].add_run(row[26]).font.size = Pt(8.5)
                                 row_cells[1].paragraphs[0].add_run('\nPedido: ').font.size = Pt(8)
                                 row_cells[1].paragraphs[0].add_run(row[2]).font.size = Pt(8)
                                 row_cells[1].paragraphs[0].runs[2].font.bold = True
