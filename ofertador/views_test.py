@@ -197,15 +197,15 @@ class Index(View):
                                 row_prod.height = Cm(1)
                                 row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                                if str(row[23]).strip() == 'Texto':
+                                if str(row[24]).strip() == 'Texto':
                                     row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
                                 else:
-                                    row_cells[0].paragraphs[0].add_run(row[23]).font.size = Pt(10)
+                                    row_cells[0].paragraphs[0].add_run(row[24]).font.size = Pt(10)
                                     row_cells[0].paragraphs[0].add_run('\n' + row[4]).font.size = Pt(10)
                                     row_cells[0].paragraphs[0].runs[1].font.italic = True
 
                                     if comprovar_stock(str(fecha), str(row[16]).strip()):
-                                        if str(row[23]).strip() == 'Especial':
+                                        if str(row[24]).strip() == 'Especial':
                                             row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
                                         else:
                                             row_cells[1].paragraphs[0].add_run(row[24]).font.size = Pt(8.5)
