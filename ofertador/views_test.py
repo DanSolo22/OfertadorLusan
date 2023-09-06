@@ -210,6 +210,7 @@ class Index(View):
                                         else:
                                             row_cells[1].paragraphs[0].add_run(row[24]).font.size = Pt(8.5)
 
+
                                         row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(8)
                                         row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
                                         if str(row[16]).strip() != '00/00/0000':
