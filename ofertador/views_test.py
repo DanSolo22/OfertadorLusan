@@ -200,7 +200,7 @@ class Index(View):
                                 if str(row[24]).strip() == 'Texto':
                                     row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
                                 else:
-                                    row_cells[0].paragraphs[0].add_run(row[24]).font.size = Pt(10)
+                                    row_cells[0].paragraphs[0].add_run(row[23]).font.size = Pt(10)
                                     row_cells[0].paragraphs[0].add_run('\n' + row[4]).font.size = Pt(10)
                                     row_cells[0].paragraphs[0].runs[1].font.italic = True
 
