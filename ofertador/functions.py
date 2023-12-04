@@ -102,14 +102,14 @@ def comprovar_plazo(fecha):
         return fecha_numerica_a_fecha(fecha)
     elif array_fecha[1] == '00' and array_fecha[2] == '0000':
         if int(array_fecha[0]) == 1:
-            return str(int(array_fecha[0])) + ' dia'
+            return str(int(array_fecha[0])) + ' dia/day'
         else:
-            return str(int(array_fecha[0])) + ' dias'
+            return str(int(array_fecha[0])) + ' dias/days'
     elif array_fecha[0] == '00' and array_fecha[2] == '0000':
         if int(array_fecha[1]) == 1:
-            return str(int(array_fecha[1])) + ' mes'
+            return str(int(array_fecha[1])) + ' mes/month'
         else:
-            return str(int(array_fecha[1])) + ' meses'
+            return str(int(array_fecha[1])) + ' meses/months'
     elif array_fecha[0] != '00' and array_fecha[1] != '00' and array_fecha[2] == '0000':
         return str(int(array_fecha[0])) + ' / ' + str(int(array_fecha[1])) + ' dias'
 
