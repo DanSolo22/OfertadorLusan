@@ -637,6 +637,7 @@ class Index(View):
                                 row_cells[1].paragraphs[0].add_run(row[2]).font.size = Pt(8.5)
                                 row_cells[1].paragraphs[0].add_run('\nPedido: ').font.size = Pt(8)
                                 row_cells[1].paragraphs[0].add_run(row[0]).font.size = Pt(8)
+                                row_cells[1].paragraphs[0].add_run('\t\t\tUnd. Caja: ' + str(row[8]).strip()).font.size = Pt(8)
                                 row_cells[1].paragraphs[0].runs[2].font.bold = True
 
                                 row_cells[2].text = row[3]
