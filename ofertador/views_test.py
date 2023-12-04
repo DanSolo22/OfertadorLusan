@@ -630,7 +630,7 @@ class Index(View):
                                 row_prod.height = Cm(1)
                                 row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                                row_cells[0].paragraphs[0].add_run(row[8]).font.size = Pt(10)
+                                row_cells[0].paragraphs[0].add_run(row[9]).font.size = Pt(10)
                                 row_cells[0].paragraphs[0].add_run('\n' + row[1]).font.size = Pt(10)
                                 row_cells[0].paragraphs[0].runs[1].font.italic = True
 
