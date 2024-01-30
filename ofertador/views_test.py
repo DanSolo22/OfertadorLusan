@@ -79,7 +79,7 @@ class Index(View):
                 total = ''
                 forma_pago = ''
                 transportista = ''
-
+                idioma = ''
                 plazo = ''
                 nif = ''
                 agente = ''
@@ -134,6 +134,7 @@ class Index(View):
                                 total = row[31]
                                 forma_pago = row[49]
                                 transportista = row[50]
+                                idioma = str(row[51]).strip()
                             line_count += 1
 
                     context = \
@@ -488,29 +489,58 @@ class Index(View):
                         table_resumen.cell(10, 5).paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
                     condiciones = doc.add_paragraph()
-                    condiciones.add_run('CONDICIONES:\n').font.size = Pt(11)
-                    condiciones.add_run('\n').font.size = Pt(3)
-                    condiciones.add_run('- Disponibilidad y precios indicados salvo venta.\n- Estos ').font.size = Pt(9)
-                    condiciones.add_run('precios ').font.size = Pt(9)
-                    condiciones.add_run('son para la ').font.size = Pt(9)
-                    condiciones.add_run('totalidad de la oferta').font.size = Pt(9)
-                    condiciones.add_run(
-                        ', en caso de pedido parcial los precios estarían sujetos a revisión.\n- Los ').font.size = Pt(
-                        9)
-                    condiciones.add_run('plazos de entrega ').font.size = Pt(9)
-                    condiciones.add_run('indicados son orientativos y se consideran, ').font.size = Pt(9)
-                    condiciones.add_run('días laborales y en nuestro almacén, ').font.size = Pt(9)
-                    condiciones.add_run('\n  a partir de la ').font.size = Pt(9)
-                    condiciones.add_run('fecha confirmación del pedido.\n').font.size = Pt(9)
-                    condiciones.add_run('- No se aceptan devolución de piezas especiales ').font.size = Pt(9)
-                    condiciones.add_run('ni medidas fuera de catálogo.\n').font.size = Pt(9)
-                    condiciones.add_run('- ').font.size = Pt(9)
-                    condiciones.add_run(
-                        'Las piezas especiales se podrán suministrar con un +/- 10% de la cantidad ofertada.').font.size = Pt(
-                        9)
-                    condiciones.add_run(
-                        '\n- El suministro quedará supeditado a la concesión de riesgo por parte de ').font.size = Pt(9)
-                    condiciones.add_run('Crédito y Caución.').font.size = Pt(9)
+                    if idioma == 'INGLES':
+                        condiciones.add_run('\nCONDITIONS:\n').font.size = Pt(11)
+                        condiciones.add_run('\n').font.size = Pt(3)
+                        condiciones.add_run(
+                            '- Price and delivery time are as offered except for sale\n- This ').font.size = Pt(9)
+                        condiciones.add_run('prices ').font.size = Pt(9)
+                        condiciones.add_run('are for ').font.size = Pt(9)
+                        condiciones.add_run('totality of the offer').font.size = Pt(9)
+                        condiciones.add_run(
+                            ', in case of a partial order, the prices may have to be revised.\n- The ').font.size = Pt(
+                            9)
+                        condiciones.add_run('delivery time ').font.size = Pt(9)
+                        condiciones.add_run('indicated is orientative and are considered ').font.size = Pt(9)
+                        condiciones.add_run('work days and in our warehouse, ').font.size = Pt(9)
+                        condiciones.add_run('from the ').font.size = Pt(9)
+                        condiciones.add_run('order confirmation date.\n').font.size = Pt(9)
+                        condiciones.add_run('- The return of special goods or ').font.size = Pt(9)
+                        condiciones.add_run('measures that are not in the catalogue ').font.size = Pt(9)
+                        condiciones.add_run('will not be accepted.\n').font.size = Pt(9)
+                        condiciones.add_run(
+                            '- The special parts can be delivered with a +/-10% difference from the quoted quantity.').font.size = Pt(
+                            9)
+                        condiciones.add_run(
+                            '\n- The providing of the goods will depend on the acceptance of risk by ').font.size = Pt(
+                            9)
+                        condiciones.add_run('Crédito y Caución.').font.size = Pt(9)
+                    else:
+                        condiciones.add_run('CONDICIONES:\n').font.size = Pt(11)
+                        condiciones.add_run('\n').font.size = Pt(3)
+                        condiciones.add_run(
+                            '- Disponibilidad y precios indicados salvo venta.\n- Estos ').font.size = Pt(9)
+                        condiciones.add_run('precios ').font.size = Pt(9)
+                        condiciones.add_run('son para la ').font.size = Pt(9)
+                        condiciones.add_run('totalidad de la oferta').font.size = Pt(9)
+                        condiciones.add_run(
+                            ', en caso de pedido parcial los precios estarían sujetos a revisión.\n- Los ').font.size = Pt(
+                            9)
+                        condiciones.add_run('plazos de entrega ').font.size = Pt(9)
+                        condiciones.add_run('indicados son orientativos y se consideran, ').font.size = Pt(9)
+                        condiciones.add_run('días laborales y en nuestro almacén, ').font.size = Pt(9)
+                        condiciones.add_run('\n  a partir de la ').font.size = Pt(9)
+                        condiciones.add_run('fecha confirmación del pedido.\n').font.size = Pt(9)
+                        condiciones.add_run('- No se aceptan devolución de piezas especiales ').font.size = Pt(9)
+                        condiciones.add_run('ni medidas fuera de catálogo.\n').font.size = Pt(9)
+                        condiciones.add_run('- ').font.size = Pt(9)
+                        condiciones.add_run(
+                            'Las piezas especiales se podrán suministrar con un +/- 10% de la cantidad ofertada.').font.size = Pt(
+                            9)
+                        condiciones.add_run(
+                            '\n- El suministro quedará supeditado a la concesión de riesgo por parte de ').font.size = Pt(
+                            9)
+                        condiciones.add_run('Crédito y Caución.').font.size = Pt(9)
 
                     condiciones.runs[0].font.bold = True
                     condiciones.runs[3].font.bold = True
