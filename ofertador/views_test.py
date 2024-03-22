@@ -867,7 +867,12 @@ class Index(View):
                                 row_cells[0].paragraphs[0].runs[1].font.italic = True
                                 row_cells[0].paragraphs[0].runs[1].font.bold = True
 
-                                row_cells[1].paragraphs[0].add_run(row[26]).font.size = Pt(8.5)
+                                product = ''
+                                if str(row[5]).strip() == 'Texto' or str(row[5]).strip() == 'Especial':
+                                    product = row[4]
+                                else:
+                                    product = row[26]
+                                row_cells[1].paragraphs[0].add_run(product).font.size = Pt(8.5)
                                 row_cells[1].paragraphs[0].add_run('\nPedido: ').font.size = Pt(8)
                                 row_cells[1].paragraphs[0].add_run(row[2]).font.size = Pt(8)
                                 row_cells[1].paragraphs[0].runs[2].font.bold = True
