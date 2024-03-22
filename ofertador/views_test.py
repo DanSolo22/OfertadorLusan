@@ -191,6 +191,8 @@ class Index(View):
                                         row_line_tabla = row_line.cells
                                         row_line_tabla[5].text = "Sigue..."
                                         row_line_tabla[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                                        doc.add_paragraph("")
+                                        table = crear_tabla_clientes(doc)
 
                                 row_prod = table.add_row()
                                 row_cells = row_prod.cells
@@ -653,6 +655,8 @@ class Index(View):
                                         row_line_tabla = row_line.cells
                                         row_line_tabla[5].text = "Sigue..."
                                         row_line_tabla[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                                        doc.add_paragraph("")
+                                        table = crear_tabla_clientes(doc)
 
                                 row_prod = table.add_row()
                                 row_cells = row_prod.cells
@@ -849,6 +853,8 @@ class Index(View):
                                         row_line_tabla = row_line.cells
                                         row_line_tabla[5].text = "Sigue..."
                                         row_line_tabla[5].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                                        doc.add_paragraph("")
+                                        table = crear_tabla_clientes(doc)
 
                                 row_prod = table.add_row()
                                 row_cells = row_prod.cells
@@ -1089,6 +1095,8 @@ class Index(View):
                                         row_line_tabla = row_line.cells
                                         row_line_tabla[3].text = "Sigue..."
                                         row_line_tabla[3].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                                        doc.add_paragraph("")
+                                        table = crear_tabla_clientes(doc)
 
                                 row_prod = table.add_row()
                                 row_cells = row_prod.cells
@@ -1282,6 +1290,8 @@ class Index(View):
                                         row_line_tabla = row_line.cells
                                         row_line_tabla[4].text = "Sigue..."
                                         row_line_tabla[4].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                                        doc.add_paragraph("")
+                                        table = crear_tabla_clientes(doc)
 
                                 if str(row[9]).strip() != 'Texto':
                                     row_prod = table.add_row()
