@@ -4,7 +4,7 @@ import pathlib
 import os
 import locale
 
-locale.setlocale(locale.LC_ALL, 'es_ES.utf8')
+locale.setlocale(locale.LC_NUMERIC, 'es_ES.utf8')
 
 from win32com.client import Dispatch
 import pythoncom
@@ -21,7 +21,7 @@ from docxtpl import DocxTemplate
 
 from ofertador.forms import CargarOferta
 from ofertador.functions import set_repeat_table_header, insert_hr, comprovar_plazo, comprovar_stock, \
-    crear_tabla_clientes, crear_tabla_resumen_pedido, insertar_barra_final_productos
+    crear_tabla_clientes, crear_tabla_resumen_pedido, insertar_barra_final_productos, parse_floats
 
 
 class Index(View):
@@ -119,7 +119,7 @@ class Index(View):
                                 tel = row[11]
                                 mail = row[13]
                                 cab = str(row[42]).strip()
-                                peso = row[17] + ' kg.'
+                                peso = parse_floats(row[17]) + ' kg.'
                                 contacto = row[32]
                                 importe_bruto = row[20]
                                 portes = row[18]
@@ -586,7 +586,7 @@ class Index(View):
                                 dp3 = row[27]
                                 contacto = row[28]
                                 transportista = row[30]
-                                peso = row[31] + ' kg.'
+                                peso = parse_floats(row[31]) + ' kg.'
                                 importe_bruto = row[32]
                                 portes = row[33]
                                 imp_portes = row[34]
@@ -783,7 +783,7 @@ class Index(View):
                                 dp2 = row[29]
                                 dp3 = row[30]
                                 transportista = row[35]
-                                peso = row[48] + ' kg.'
+                                peso = parse_floats(row[48]) + ' kg.'
                                 importe_bruto = row[51]
                                 portes = row[52]
                                 imp_portes = row[53]
@@ -1162,7 +1162,7 @@ class Index(View):
                                 pro = row[10]
                                 tel = row[11]
                                 mail = row[13]
-                                peso = str(row[18]).replace(',', '.')
+                                peso = parse_floats(row[18])
                                 total = row[19]
                                 observaciones = str(row[21]) + str(row[22]) + str(row[23]) + str(row[24])
                                 break
@@ -1316,7 +1316,7 @@ class Index(View):
                                     row_cells[1].paragraphs[0].runs[0].font.size = Pt(10)
                                     row_cells[1].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
-                                    row_cells[2].text = row[14]
+                                    row_cells[2].text = parse_floats(row[14])
                                     row_cells[2].paragraphs[0].runs[0].font.size = Pt(10)
                                     row_cells[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 
@@ -1347,7 +1347,7 @@ class Index(View):
 
                     row_cells[1].merge(row_cells[0])
 
-                    row_cells[0].paragraphs[0].add_run('PESO/Weight:\t' + str(peso) + ' Kg.').font.size = Pt(10)
+                    row_cells[0].paragraphs[0].add_run('PESO/Weight:\t' + peso + ' Kg.').font.size = Pt(10)
                     row_cells[0].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                     row_cells[0].paragraphs[0].runs[0].font.bold = True
 

@@ -460,3 +460,20 @@ def insertar_barra_final_productos(table):
     barra_pie_tabla[0].paragraphs[0].runs[0].font.color.rgb = RGBColor(255, 255, 255)
 
     insert_hr(barra_pie_tabla[0].paragraphs[0])
+
+
+def parse_floats(num):
+    # Eliminar espacios en blanco y reemplazar puntos y comas
+    num_parsed = str(num).strip().replace('.', '').replace(',', '.')
+
+    # Convertir a float y formatear con dos decimales
+    num_float = "{:.2f}".format(float(num_parsed))
+
+    # Separar los miles con puntos y reemplazar el punto decimal por una coma
+    parte_entera, parte_decimal = num_float.split('.')
+    parte_entera_con_puntos = "{:,}".format(int(parte_entera)).replace(',', '.')
+    num_parsed = parte_entera_con_puntos + ',' + parte_decimal
+
+    return num_parsed
+
+
