@@ -21,7 +21,8 @@ from docxtpl import DocxTemplate
 
 from ofertador.forms import CargarOferta
 from ofertador.functions import set_repeat_table_header, insert_hr, comprovar_plazo, comprovar_stock, \
-    crear_tabla_clientes, crear_tabla_consulta, crear_tabla_resumen_pedido, insertar_barra_final_productos, parse_floats
+    crear_tabla_clientes, crear_tabla_consulta, crear_tabla_resumen_pedido, insertar_barra_final_productos, parse_floats, \
+    crear_tabla_pedprov
 
 
 class Index(View):
@@ -1140,81 +1141,7 @@ class Index(View):
 
                     doc.add_paragraph()
 
-                    table = doc.add_table(rows=1, cols=5)
-
-                    for i in range(5):
-                        for cell in table.columns[i].cells:
-                            if i == 0:
-                                cell.width = Inches(4)
-                            elif i == 1:
-                                cell.width = Inches(1)
-                            elif i == 2:
-                                cell.width = Inches(0.5)
-                                cell.paragraphs[0].paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-                            elif i == 3:
-                                cell.width = Inches(0.5)
-                                cell.paragraphs[0].paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-                            elif i == 4:
-                                cell.width = Inches(1.5)
-                                cell.paragraphs[0].paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-
-                    hdr = table.rows[0]
-                    hdr_cells = hdr.cells
-
-                    hdr_cells[0].paragraphs[0].add_run('DESCRIPCION\n').font.size = Pt(9)
-                    hdr_cells[0].paragraphs[0].add_run('SPECIFICATION\n').font.size = Pt(9)
-                    hdr_cells[0].paragraphs[0].runs[0].font.bold = True
-                    hdr_cells[0].paragraphs[0].runs[1].font.italic = True
-                    hdr_cells[0].paragraphs[0].runs[1].font.bold = False
-
-                    hdr_cells[1].paragraphs[0].add_run('CANTIDAD\n').font.size = Pt(9)
-                    hdr_cells[1].paragraphs[0].add_run('QUANTITY\n').font.size = Pt(9)
-                    hdr_cells[1].paragraphs[0].runs[0].font.bold = True
-                    hdr_cells[1].paragraphs[0].runs[1].font.italic = True
-                    hdr_cells[1].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-
-                    hdr_cells[2].paragraphs[0].add_run('PRECIO\n').font.size = Pt(9)
-                    hdr_cells[2].paragraphs[0].add_run('PRICE\n').font.size = Pt(9)
-                    hdr_cells[2].paragraphs[0].add_run('EUROx100').font.size = Pt(9)
-                    hdr_cells[2].paragraphs[0].runs[0].font.bold = True
-                    hdr_cells[2].paragraphs[0].runs[1].font.italic = True
-                    hdr_cells[2].paragraphs[0].runs[2].font.bold = True
-                    hdr_cells[2].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-
-                    hdr_cells[3].paragraphs[0].add_run('DTO.\n').font.size = Pt(9)
-                    hdr_cells[3].paragraphs[0].add_run('DIS.\n').font.size = Pt(9)
-                    hdr_cells[3].paragraphs[0].add_run('%').font.size = Pt(9)
-                    hdr_cells[3].paragraphs[0].runs[0].font.bold = True
-                    hdr_cells[3].paragraphs[0].runs[1].font.italic = True
-                    hdr_cells[3].paragraphs[0].runs[2].font.bold = True
-                    hdr_cells[3].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-
-                    hdr_cells[4].paragraphs[0].add_run('IMPORTE\n').font.size = Pt(9)
-                    hdr_cells[4].paragraphs[0].add_run('AMOUNT\n').font.size = Pt(9)
-                    hdr_cells[4].paragraphs[0].add_run('EURO').font.size = Pt(9)
-                    hdr_cells[4].paragraphs[0].runs[0].font.bold = True
-                    hdr_cells[4].paragraphs[0].runs[1].font.italic = True
-                    hdr_cells[4].paragraphs[0].runs[2].font.bold = True
-                    hdr_cells[4].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-
-                    hdr.height = Cm(1.25)
-                    hdr.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
-
-                    barra_cabeza = table.add_row()
-                    barra_cabeza_tabla = barra_cabeza.cells
-
-                    barra_cabeza_tabla[4].merge(barra_cabeza_tabla[3])
-                    barra_cabeza_tabla[3].merge(barra_cabeza_tabla[2])
-                    barra_cabeza_tabla[2].merge(barra_cabeza_tabla[1])
-                    barra_cabeza_tabla[1].merge(barra_cabeza_tabla[0])
-
-                    barra_cabeza.height = Cm(0.65)
-                    barra_cabeza.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
-
-                    insert_hr(barra_cabeza_tabla[0].paragraphs[0])
-
-                    set_repeat_table_header(table.rows[0])
-                    set_repeat_table_header(table.rows[1])
+                    table = crear_tabla_pedprov(doc)
 
                     linias = 0
 
@@ -1243,7 +1170,7 @@ class Index(View):
                                         row_line_tabla[4].text = "Sigue..."
                                         row_line_tabla[4].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
                                         doc.add_paragraph("")
-                                        table = crear_tabla_clientes(doc)
+                                        table = crear_tabla_pedprov(doc)
 
                                 if str(row[9]).strip() != 'Texto':
                                     row_prod = table.add_row()
