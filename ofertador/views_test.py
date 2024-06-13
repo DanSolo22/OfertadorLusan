@@ -120,7 +120,10 @@ class Index(View):
                                 tel = row[11]
                                 mail = row[13]
                                 cab = str(row[42]).strip()
-                                peso = parse_floats(row[17]) + ' kg.'
+                                if str(row[17]).strip() is None or str(row[17]).strip() == '':
+                                    peso = '0 kg.'
+                                else:
+                                    peso = parse_floats(row[17]) + ' kg.'
                                 contacto = row[32]
                                 importe_bruto = row[20]
                                 portes = row[18]
