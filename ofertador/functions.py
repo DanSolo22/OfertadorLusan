@@ -115,7 +115,9 @@ def comprovar_plazo(fecha):
 
 
 def comprovar_stock(fecha_pedido, fecha_plazo):
-    if str(fecha_pedido) == str(fecha_plazo) or str(fecha_plazo) == "00/00/0000":
+    print(type(fecha_pedido))
+    print(type(fecha_plazo))
+    if fecha_pedido >= fecha_plazo or str(fecha_plazo) == "00/00/0000":
         return True
     else:
         array_fecha_pedido = str(fecha_pedido).split('/')
@@ -161,9 +163,9 @@ def crear_tabla_clientes(doc):
     for i in range(6):
         for cell in table.columns[i].cells:
             if i == 0:
-                cell.width = Cm(2.75)
+                cell.width = Cm(7)
             elif i == 1:
-                cell.width = Cm(19)
+                cell.width = Cm(14.75)
             elif i == 2:
                 cell.width = Cm(2.25)
                 cell.paragraphs[0].paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT

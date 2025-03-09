@@ -176,7 +176,7 @@ class Index(View):
 
                         for row in csv_reader:
                             if count > 2:
-                                if linias == 16 or (linias - 16) % 18 == 0:
+                                if linias == 11 or (linias - 11) % 13 == 0:
                                     if linias != 0:
                                         row_line = table.add_row()
                                         row_line_tabla = row_line.cells
@@ -201,7 +201,7 @@ class Index(View):
                                 row_prod = table.add_row()
                                 row_cells = row_prod.cells
 
-                                row_prod.height = Cm(1)
+                                row_prod.height = Cm(1.4)
                                 row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
                                 if str(row[24]).strip() == 'Texto':
@@ -224,8 +224,10 @@ class Index(View):
                                             row_cells[1].paragraphs[0].add_run('  [STOCK]').font.size = Pt(8)
                                         else:
                                             row_cells[1].paragraphs[0].add_run('  A CONVENIR').font.size = Pt(8)
+
                                         row_cells[1].paragraphs[0].runs[2].font.italic = True
                                         row_cells[1].paragraphs[0].runs[3].font.bold = True
+
                                     else:
                                         if str(row[24]).strip() == 'Especial':
                                             row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
@@ -234,10 +236,14 @@ class Index(View):
 
                                         row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(8)
                                         row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
-                                        row_cells[1].paragraphs[0].add_run(
-                                            '  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(8)
+                                        row_cells[1].paragraphs[0].add_run('  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(8)
                                         row_cells[1].paragraphs[0].runs[2].font.italic = True
                                         row_cells[1].paragraphs[0].runs[3].font.bold = True
+
+                                    if str(row[55]).strip() != '':
+                                        row_cells[1].paragraphs[0].add_run('\n' + str(row[55])).font.size = Pt(8)
+                                        row_cells[1].paragraphs[0].runs[4].font.italic = True
+                                        row_cells[1].paragraphs[0].runs[4].font.bold = True
 
                                     row_cells[2].text = row[9]
                                     row_cells[2].paragraphs[0].runs[0].font.size = Pt(10)
@@ -675,7 +681,7 @@ class Index(View):
                                 row_cells[1].paragraphs[0].add_run(row[2]).font.size = Pt(8.5)
                                 row_cells[1].paragraphs[0].add_run('\nPedido: ').font.size = Pt(8)
                                 row_cells[1].paragraphs[0].add_run(row[0]).font.size = Pt(8)
-                                row_cells[1].paragraphs[0].add_run('\t\t\tUnd. Caja: ' + str(row[8]).strip()).font.size = Pt(8)
+                                row_cells[1].paragraphs[0].add_run('\tUnd. Caja: ' + str(row[8]).strip()).font.size = Pt(8)
                                 row_cells[1].paragraphs[0].runs[2].font.bold = True
 
                                 row_cells[2].text = row[3]
@@ -1182,8 +1188,7 @@ class Index(View):
                                     row_prod.height = Cm(1)
                                     row_prod.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
 
-                                    row_cells[0].paragraphs[0].add_run(
-                                        str(row[29]).strip()).font.size = Pt(8.5)
+                                    row_cells[0].paragraphs[0].add_run(str(row[29]).strip()).font.size = Pt(8.5)
 
                                     if str(row[9]).strip() != 'Especial' and str(row[7]).strip() != '':
                                         row_cells[0].paragraphs[0].add_run('\nRef. ' + row[7]).font.size = Pt(8)
@@ -1215,6 +1220,7 @@ class Index(View):
                                     row_cells[1].merge(row_cells[0])
                                     row_cells[0].paragraphs[0].add_run(row[8]).font.size = Pt(8.5)
 
+                                row_cells[0].paragraphs[0].add_run("\tPlazo: " + row[24]).font.size = Pt(8.5)
                                 linias += 1
 
                             count += 1
