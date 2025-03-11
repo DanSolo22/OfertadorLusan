@@ -211,7 +211,7 @@ class Index(View):
                                     row_cells[0].paragraphs[0].add_run('\n' + row[4]).font.size = Pt(10)
                                     row_cells[0].paragraphs[0].runs[1].font.italic = True
 
-                                    if comprovar_stock(str(fecha), str(row[16]).strip()):
+                                    '''if comprovar_stock(str(fecha), str(row[16]).strip()):
                                         if str(row[24]).strip() == 'Especial':
                                             row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
                                         else:
@@ -238,10 +238,24 @@ class Index(View):
                                         row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
                                         row_cells[1].paragraphs[0].add_run('  ' + str(comprovar_plazo(row[16].strip()))).font.size = Pt(8)
                                         row_cells[1].paragraphs[0].runs[2].font.italic = True
-                                        row_cells[1].paragraphs[0].runs[3].font.bold = True
+                                        row_cells[1].paragraphs[0].runs[3].font.bold = True'''
+
+                                    if str(row[24]).strip() == 'Especial':
+                                        row_cells[1].paragraphs[0].add_run(row[5]).font.size = Pt(8.5)
+                                    else:
+                                        row_cells[1].paragraphs[0].add_run(row[24]).font.size = Pt(8.5)
+
+                                    row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(8)
+                                    row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
+                                    row_cells[1].paragraphs[0].add_run('  ' + str(comprovar_plazo(str(fecha), str(row[16]).strip()))).font.size = Pt(8)
+                                    row_cells[1].paragraphs[0].runs[2].font.italic = True
+                                    row_cells[1].paragraphs[0].runs[3].font.bold = True
 
                                     if str(row[55]).strip() != '':
-                                        row_cells[1].paragraphs[0].add_run('\n' + str(row[55])).font.size = Pt(8)
+                                        codigo_barras = row[55].replace(",", ".")
+                                        codigo_barras = float(codigo_barras)
+                                        codigo_barras = int(codigo_barras)
+                                        row_cells[1].paragraphs[0].add_run('\n' + str(codigo_barras)).font.size = Pt(8)
                                         row_cells[1].paragraphs[0].runs[4].font.italic = True
                                         row_cells[1].paragraphs[0].runs[4].font.bold = True
 

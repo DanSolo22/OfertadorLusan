@@ -95,11 +95,19 @@ def fecha_numerica_a_fecha(fecha):
                 return str("diciembre " + array_fecha[2])
 
 
-def comprovar_plazo(fecha):
-    array_fecha = fecha.split("/")
-
+def comprovar_plazo(fecha_pedido, fecha_plazo):
+    array_fecha = fecha_plazo.split("/")
+    print(array_fecha)
     if array_fecha[1] != '00' and array_fecha[2] != '0000':
-        return fecha_numerica_a_fecha(fecha)
+        stock = comprovar_stock(fecha_pedido, fecha_plazo)
+
+        if stock:
+            return "[STOCK]"
+        else:
+            return fecha_numerica_a_fecha(fecha_plazo)
+    elif array_fecha[0] == '00' and array_fecha[1] == '00' and array_fecha[2] == '0000':
+        return "A CONVENIR"
+
     elif array_fecha[1] == '00' and array_fecha[2] == '0000':
         if int(array_fecha[0]) == 1:
             return str(int(array_fecha[0])) + ' dia/day'
@@ -115,8 +123,7 @@ def comprovar_plazo(fecha):
 
 
 def comprovar_stock(fecha_pedido, fecha_plazo):
-    print(type(fecha_pedido))
-    print(type(fecha_plazo))
+
     if fecha_pedido >= fecha_plazo or str(fecha_plazo) == "00/00/0000":
         return True
     else:
