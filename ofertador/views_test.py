@@ -248,16 +248,17 @@ class Index(View):
                                     row_cells[1].paragraphs[0].add_run('\nPLAZO/').font.size = Pt(8)
                                     row_cells[1].paragraphs[0].add_run('Delivery:').font.size = Pt(8)
                                     row_cells[1].paragraphs[0].add_run('  ' + str(comprovar_plazo(str(fecha), str(row[16]).strip()))).font.size = Pt(8)
+                                    row_cells[1].paragraphs[0].add_run('\nUnd. Caja: ' + str(row[22]).strip()).font.size = Pt(8)
                                     row_cells[1].paragraphs[0].runs[2].font.italic = True
                                     row_cells[1].paragraphs[0].runs[3].font.bold = True
 
-                                    if str(row[55]).strip() != '':
+                                    '''if str(row[55]).strip() != '':
                                         codigo_barras = row[55].replace(",", ".")
                                         codigo_barras = float(codigo_barras)
                                         codigo_barras = int(codigo_barras)
                                         row_cells[1].paragraphs[0].add_run('\n' + str(codigo_barras)).font.size = Pt(8)
                                         row_cells[1].paragraphs[0].runs[4].font.italic = True
-                                        row_cells[1].paragraphs[0].runs[4].font.bold = True
+                                        row_cells[1].paragraphs[0].runs[4].font.bold = True'''
 
                                     row_cells[2].text = row[9]
                                     row_cells[2].paragraphs[0].runs[0].font.size = Pt(10)
