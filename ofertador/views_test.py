@@ -18,6 +18,7 @@ from docx.enum.table import WD_ROW_HEIGHT_RULE
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from docx.shared import Inches, Pt, Cm
 from docxtpl import DocxTemplate
+from datetime import datetime
 
 from ofertador.forms import CargarOferta
 from ofertador.functions import set_repeat_table_header, insert_hr, comprovar_plazo, comprovar_stock, \
@@ -107,7 +108,9 @@ class Index(View):
                         for row in csv_reader:
                             if line_count == 1:
                                 oferta = row[0]
-                                fecha = row[1]
+                                #fecha = row[1]
+                                now = datetime.now()
+                                fecha = str(now.day) + "/" + str(now.month) + "/" + str(now.year)
                                 validez = row[2]
                                 cliente = row[3]
                                 proveedor = row[4]
