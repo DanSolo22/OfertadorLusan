@@ -100,27 +100,27 @@ def comprovar_plazo(fecha_pedido, fecha_plazo):
     array_fecha_pedido = fecha_pedido.split("/")
     print(array_fecha)
     print(array_fecha_pedido)
-    if array_fecha[0] != '00' and array_fecha[1] != '00' and array_fecha[2] == '0000':
+
+    if int(array_fecha[0]) != '00' and int(array_fecha[1]) != '00' and int(array_fecha[2]) == '0000':
         return str(int(array_fecha[0])) + ' / ' + str(int(array_fecha[1])) + ' dias'
 
-    elif array_fecha[0] == '00' and array_fecha[1] == '00' and array_fecha[2] == '0000':
+    elif int(array_fecha[0]) == '00' and int(array_fecha[1]) == '00' and int(array_fecha[2]) == '0000':
         return "A CONVENIR"
 
-    elif array_fecha[1] == '00' and array_fecha[2] == '0000':
+    elif int(array_fecha[1]) == '00' and int(array_fecha[2]) == '0000':
         if int(array_fecha[0]) == 1:
             return str(int(array_fecha[0])) + ' dia/day'
         else:
             return str(int(array_fecha[0])) + ' dias/days'
 
-    elif array_fecha[0] == '00' and array_fecha[2] == '0000':
+    elif int(array_fecha[0]) == '00' and int(array_fecha[2]) == '0000':
         if int(array_fecha[1]) == 1:
             return str(int(array_fecha[1])) + ' mes/month'
         else:
             return str(int(array_fecha[1])) + ' meses/months'
 
-    elif array_fecha[1] != '00' and array_fecha[2] != '0000':
-
-        if array_fecha[1] > array_fecha_pedido[1] and array_fecha[2] == array_fecha_pedido[2] or array_fecha[2] > array_fecha_pedido[2]:
+    elif int(array_fecha[1]) != '00' and int(array_fecha[2]) != '0000':
+        if int(array_fecha[1]) > int(array_fecha_pedido[1]) and int(array_fecha[2]) == int(array_fecha_pedido[2]) or int(array_fecha[2]) > int(array_fecha_pedido[2]):
             return fecha_numerica_a_fecha(fecha_plazo)
         else:
             return "[STOCK]"
